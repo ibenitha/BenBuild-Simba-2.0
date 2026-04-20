@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "categories": "Catégories",
+    "cart": "Panier",
+    "search": "Rechercher des produits...",
+    "darkMode": "Mode Sombre",
+    "language": "Langue"
+  },
+  "home": {
+    "hero": {
+      "title": "Les Épiceries les Plus Fraîches du Rwanda",
+      "subtitle": "Livré à votre porte. Achetez parmi 789+ produits dans 10 catégories.",
+      "cta": "Acheter Maintenant",
+      "badge": "Livraison gratuite pour les commandes de plus de 20 000 RWF"
+    },
+    "categories": "Acheter par Catégorie",
+    "featured": "Produits en Vedette",
+    "deals": "Offres du Jour"
+  },
+  "product": {
+    "addToCart": "Ajouter au Panier",
+    "outOfStock": "Rupture de Stock",
+    "inStock": "En Stock",
+    "reviews": "avis",
+    "description": "Description",
+    "relatedProducts": "Vous pourriez aussi aimer",
+    "unit": "Unité"
+  },
+  "cart": {
+    "title": "Votre Panier",
+    "empty": "Votre panier est vide",
+    "emptyDesc": "Commencez vos achats pour ajouter des articles",
+    "shopNow": "Acheter Maintenant",
+    "subtotal": "Sous-total",
+    "delivery": "Livraison",
+    "total": "Total",
+    "checkout": "Passer à la Caisse",
+    "remove": "Supprimer",
+    "items": "articles"
+  },
+  "checkout": {
+    "title": "Caisse",
+    "delivery": "Détails de Livraison",
+    "payment": "Mode de Paiement",
+    "name": "Nom Complet",
+    "phone": "Numéro de Téléphone",
+    "address": "Adresse de Livraison",
+    "district": "District",
+    "momo": "Mobile Money (MoMo)",
+    "cash": "Paiement à la Livraison",
+    "card": "Carte de Crédit/Débit",
+    "momoNumber": "Numéro MoMo",
+    "placeOrder": "Passer la Commande",
+    "orderSummary": "Résumé de la Commande",
+    "success": "Commande Passée!",
+    "successDesc": "Votre commande a été passée avec succès.",
+    "continueShopping": "Continuer les Achats"
+  },
+  "search": {
+    "results": "Résultats de Recherche",
+    "noResults": "Aucun produit trouvé pour",
+    "showing": "Affichage de",
+    "products": "produits"
+  },
+  "filter": {
+    "title": "Filtrer",
+    "price": "Fourchette de Prix",
+    "category": "Catégorie",
+    "inStock": "En Stock Seulement",
+    "apply": "Appliquer",
+    "clear": "Effacer"
+  }
+}

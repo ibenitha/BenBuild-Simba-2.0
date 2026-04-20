@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "home": "Home",
+    "categories": "Categories",
+    "cart": "Cart",
+    "search": "Search products...",
+    "darkMode": "Dark Mode",
+    "language": "Language"
+  },
+  "home": {
+    "hero": {
+      "title": "Rwanda's Freshest Groceries",
+      "subtitle": "Delivered to your door. Shop from 789+ products across 10 categories.",
+      "cta": "Shop Now",
+      "badge": "Free delivery on orders over 20,000 RWF"
+    },
+    "categories": "Shop by Category",
+    "featured": "Featured Products",
+    "deals": "Today's Deals"
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "outOfStock": "Out of Stock",
+    "inStock": "In Stock",
+    "reviews": "reviews",
+    "description": "Description",
+    "relatedProducts": "You might also like",
+    "unit": "Unit"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "emptyDesc": "Start shopping to add items to your cart",
+    "shopNow": "Shop Now",
+    "subtotal": "Subtotal",
+    "delivery": "Delivery",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "remove": "Remove",
+    "items": "items"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "delivery": "Delivery Details",
+    "payment": "Payment Method",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "address": "Delivery Address",
+    "district": "District",
+    "momo": "Mobile Money (MoMo)",
+    "cash": "Cash on Delivery",
+    "card": "Credit/Debit Card",
+    "momoNumber": "MoMo Number",
+    "placeOrder": "Place Order",
+    "orderSummary": "Order Summary",
+    "success": "Order Placed!",
+    "successDesc": "Your order has been placed successfully. You will receive a confirmation shortly.",
+    "continueShopping": "Continue Shopping"
+  },
+  "search": {
+    "results": "Search Results",
+    "noResults": "No products found for",
+    "showing": "Showing",
+    "products": "products"
+  },
+  "filter": {
+    "title": "Filter",
+    "price": "Price Range",
+    "category": "Category",
+    "inStock": "In Stock Only",
+    "apply": "Apply",
+    "clear": "Clear"
+  }
+}

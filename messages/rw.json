@@ -1,0 +1,74 @@
+{
+  "nav": {
+    "home": "Ahabanza",
+    "categories": "Ibyiciro",
+    "cart": "Agasanduku",
+    "search": "Shakisha ibicuruzwa...",
+    "darkMode": "Umwijima",
+    "language": "Ururimi"
+  },
+  "home": {
+    "hero": {
+      "title": "Ibiribwa Bibi mu Rwanda",
+      "subtitle": "Bitumirwa ku rugi rwawe. Gura ibicuruzwa 789+ mu byiciro 10.",
+      "cta": "Gura Ubu",
+      "badge": "Gutumiza ubuntu ku mafaranga arenga 20,000 RWF"
+    },
+    "categories": "Gura ukurikije Icyiciro",
+    "featured": "Ibicuruzwa Byihariye",
+    "deals": "Amangazo y'Uyu Munsi"
+  },
+  "product": {
+    "addToCart": "Shyira mu Gasanduku",
+    "outOfStock": "Nta Bubiko",
+    "inStock": "Bihari",
+    "reviews": "ibitekerezo",
+    "description": "Ibisobanuro",
+    "relatedProducts": "Ushobora no gukunda",
+    "unit": "Ingano"
+  },
+  "cart": {
+    "title": "Agasanduku Kawe",
+    "empty": "Agasanduku kawe kararimo ubusa",
+    "emptyDesc": "Tangira kugura kugira ngo wongeremo ibintu",
+    "shopNow": "Gura Ubu",
+    "subtotal": "Igiteranyo",
+    "delivery": "Gutumiza",
+    "total": "Igiteranyo Cyose",
+    "checkout": "Komeza Kwishyura",
+    "remove": "Gukuraho",
+    "items": "ibintu"
+  },
+  "checkout": {
+    "title": "Kwishyura",
+    "delivery": "Amakuru yo Gutumiza",
+    "payment": "Uburyo bwo Kwishyura",
+    "name": "Amazina Yuzuye",
+    "phone": "Nimero ya Telefoni",
+    "address": "Aderesi yo Gutumizirwa",
+    "district": "Akarere",
+    "momo": "Mobile Money (MoMo)",
+    "cash": "Kwishyura Iyo Bitumijwe",
+    "card": "Ikarita ya Banki",
+    "momoNumber": "Nimero ya MoMo",
+    "placeOrder": "Saba Gutumizwa",
+    "orderSummary": "Incamake y'Itumiza",
+    "success": "Itumiza Ryakiriwe!",
+    "successDesc": "Itumiza ryawe ryakiriwe neza.",
+    "continueShopping": "Komeza Kugura"
+  },
+  "search": {
+    "results": "Ibisubizo bya Gushakisha",
+    "noResults": "Nta bicuruzwa byabonetse kuri",
+    "showing": "Erekana",
+    "products": "ibicuruzwa"
+  },
+  "filter": {
+    "title": "Shungura",
+    "price": "Igiciro",
+    "category": "Icyiciro",
+    "inStock": "Bihari Gusa",
+    "apply": "Shyira mu Bikorwa",
+    "clear": "Siba"
+  }
+}
