@@ -29,7 +29,7 @@ export default function FilterPanel({
     <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-4 space-y-5">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-slate-800 dark:text-slate-100">{t('title')}</h3>
-        <button onClick={onClear} className="text-xs text-slate-400 hover:text-simba-green flex items-center gap-1 transition-colors">
+        <button onClick={onClear} className="text-xs text-slate-400 hover:text-simba-orange flex items-center gap-1 transition-colors">
           <X className="w-3 h-3" /> {t('clear')}
         </button>
       </div>
@@ -40,7 +40,7 @@ export default function FilterPanel({
         <div className="space-y-1">
           <button
             onClick={() => onCategoryChange('')}
-            className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${!selectedCategory ? 'bg-simba-green text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
+            className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${!selectedCategory ? 'bg-simba-orange text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
           >
             All Categories
           </button>
@@ -48,7 +48,7 @@ export default function FilterPanel({
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.slug)}
-              className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${selectedCategory === cat.slug ? 'bg-simba-green text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
+              className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${selectedCategory === cat.slug ? 'bg-simba-orange text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
             >
               {cat.name}
             </button>
@@ -68,7 +68,7 @@ export default function FilterPanel({
           step={500}
           value={priceRange[1]}
           onChange={e => onPriceChange([priceRange[0], Number(e.target.value)])}
-          className="w-full accent-simba-green"
+          className="w-full accent-simba-orange"
         />
       </div>
 
@@ -78,7 +78,7 @@ export default function FilterPanel({
           type="checkbox"
           checked={inStockOnly}
           onChange={e => onInStockChange(e.target.checked)}
-          className="w-4 h-4 accent-simba-green rounded"
+          className="w-4 h-4 accent-simba-orange rounded"
         />
         <span className="text-sm text-slate-700 dark:text-slate-300">{t('inStock')}</span>
       </label>

@@ -1,213 +1,246 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { CheckCircle, Smartphone, CreditCard, Banknote, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useCartStore } from '@/store/cart';
+import { useAuthStore } from '@/store/auth';
+import { useOperationsStore } from '@/store/operations';
+import { simbaBranches } from '@/lib/branches';
 import { formatPrice } from '@/lib/utils';
+import { Star, MapPin } from 'lucide-react';
 
-interface CheckoutPageProps {
-  params: { locale: string };
-}
+const PICKUP_SLOTS = ['08:00 - 10:00', '10:00 - 12:00', '12:00 - 14:00', '16:00 - 18:00'];
+const DEFAULT_DEPOSIT = 500;
 
-const DISTRICTS = ['Gasabo', 'Kicukiro', 'Nyarugenge', 'Bugesera', 'Gatsibo', 'Kayonza', 'Kirehe', 'Maramagambi', 'Ngoma', 'Nyagatare', 'Rwamagana'];
-
-export default function CheckoutPage({ params: { locale } }: CheckoutPageProps) {
-  const t = useTranslations('checkout');
+export default function CheckoutPage({ params: { locale } }: { params: { locale: string } }) {
+  const t = useTranslations('pickupCheckout');
+  const router = useRouter();
   const { items, total, clearCart } = useCartStore();
-  const [step, setStep] = useState<'details' | 'payment' | 'success'>('details');
-  const [paymentMethod, setPaymentMethod] = useState<'momo' | 'cash' | 'card'>('momo');
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: '', phone: '', address: '', district: 'Gasabo', momoNumber: '' });
+  const user = useAuthStore((s) => s.currentUser);
+  const seedBranchStock = useOperationsStore((s) => s.seedBranchStock);
+  const getBranchStock = useOperationsStore((s) => s.getBranchStock);
+  const placePickupOrder = useOperationsStore((s) => s.placePickupOrder);
+  const reviews = useOperationsStore((s) => s.reviews);
 
-  const deliveryFee = total() >= 20000 ? 0 : 2000;
-  const orderTotal = total() + deliveryFee;
+  // Branch ratings derived from reviews
+  const branchRatings = useMemo(() =>
+    simbaBranches.reduce<Record<string, { avg: number; count: number }>>((acc, b) => {
+      const br = reviews.filter(r => r.branchId === b.id);
+      acc[b.id] = {
+        avg: br.length ? br.reduce((s, r) => s + r.rating, 0) / br.length : 0,
+        count: br.length,
+      };
+      return acc;
+    }, {}),
+    [reviews]
+  );
 
-  const handleDetailsSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep('payment');
-  };
+  const [branchId, setBranchId] = useState(simbaBranches[0].id);
+  const [slot, setSlot] = useState(PICKUP_SLOTS[1]);
+  const [phone, setPhone] = useState('');
+  const [step, setStep] = useState<'pickup' | 'deposit' | 'done'>('pickup');
+  const [orderId, setOrderId] = useState('');
+  const [hydrated, setHydrated] = useState(false);
 
-  const handlePlaceOrder = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    // Simulate payment processing
-    await new Promise(r => setTimeout(r, 2000));
-    setLoading(false);
-    setStep('success');
+  useEffect(() => {
+    seedBranchStock(simbaBranches.map((branch) => branch.id));
+  }, [seedBranchStock]);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  const stableItems = hydrated ? items : [];
+  const subtotal = hydrated ? total() : 0;
+  const hasOutOfStock = useMemo(
+    () => stableItems.some((item) => getBranchStock(branchId, item.product.id) < item.quantity),
+    [stableItems, branchId, getBranchStock]
+  );
+
+  const placeOrder = () => {
+    if (!user) {
+      router.push(`/${locale}/auth/login`);
+      return;
+    }
+    const created = placePickupOrder({
+      customerName: user.fullName,
+      customerEmail: user.email,
+      branchId,
+      timeSlot: slot,
+      deposit: DEFAULT_DEPOSIT,
+      items: stableItems.map((item) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+        name: item.product.name,
+      })),
+    });
     clearCart();
+    setOrderId(created.id);
+    setStep('done');
   };
 
-  if (step === 'success') {
+  if (stableItems.length === 0 && step !== 'done') {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-center">
-        <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-lg border border-slate-100 dark:border-slate-700">
-          <div className="w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-10 h-10 text-simba-green" />
-          </div>
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">{t('success')}</h1>
-          <p className="text-slate-500 mb-2">{t('successDesc')}</p>
-          <p className="text-sm text-slate-400 mb-8">Order #SB{Date.now().toString().slice(-6)}</p>
-          <div className="bg-slate-50 dark:bg-slate-700 rounded-xl p-4 mb-6 text-left">
-            <p className="text-sm text-slate-600 dark:text-slate-300"><strong>Delivery to:</strong> {form.address}, {form.district}</p>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mt-1"><strong>Payment:</strong> {paymentMethod === 'momo' ? 'Mobile Money' : paymentMethod === 'cash' ? 'Cash on Delivery' : 'Card'}</p>
-          </div>
-          <Link href={`/${locale}`} className="block w-full bg-simba-green text-white py-3 rounded-xl font-semibold hover:bg-simba-green-dark transition-colors">
-            {t('continueShopping')}
-          </Link>
-        </div>
+      <div className="max-w-3xl mx-auto px-4 py-16">
+        <h1 className="text-3xl font-bold mb-3">{t('checkout')}</h1>
+        <p className="text-slate-500 mb-6">{t('emptyCart')}</p>
+        <Link href={`/${locale}`} className="bg-simba-orange text-white px-5 py-3 rounded-xl font-semibold">{t('startShopping')}</Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-8">{t('title')}</h1>
+    <div className="max-w-6xl mx-auto px-4 py-10">
+      <h1 className="text-3xl font-bold mb-2">{t('title')}</h1>
+      <p className="text-slate-500 mb-8">{t('subtitle')}</p>
 
-      {/* Progress steps */}
-      <div className="flex items-center gap-2 mb-8">
-        {['details', 'payment'].map((s, i) => (
-          <div key={s} className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${step === s || (step === 'payment' && s === 'details') ? 'bg-simba-green text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
-              {i + 1}
-            </div>
-            <span className={`text-sm font-medium ${step === s ? 'text-simba-green' : 'text-slate-400'}`}>
-              {s === 'details' ? t('delivery') : t('payment')}
-            </span>
-            {i < 1 && <ChevronRight className="w-4 h-4 text-slate-300" />}
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Form */}
-        <div className="lg:col-span-2">
-          {step === 'details' && (
-            <form onSubmit={handleDetailsSubmit} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 space-y-4">
-              <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100">{t('delivery')}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('name')}</label>
-                  <input required value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-simba-green text-sm" placeholder="Jean Baptiste" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('phone')}</label>
-                  <input required value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-simba-green text-sm" placeholder="+250 788 000 000" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('address')}</label>
-                <input required value={form.address} onChange={e => setForm({...form, address: e.target.value})} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-simba-green text-sm" placeholder="KG 123 St, Kigali" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{t('district')}</label>
-                <select value={form.district} onChange={e => setForm({...form, district: e.target.value})} className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-simba-green text-sm">
-                  {DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
-                </select>
-              </div>
-              <button type="submit" className="w-full bg-simba-green text-white py-3 rounded-xl font-semibold hover:bg-simba-green-dark transition-colors">
-                Continue to Payment
-              </button>
-            </form>
-          )}
-
-          {step === 'payment' && (
-            <form onSubmit={handlePlaceOrder} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 space-y-4">
-              <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100">{t('payment')}</h2>
-
-              {/* Payment methods */}
-              <div className="space-y-3">
-                {[
-                  { id: 'momo', label: t('momo'), icon: <Smartphone className="w-5 h-5" />, desc: 'MTN MoMo or Airtel Money', badge: 'Recommended' },
-                  { id: 'cash', label: t('cash'), icon: <Banknote className="w-5 h-5" />, desc: 'Pay when your order arrives', badge: null },
-                  { id: 'card', label: t('card'), icon: <CreditCard className="w-5 h-5" />, desc: 'Visa, Mastercard', badge: null },
-                ].map(method => (
-                  <label key={method.id} className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === method.id ? 'border-simba-green bg-green-50 dark:bg-green-900/20' : 'border-slate-200 dark:border-slate-600 hover:border-slate-300'}`}>
-                    <input type="radio" name="payment" value={method.id} checked={paymentMethod === method.id as 'momo' | 'cash' | 'card'} onChange={() => setPaymentMethod(method.id as 'momo' | 'cash' | 'card')} className="sr-only" />
-                    <div className={`${paymentMethod === method.id ? 'text-simba-green' : 'text-slate-400'}`}>{method.icon}</div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm text-slate-800 dark:text-slate-100">{method.label}</span>
-                        {method.badge && <span className="bg-simba-green text-white text-xs px-2 py-0.5 rounded-full">{method.badge}</span>}
+      {step === 'pickup' && (
+        <div className="grid lg:grid-cols-2 gap-6">
+          <div className="border rounded-2xl p-5 bg-white dark:bg-slate-900">
+            <h2 className="text-lg font-bold mb-4">{t('selectBranch')}</h2>
+            <div className="space-y-2">
+              {simbaBranches.map((branch) => {
+                const rating = branchRatings[branch.id];
+                return (
+                  <label key={branch.id} className={`block border rounded-xl p-3 cursor-pointer transition-colors ${branch.id === branchId ? 'border-simba-orange bg-orange-50 dark:bg-orange-950/30' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300'}`}>
+                    <input type="radio" className="sr-only" checked={branch.id === branchId} onChange={() => setBranchId(branch.id)} />
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">{branch.name}</p>
+                        <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                          <MapPin className="w-3 h-3" /> {branch.district} {t('district')}
+                        </p>
                       </div>
-                      <p className="text-xs text-slate-500">{method.desc}</p>
-                    </div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === method.id ? 'border-simba-green' : 'border-slate-300'}`}>
-                      {paymentMethod === method.id && <div className="w-2.5 h-2.5 rounded-full bg-simba-green" />}
+                      {rating.count > 0 && (
+                        <div className="flex items-center gap-1 flex-shrink-0">
+                          <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                          <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{rating.avg.toFixed(1)}</span>
+                          <span className="text-xs text-slate-400">({rating.count})</span>
+                        </div>
+                      )}
                     </div>
                   </label>
-                ))}
-              </div>
-
-              {/* MoMo number input */}
-              {paymentMethod === 'momo' && (
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">{t('momoNumber')}</label>
-                  <input
-                    required
-                    value={form.momoNumber}
-                    onChange={e => setForm({...form, momoNumber: e.target.value})}
-                    className="w-full px-4 py-2.5 rounded-xl border border-yellow-300 dark:border-yellow-700 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-simba-orange text-sm"
-                    placeholder="+250 788 000 000"
-                  />
-                  <p className="text-xs text-slate-500 mt-2">💡 You will receive a payment prompt on your phone</p>
-                </div>
-              )}
-
-              <div className="flex gap-3">
-                <button type="button" onClick={() => setStep('details')} className="flex-1 border-2 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 py-3 rounded-xl font-medium hover:border-simba-green hover:text-simba-green transition-colors">
-                  Back
-                </button>
-                <button type="submit" disabled={loading} className="flex-1 bg-simba-green text-white py-3 rounded-xl font-semibold hover:bg-simba-green-dark transition-colors disabled:opacity-70 flex items-center justify-center gap-2">
-                  {loading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : t('placeOrder')}
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-
-        {/* Order summary */}
-        <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 sticky top-24">
-            <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-4">{t('orderSummary')}</h2>
-            <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
-              {items.map(item => (
-                <div key={item.product.id} className="flex gap-3">
-                  <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                    <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-800 dark:text-slate-100 line-clamp-1">{item.product.name}</p>
-                    <p className="text-xs text-slate-500">x{item.quantity}</p>
-                  </div>
-                  <p className="text-sm font-medium text-simba-green">{formatPrice(item.product.price * item.quantity)}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-slate-500">Subtotal</span>
-                <span>{formatPrice(total())}</span>
+          </div>
+
+          <div className="border rounded-2xl p-5 bg-white dark:bg-slate-900">
+            <h2 className="text-lg font-bold mb-4">{t('pickupTimeContact')}</h2>
+            <label className="block text-sm mb-2">{t('phoneNumber')}</label>
+            <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+250 7xx xxx xxx" className="w-full border rounded-xl px-4 py-2.5 mb-4 bg-transparent" />
+            <label className="block text-sm mb-2">{t('timeSlot')}</label>
+            <select value={slot} onChange={(e) => setSlot(e.target.value)} className="w-full border rounded-xl px-4 py-2.5 bg-transparent">
+              {PICKUP_SLOTS.map((item) => <option key={item} value={item}>{item}</option>)}
+            </select>
+
+            <div className="mt-6 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-sm">
+              <p className="font-semibold mb-1">{t('stockCheck')}</p>
+              <p className={hasOutOfStock ? 'text-red-600' : 'text-green-600'}>
+                {hasOutOfStock ? t('outOfStock') : t('allAvailable')}
+              </p>
+            </div>
+
+            <button
+              disabled={!phone || hasOutOfStock}
+              onClick={() => setStep('deposit')}
+              className="mt-5 w-full bg-simba-orange text-white py-3 rounded-xl font-semibold disabled:opacity-50"
+            >
+              {t('continueToDeposit')}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === 'deposit' && (
+        <div className="max-w-md mx-auto">
+          {/* MoMo mock payment card */}
+          <div className="rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700">
+            {/* MoMo header */}
+            <div className="bg-yellow-400 px-6 py-5 flex items-center gap-3">
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center font-black text-yellow-500 text-lg shadow">M</div>
+              <div>
+                <p className="font-black text-slate-900 text-lg leading-tight">MTN MoMo</p>
+                <p className="text-xs text-slate-700">Mobile Money Payment</p>
               </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Delivery</span>
-                <span className={deliveryFee === 0 ? 'text-simba-green' : ''}>{deliveryFee === 0 ? 'Free' : formatPrice(deliveryFee)}</span>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 p-6 space-y-4">
+              <div className="text-center py-2">
+                <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Deposit amount</p>
+                <p className="text-4xl font-black text-slate-900 dark:text-white">{formatPrice(DEFAULT_DEPOSIT)}</p>
+                <p className="text-xs text-slate-500 mt-1">Non-refundable pick-up deposit</p>
               </div>
-              <div className="flex justify-between font-bold text-base border-t border-slate-200 dark:border-slate-700 pt-2">
-                <span>Total</span>
-                <span className="text-simba-green">{formatPrice(orderTotal)}</span>
+
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">{t('branchLabel')}</span>
+                  <span className="font-semibold text-right max-w-[55%]">{simbaBranches.find(b => b.id === branchId)?.name}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">{t('timeLabel')}</span>
+                  <span className="font-semibold">{slot}</span>
+                </div>
+                <div className="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2 mt-2">
+                  <span className="text-slate-500">{t('subtotalLabel')}</span>
+                  <span className="font-semibold">{formatPrice(subtotal)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">{t('depositLabel')}</span>
+                  <span className="font-bold text-yellow-600">{formatPrice(DEFAULT_DEPOSIT)}</span>
+                </div>
+              </div>
+
+              <p className="text-xs text-slate-500 text-center leading-relaxed">
+                {t('depositDescription', { amount: DEFAULT_DEPOSIT })}
+              </p>
+
+              <div className="flex gap-3 pt-1">
+                <button
+                  onClick={() => setStep('pickup')}
+                  className="px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl font-semibold text-sm hover:border-slate-400 transition-colors"
+                >
+                  {t('back')}
+                </button>
+                <button
+                  onClick={placeOrder}
+                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-slate-900 py-3 rounded-xl font-black text-sm transition-colors shadow-md"
+                >
+                  {t('simulatePayment')} →
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {step === 'done' && (
+        <div className="max-w-md mx-auto border rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-lg">
+          <div className="bg-green-500 px-6 py-8 text-center">
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow">
+              <span className="text-3xl">✓</span>
+            </div>
+            <h2 className="text-2xl font-black text-white">{t('orderConfirmed')}</h2>
+            <p className="text-green-100 text-sm mt-1">{t('orderId')}: <span className="font-bold text-white">{orderId}</span></p>
+          </div>
+          <div className="p-6">
+            <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">{t('orderConfirmedDescription')}</p>
+            <div className="flex flex-col gap-3">
+              <Link href={`/${locale}/branch-dashboard`} className="w-full bg-simba-orange text-white px-4 py-3 rounded-xl font-bold text-sm text-center hover:bg-simba-orange-dark transition-colors">
+                {t('openBranchDashboard')}
+              </Link>
+              <Link href={`/${locale}/branch-reviews`} className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm text-center transition-colors">
+                ⭐ Rate your pick-up experience
+              </Link>
+              <Link href={`/${locale}`} className="w-full border border-slate-200 dark:border-slate-700 px-4 py-3 rounded-xl font-semibold text-sm text-center hover:border-simba-orange transition-colors">
+                {t('continueShopping')}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

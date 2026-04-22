@@ -19,7 +19,7 @@ export default async function LocaleLayout({
         <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
           <Navbar locale={locale} />
           <main>{children}</main>
-          <Footer />
+          <Footer locale={locale} />
         </div>
       </ThemeProvider>
     </NextIntlClientProvider>

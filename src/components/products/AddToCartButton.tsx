@@ -26,14 +26,14 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
       <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-xl px-4 py-2">
         <button
           onClick={() => setQuantity(q => Math.max(1, q - 1))}
-          className="w-8 h-8 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm hover:bg-simba-green hover:text-white transition-colors"
+          className="w-8 h-8 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm hover:bg-simba-orange hover:text-white transition-colors"
         >
           <Minus className="w-4 h-4" />
         </button>
         <span className="font-bold text-lg w-8 text-center">{quantity}</span>
         <button
           onClick={() => setQuantity(q => q + 1)}
-          className="w-8 h-8 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm hover:bg-simba-green hover:text-white transition-colors"
+          className="w-8 h-8 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm hover:bg-simba-orange hover:text-white transition-colors"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -46,7 +46,7 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
         className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-base transition-all active:scale-95 ${
           added
             ? 'bg-green-500 text-white'
-            : 'bg-simba-green text-white hover:bg-simba-green-dark'
+            : 'bg-simba-orange text-white hover:bg-simba-orange-dark'
         } disabled:opacity-50 disabled:cursor-not-allowed`}
       >
         <ShoppingCart className="w-5 h-5" />

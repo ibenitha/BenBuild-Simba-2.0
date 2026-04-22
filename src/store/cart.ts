@@ -10,6 +10,7 @@ interface CartStore {
   clearCart: () => void;
   total: () => number;
   itemCount: () => number;
+  savings: () => number;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -27,15 +28,16 @@ export const useCartStore = create<CartStore>()(
       },
       removeItem: (productId) => set({ items: get().items.filter(i => i.product.id !== productId) }),
       updateQuantity: (productId, quantity) => {
-        if (quantity <= 0) {
-          get().removeItem(productId);
-          return;
-        }
+        if (quantity <= 0) { get().removeItem(productId); return; }
         set({ items: get().items.map(i => i.product.id === productId ? { ...i, quantity } : i) });
       },
       clearCart: () => set({ items: [] }),
       total: () => get().items.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
       itemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
+      savings: () => get().items.reduce((sum, i) => {
+        const saved = i.product.originalPrice ? (i.product.originalPrice - i.product.price) * i.quantity : 0;
+        return sum + saved;
+      }, 0),
     }),
     { name: 'simba-cart' }
   )
