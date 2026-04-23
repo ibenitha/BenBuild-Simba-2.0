@@ -38,8 +38,7 @@ export default function RegisterPage({ params: { locale } }: { params: { locale:
     const validationError = validate();
     if (validationError) { setError(validationError); return; }
     setLoading(true);
-    await new Promise(r => setTimeout(r, 400));
-    const result = register({ fullName: fullName.trim(), email: email.trim(), password });
+    const result = await register({ fullName: fullName.trim(), email: email.trim(), password });
     setLoading(false);
     if (!result.ok) { setError(result.message || t('registrationFailed')); return; }
     router.push(`/${locale}`);

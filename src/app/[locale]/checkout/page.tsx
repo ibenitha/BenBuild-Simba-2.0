@@ -9,7 +9,7 @@ import { useAuthStore } from '@/store/auth';
 import { useOperationsStore } from '@/store/operations';
 import { simbaBranches } from '@/lib/branches';
 import { formatPrice } from '@/lib/utils';
-import { Star, MapPin } from 'lucide-react';
+import { Star, MapPin, Loader2 } from 'lucide-react';
 
 const PICKUP_SLOTS = ['08:00 - 10:00', '10:00 - 12:00', '12:00 - 14:00', '16:00 - 18:00'];
 const DEFAULT_DEPOSIT = 500;
@@ -18,13 +18,35 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
   const t = useTranslations('pickupCheckout');
   const router = useRouter();
   const { items, total, clearCart } = useCartStore();
-  const user = useAuthStore((s) => s.currentUser);
-  const seedBranchStock = useOperationsStore((s) => s.seedBranchStock);
-  const getBranchStock = useOperationsStore((s) => s.getBranchStock);
-  const placePickupOrder = useOperationsStore((s) => s.placePickupOrder);
-  const reviews = useOperationsStore((s) => s.reviews);
+  const user = useAuthStore(s => s.currentUser);
+  const { getBranchStock, fetchStock, stockByBranch, placePickupOrder, reviews, fetchReviews } = useOperationsStore();
 
-  // Branch ratings derived from reviews
+  const [branchId, setBranchId] = useState(simbaBranches[0].id);
+  const [slot, setSlot] = useState(PICKUP_SLOTS[1]);
+  const [phone, setPhone] = useState('');
+  const [step, setStep] = useState<'pickup' | 'deposit' | 'done'>('pickup');
+  const [orderId, setOrderId] = useState('');
+  const [placing, setPlacing] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => { setHydrated(true); }, []);
+
+  // Fetch stock + reviews when branch changes
+  useEffect(() => {
+    fetchStock(branchId);
+    fetchReviews();
+  }, [branchId, fetchStock, fetchReviews]);
+
+  const stableItems = hydrated ? items : [];
+  const subtotal = hydrated ? total() : 0;
+
+  const branchStock = stockByBranch[branchId] ?? {};
+  const hasOutOfStock = useMemo(
+    () => stableItems.some(item => (branchStock[item.product.id] ?? 25) < item.quantity),
+    [stableItems, branchStock]
+  );
+
+  // Branch ratings from reviews
   const branchRatings = useMemo(() =>
     simbaBranches.reduce<Record<string, { avg: number; count: number }>>((acc, b) => {
       const br = reviews.filter(r => r.branchId === b.id);
@@ -37,47 +59,25 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
     [reviews]
   );
 
-  const [branchId, setBranchId] = useState(simbaBranches[0].id);
-  const [slot, setSlot] = useState(PICKUP_SLOTS[1]);
-  const [phone, setPhone] = useState('');
-  const [step, setStep] = useState<'pickup' | 'deposit' | 'done'>('pickup');
-  const [orderId, setOrderId] = useState('');
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    seedBranchStock(simbaBranches.map((branch) => branch.id));
-  }, [seedBranchStock]);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-
-  const stableItems = hydrated ? items : [];
-  const subtotal = hydrated ? total() : 0;
-  const hasOutOfStock = useMemo(
-    () => stableItems.some((item) => getBranchStock(branchId, item.product.id) < item.quantity),
-    [stableItems, branchId, getBranchStock]
-  );
-
-  const placeOrder = () => {
-    if (!user) {
-      router.push(`/${locale}/auth/login`);
-      return;
-    }
-    const created = placePickupOrder({
+  const placeOrder = async () => {
+    if (!user) { router.push(`/${locale}/auth/login`); return; }
+    setPlacing(true);
+    const result = await placePickupOrder({
       customerName: user.fullName,
       customerEmail: user.email,
       branchId,
       timeSlot: slot,
       deposit: DEFAULT_DEPOSIT,
-      items: stableItems.map((item) => ({
+      items: stableItems.map(item => ({
         productId: item.product.id,
         quantity: item.quantity,
         name: item.product.name,
       })),
     });
+    setPlacing(false);
+    if (!result) return; // error — stay on deposit screen
     clearCart();
-    setOrderId(created.id);
+    setOrderId(result.id);
     setStep('done');
   };
 
@@ -96,12 +96,13 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
       <h1 className="text-3xl font-bold mb-2">{t('title')}</h1>
       <p className="text-slate-500 mb-8">{t('subtitle')}</p>
 
+      {/* ── Step 1: Branch + time ── */}
       {step === 'pickup' && (
         <div className="grid lg:grid-cols-2 gap-6">
           <div className="border rounded-2xl p-5 bg-white dark:bg-slate-900">
             <h2 className="text-lg font-bold mb-4">{t('selectBranch')}</h2>
             <div className="space-y-2">
-              {simbaBranches.map((branch) => {
+              {simbaBranches.map(branch => {
                 const rating = branchRatings[branch.id];
                 return (
                   <label key={branch.id} className={`block border rounded-xl p-3 cursor-pointer transition-colors ${branch.id === branchId ? 'border-simba-orange bg-orange-50 dark:bg-orange-950/30' : 'border-slate-200 dark:border-slate-700 hover:border-slate-300'}`}>
@@ -113,7 +114,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                           <MapPin className="w-3 h-3" /> {branch.district} {t('district')}
                         </p>
                       </div>
-                      {rating.count > 0 && (
+                      {rating?.count > 0 && (
                         <div className="flex items-center gap-1 flex-shrink-0">
                           <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                           <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{rating.avg.toFixed(1)}</span>
@@ -129,11 +130,11 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
 
           <div className="border rounded-2xl p-5 bg-white dark:bg-slate-900">
             <h2 className="text-lg font-bold mb-4">{t('pickupTimeContact')}</h2>
-            <label className="block text-sm mb-2">{t('phoneNumber')}</label>
-            <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+250 7xx xxx xxx" className="w-full border rounded-xl px-4 py-2.5 mb-4 bg-transparent" />
-            <label className="block text-sm mb-2">{t('timeSlot')}</label>
-            <select value={slot} onChange={(e) => setSlot(e.target.value)} className="w-full border rounded-xl px-4 py-2.5 bg-transparent">
-              {PICKUP_SLOTS.map((item) => <option key={item} value={item}>{item}</option>)}
+            <label className="block text-sm font-medium mb-1.5">{t('phoneNumber')}</label>
+            <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+250 7xx xxx xxx" className="w-full border rounded-xl px-4 py-2.5 mb-4 bg-transparent focus:outline-none focus:border-simba-orange" />
+            <label className="block text-sm font-medium mb-1.5">{t('timeSlot')}</label>
+            <select value={slot} onChange={e => setSlot(e.target.value)} className="w-full border rounded-xl px-4 py-2.5 bg-transparent focus:outline-none focus:border-simba-orange">
+              {PICKUP_SLOTS.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
 
             <div className="mt-6 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-sm">
@@ -146,7 +147,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
             <button
               disabled={!phone || hasOutOfStock}
               onClick={() => setStep('deposit')}
-              className="mt-5 w-full bg-simba-orange text-white py-3 rounded-xl font-semibold disabled:opacity-50"
+              className="mt-5 w-full bg-simba-orange text-white py-3 rounded-xl font-bold disabled:opacity-50 hover:bg-simba-orange-dark transition-colors"
             >
               {t('continueToDeposit')}
             </button>
@@ -154,11 +155,10 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
         </div>
       )}
 
+      {/* ── Step 2: MoMo deposit ── */}
       {step === 'deposit' && (
         <div className="max-w-md mx-auto">
-          {/* MoMo mock payment card */}
           <div className="rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700">
-            {/* MoMo header */}
             <div className="bg-yellow-400 px-6 py-5 flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center font-black text-yellow-500 text-lg shadow">M</div>
               <div>
@@ -169,9 +169,9 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
 
             <div className="bg-white dark:bg-slate-900 p-6 space-y-4">
               <div className="text-center py-2">
-                <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Deposit amount</p>
+                <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">{t('depositAmount')}</p>
                 <p className="text-4xl font-black text-slate-900 dark:text-white">{formatPrice(DEFAULT_DEPOSIT)}</p>
-                <p className="text-xs text-slate-500 mt-1">Non-refundable pick-up deposit</p>
+                <p className="text-xs text-slate-500 mt-1">{t('nonRefundable')}</p>
               </div>
 
               <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 space-y-2 text-sm">
@@ -198,17 +198,16 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
               </p>
 
               <div className="flex gap-3 pt-1">
-                <button
-                  onClick={() => setStep('pickup')}
-                  className="px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl font-semibold text-sm hover:border-slate-400 transition-colors"
-                >
+                <button onClick={() => setStep('pickup')} className="px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl font-semibold text-sm hover:border-slate-400 transition-colors">
                   {t('back')}
                 </button>
                 <button
                   onClick={placeOrder}
-                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-slate-900 py-3 rounded-xl font-black text-sm transition-colors shadow-md"
+                  disabled={placing}
+                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-slate-900 py-3 rounded-xl font-black text-sm transition-colors shadow-md disabled:opacity-60 flex items-center justify-center gap-2"
                 >
-                  {t('simulatePayment')} →
+                  {placing && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {placing ? 'Processing...' : `${t('simulatePayment')} →`}
                 </button>
               </div>
             </div>
@@ -216,6 +215,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
         </div>
       )}
 
+      {/* ── Step 3: Confirmed ── */}
       {step === 'done' && (
         <div className="max-w-md mx-auto border rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-lg">
           <div className="bg-green-500 px-6 py-8 text-center">
@@ -232,7 +232,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                 {t('openBranchDashboard')}
               </Link>
               <Link href={`/${locale}/branch-reviews`} className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm text-center transition-colors">
-                ⭐ Rate your pick-up experience
+                ⭐ {t('rateExperience')}
               </Link>
               <Link href={`/${locale}`} className="w-full border border-slate-200 dark:border-slate-700 px-4 py-3 rounded-xl font-semibold text-sm text-center hover:border-simba-orange transition-colors">
                 {t('continueShopping')}

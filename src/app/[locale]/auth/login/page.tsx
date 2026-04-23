@@ -32,9 +32,7 @@ export default function LoginPage({ params: { locale } }: { params: { locale: st
     const validationError = validate();
     if (validationError) { setError(validationError); return; }
     setLoading(true);
-    // small delay to feel real
-    await new Promise(r => setTimeout(r, 400));
-    const result = login(email.trim(), password);
+    const result = await login(email.trim(), password);
     setLoading(false);
     if (!result.ok) { setError(result.message || t('loginFailed')); return; }
     router.push(`/${locale}`);

@@ -157,7 +157,7 @@ export default function Navbar({ locale }: NavbarProps) {
 
               {currentUser ? (
                 <button
-                  onClick={logout}
+                  onClick={() => logout()}
                   className="hidden sm:block px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 hover:border-simba-orange"
                 >
                   {t('logout')}

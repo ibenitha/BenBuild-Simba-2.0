@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { simbaBranches } from '@/lib/branches';
 import { useOperationsStore } from '@/store/operations';
 import { useTranslations } from 'next-intl';
@@ -49,6 +49,9 @@ export default function BranchReviewsPage() {
   const t = useTranslations('branchReviews');
   const reviews = useOperationsStore(s => s.reviews);
   const addReview = useOperationsStore(s => s.addReview);
+  const fetchReviews = useOperationsStore(s => s.fetchReviews);
+
+  useEffect(() => { fetchReviews(); }, [fetchReviews]);
 
   const [selectedBranch, setSelectedBranch] = useState(simbaBranches[0].id);
   const [customerName, setCustomerName] = useState('');
