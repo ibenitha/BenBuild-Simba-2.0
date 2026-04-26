@@ -5,22 +5,39 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Loader2, MailCheck } from 'lucide-react';
+import { useAuthStore } from '@/store/auth';
 
 export default function ForgotPasswordPage({ params: { locale } }: { params: { locale: string } }) {
   const t = useTranslations('auth');
+  const sendPasswordReset = useAuthStore((state) => state.sendPasswordReset);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setError('');
-    if (!email.trim()) { setError('Email is required.'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('Enter a valid email address.'); return; }
+
+    if (!email.trim()) {
+      setError('Email is required.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Enter a valid email address.');
+      return;
+    }
+
     setLoading(true);
-    await new Promise(r => setTimeout(r, 600));
+    const result = await sendPasswordReset(email.trim(), locale);
     setLoading(false);
+
+    if (!result.ok) {
+      setError(result.message || 'Unable to send reset email.');
+      return;
+    }
+
     setSent(true);
   };
 
@@ -38,7 +55,9 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
             />
           </div>
           <h1 className="text-2xl font-black text-slate-900 dark:text-white">{t('forgotPassword')}</h1>
-          <p className="text-sm text-slate-500 mt-1 text-center max-w-xs">{t('forgotDemoNote')}</p>
+          <p className="text-sm text-slate-500 mt-1 text-center max-w-xs">
+            Enter your email and we&apos;ll send you a password reset link.
+          </p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-sm">
@@ -48,7 +67,9 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
                 <MailCheck className="w-7 h-7 text-green-600" />
               </div>
               <h2 className="font-bold text-lg text-slate-900 dark:text-white mb-2">Check your inbox</h2>
-              <p className="text-sm text-slate-500 mb-5">{t('resetSent', { email })}</p>
+              <p className="text-sm text-slate-500 mb-5">
+                We sent a password reset link to {email}.
+              </p>
               <Link
                 href={`/${locale}/auth/login`}
                 className="inline-block bg-simba-orange text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-simba-orange-dark transition-colors"
@@ -64,7 +85,10 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
                   type="email"
                   autoComplete="email"
                   value={email}
-                  onChange={e => { setEmail(e.target.value); setError(''); }}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    setError('');
+                  }}
                   placeholder="you@example.com"
                   className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all"
                 />
@@ -82,7 +106,7 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
                 className="w-full bg-simba-orange hover:bg-simba-orange-dark text-white py-3 rounded-xl font-bold text-sm transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                {loading ? 'Sending…' : t('sendResetLink')}
+                {loading ? 'Sending...' : t('sendResetLink')}
               </button>
 
               <div className="text-center">

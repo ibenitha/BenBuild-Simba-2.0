@@ -1,7 +1,21 @@
 {
+  "categories": {
+    "all": "Ibyiciro Byose",
+    "cosmetics-and-personal-care": "Ibirungo by'ubwiza (Kosimetike)",
+    "sports-and-wellness": "Siporo n'ubuzima",
+    "baby-products": "Ibikoresho by'abana",
+    "kitchenware-and-electronics": "Iby'igikoni n'Erekitironiki",
+    "food-products": "Ibiribwa",
+    "alcoholic-drinks": "Ibinyobwa bisindisha",
+    "general": "Ibisanzwe",
+    "cleaning-and-sanitary": "Isuku (Sanitari)",
+    "kitchen-storage": "Ububiko bw'igikoni",
+    "pet-care": "Iby'amatungo"
+  },
   "nav": {
     "home": "Ahabanza",
     "categories": "Ibyiciro",
+    "allProducts": "Ibicuruzwa byose",
     "cart": "Agasanduku",
     "search": "Shakisha ibicuruzwa...",
     "darkMode": "Umwijima",
@@ -12,17 +26,60 @@
     "branchOps": "Ibikorwa by'ishami",
     "myCart": "Agasanduku kanjye",
     "empty": "Nta birimo",
-    "itemsLabel": "{count, plural, one {ikintu} other {ibintu}}"
+    "itemsLabel": "{count, plural, one {ikintu} other {ibintu}}",
+    "freeDelivery": "Gutumiza ku buntu ku masoko arengeje 20,000 RWF",
+    "location": "Kigali, u Rwanda",
+    "seeAllResults": "Reba ibisubizo byose bya \"{query}\"",
+    "more": "Ibindi",
+    "toggleDarkMode": "Hindura uburyo bw'umwijima",
+    "openCart": "Fungura agasanduku",
+    "welcomeSimba": "Murakaza neza muri Simba",
+    "selectBranch": "Hitamo ishami ryawe wifuza",
+    "branchPricingNote": "Ibiciro n'ububiko bishobora guhinduka bitewe n'aho ishami riherereye. Hitamo ishami kugira ngo urebe ibishya biri hafi yawe.",
+    "selectBranchCta": "Hitamo Ishami",
+    "fastDeliveryNote": "Gutumiza vuba: Amasoko aturutse ku ishami wahisemo ubusanzwe agera aho uri mu minota 45 i Kigali.",
+    "reviews": "Ibitekerezo",
+    "locations": "Amashami",
+    "storeLocator": "Gushaka Ishami"
   },
   "home": {
     "hero": {
-      "title": "Ibiribwa Bishya Cyane mu Rwanda",
-      "subtitle": "Bitumirwa ku rugi rwawe. Gura ibicuruzwa 789+ mu byiciro 10.",
-      "cta": "Tangira Kugura",
-      "badge": "Supermarket Nziza Cyane mu Rwanda"
+      "slides": {
+        "main": {
+          "badge": "Supermarket Nziza Cyane mu Rwanda",
+          "title": "Ibiribwa Bishya, Bitumirwa mu Minota 45",
+          "subtitle": "Gura ibicuruzwa 789+ mu mashami 9 i Kigali. Fata ku ishami cyangwa utumirizwe uyu munsi.",
+          "cta": "Tangira Kugura"
+        },
+        "fresh": {
+          "badge": "Ibishya biva mu murima buri munsi",
+          "title": "Imboga n'Imbuto nshya",
+          "subtitle": "Bituruka mu murima buri gitondo. Inyanya, avoka, ibitoki n'ibindi — bigera ku rugi rwawe.",
+          "cta": "Gura Imboga"
+        },
+        "momo": {
+          "badge": "Kwishyura bworoshye",
+          "title": "Ishyura na MoMo, Fata Vuba",
+          "subtitle": "Emeza itumiza ryawe n'ingwate ya 500 RWF. Ishami ryawe rihita ritangira gutegura.",
+          "cta": "Saba Ubu"
+        },
+        "deals": {
+          "badge": "Igihe gito",
+          "title": "Igabanyirizwa rya 15% ku Biribwa Byose",
+          "subtitle": "Koresha code SIMBA10 wishyura. Ibishya, ibiciro bitagereranywa mu byiciro byose.",
+          "cta": "Fata Iri Gabanyirizwa"
+        }
+      },
+      "props": {
+        "delivery": { "title": "Gutumiza mu minota 45", "desc": "muri Kigali" },
+        "pickup": { "title": "Gufatira ubuntu", "desc": "mu mashami 9" },
+        "payment": { "title": "MoMo n'Ikarita", "desc": "Kwishyura neza" },
+        "fresh": { "title": "Ibicuruzwa bishya", "desc": "Cyangwa tugarure amafaranga" }
+      }
     },
     "categories": "Gura ukurikije Icyiciro",
     "categoriesSubtitle": "Ibyiciro 10 · Ibicuruzwa 789+",
+    "shopByCategory": "Gura ukurikije Icyiciro",
     "featured": "Ibicuruzwa Byihariye",
     "featuredSubtitle": "Ibicuruzwa bikunzwe cyane mu byiciro byose",
     "deals": "Amangazo y'Uyu Munsi",
@@ -35,7 +92,39 @@
     "kigaliBranches": "Amashami i Kigali",
     "products": "Ibicuruzwa",
     "avgDelivery": "Gutumiza bisanzwe",
-    "happyCustomers": "Abakiriya bashimye"
+    "happyCustomers": "Abakiriya bashimye",
+    "whyTrustSimba": "Kuki Kigali yizera Simba",
+    "yearsInRwanda": "Imyaka mu Rwanda",
+    "branchesInKigali": "Amashami i Kigali",
+    "freshnessGuarantee": "Ibicuruzwa bishya",
+    "freshnessDesc": "Biva mu murima buri munsi",
+    "securePayment": "Kwishyura neza",
+    "securePaymentDesc": "MoMo n'Amakarita Mpuzamahanga",
+    "deliveryTitle": "Ikwirakwiza ryihuse",
+    "deliveryDesc": "Munsi y'iminota 45 i Kigali",
+    "topPicks": "Ibyatoranyijwe i Kigali",
+    "shopByCategory": "Gura ukurikije Icyiciro",
+    "weeklyDeals": "Ibyatunzwe n'Igihe & Poromosiyo",
+    "browseBranchReviews": "Reba Ibitekerezo by'Amashami",
+    "shareExperience": "Sangira Natwe Ubumenyi bwa Simba",
+    "shareExperienceDesc": "Ibitekerezo byanyu bidufasha kubasubiza neza i Kigali. Soma ibitekerezo ku mashami yacu 9 cyangwa usangire natwe uko wumva serivisi zacu.",
+    "avgRating": "Igereranyo ry'Amanota",
+    "totalReviews": "Ibyifuzo Byose",
+    "kigaliBranches": "Amashami i Kigali",
+    "callSupport": "Duhamagare ubufasha",
+    "trackOrder": "Kurikirana ibyo watumije",
+    "selfService": "Serivisi ku muntu",
+    "gpsDelivery": "Ikwirakwiza rikoresha GPS",
+    "manageAccount": "Gucunga konti n'ibyasubijwe",
+    "promoFreshTitle": "Ibishya Bitumirwa",
+    "promoFreshSubtitle": "Kugeza 20% igabanyirizwa ku bisanzwe",
+    "promoFreshBadge": "Byihariye",
+    "promoMomoTitle": "Byihariye kuri MoMo",
+    "promoMomoSubtitle": "Kwishyura neza, kwishyura vuba",
+    "promoMomoBadge": "Neza",
+    "promoBabyTitle": "Igabanyirizwa ry'Ibikoresho by'Abana",
+    "promoBabySubtitle": "Ibicuruzwa byoroshye ku bana bawe",
+    "promoBabyBadge": "Igabanyirizwa"
   },
   "product": {
     "addToCart": "Shyira mu Gasanduku",
@@ -50,7 +139,21 @@
     "productsAvailable": "Ibicuruzwa {count} bihari",
     "noProductsIn": "Nta bicuruzwa muri {category} ubu",
     "home": "Ahabanza",
-    "off": "IGABANYIJWE"
+    "off": "IGABANYIJWE",
+    "recentlyViewed": "Ibiherutse kurebwa",
+    "add": "Ongeramo",
+    "added": "Byongewe mu Gasanduku!",
+    "noProducts": "Nta bicuruzwa byabonetse",
+    "sortBy": "Shungura ukurikije",
+    "sortOptions": {
+      "newest": "Ibishya",
+      "priceLow": "Igiciro: Uhereye ku gito",
+      "priceHigh": "Igiciro: Uhereye ku kinini",
+      "name": "Izina: A kugeza kuri Z"
+    },
+    "noMatchesFound": "Nta bicuruzwa bijyanye n'ibyo mwasabye byabonetse",
+    "noMatchesDesc": "Ntabwo twabashije kubona ibicuruzwa bijyanye na \"{query}\". Gerageza urebe ko wanditse neza cyangwa urebe mu bindi byiciro.",
+    "browseAll": "Reba ibicuruzwa byose"
   },
   "cart": {
     "title": "Agasanduku Kawe",
@@ -68,7 +171,14 @@
     "items": "ibintu",
     "freeDeliveryUnlocked": "Wahawe gutumizwa UBUNTU!",
     "freeDeliveryProgress": "Ongeramo {amount} kugira ngo ubone gutumizwa ubuntu",
-    "savingsBanner": "Ubika {amount} kuri iyi nguzanyo!"
+    "savingsBanner": "Ubika {amount} kuri iyi nguzanyo!",
+    "save": "Kubika",
+    "orderSummary": "Incamake y'Igisabe",
+    "savings": "Amafaranga yabitswe",
+    "continueShopping": "Komeza kugura",
+    "outOfStockBranch": "Nta bubiko kuri iri shami",
+    "onlyAvailable": "Hasigaye {stock} gusa",
+    "fixStockIssues": "Kora ku bibazo by'ububiko (Sitetike) kugira ngo ukomeze kwishyura"
   },
   "checkout": {
     "title": "Kwishyura",
@@ -102,7 +212,8 @@
     "category": "Icyiciro",
     "inStock": "Bihari Gusa",
     "apply": "Shyira mu Bikorwa",
-    "clear": "Siba"
+    "clear": "Siba",
+    "allCategories": "Ibyiciro Byose"
   },
   "auth": {
     "login": "Injira",
@@ -122,6 +233,7 @@
     "welcomeBack": "Murakaza neza",
     "signInSubtitle": "Injira muri konti yawe ya Simba",
     "createAccountSubtitle": "Injira mu bagura ibihumbi i Kigali",
+    "orContinueWithEmail": "cyangwa komeza na imeyili",
     "signingIn": "Kwinjira...",
     "creatingAccount": "Gufungura konti...",
     "sending": "Kohereza...",
@@ -139,13 +251,33 @@
     "perkPay": "Ishyura na MoMo cyangwa ikarita"
   },
   "conversationSearch": {
+    "eyebrow": "Ishakisha ryo kuganira",
     "title": "Baza Simba AI",
     "hint": "Gerageza: \"Mufite amata meza?\" cyangwa \"Ndashaka ifunguro rya mu gitondo\".",
     "placeholder": "Baza Simba AI icyo ushaka...",
     "ask": "Baza",
     "searching": "Birashakishwa...",
+    "poweredBy": "Ikorwamo na Groq",
+    "poweredByHint": "Ishaka ibicuruzwa mu mvugo isanzwe ikoresheje katalogi yawe.",
+    "assistantLabel": "Simba AI",
+    "viewProduct": "Reba igicuruzwa",
+    "productFallbackUnit": "Birahari",
     "unavailable": "Ishakisha ntiribashije kuboneka ubu. Ongera ugerageze.",
-    "noResponse": "Nta gisubizo."
+    "noResponse": "Nta gisubizo.",
+    "suggestedPrompts": {
+      "milk": "Mufite amata meza?",
+      "breakfast": "Ndashaka ifunguro rya mu gitondo",
+      "snacks": "Ndashaka utuntu turyoshye tw'ubuzima"
+    },
+    "thinking": "Simba AI ari gutekereza...",
+    "userLabel": "Wowe",
+    "clearChat": "Siba ibiganiro",
+    "recommendations": "Ibyo Simba AI akugira inama",
+    "askSimba": "Baza Simba",
+    "viewAllResults": "Reba ibyavuye mu gushakisha byose",
+    "closeChat": "Funga ikiganiro",
+    "welcomeBubble": "Nshobora kugufasha nte uyu munsi?",
+    "repliesInSeconds": "Bisanzwe bisubiza mu masegonda make"
   },
   "pickupCheckout": {
     "checkout": "Kwishyura",
@@ -178,7 +310,19 @@
     "openBranchDashboard": "Fungura dashboard y'ishami",
     "continueShopping": "Komeza kugura",
     "rateExperience": "Tanga amanota ku gufata kwawe",
-    "loginRequired": "Injira kugira ngo usabe gutumizwa."
+    "loginRequired": "Injira kugira ngo usabe gutumizwa.",
+    "changeDefaultBranch": "Hindura ishami ry'ibanze",
+    "phonePlaceholder": "+250 7xx xxx xxx",
+    "momoDepositRequired": "Hakenewe ingwate ya MoMo ya {amount}",
+    "momoDepositDesc": "Kugira ngo turinde igihe cy'abakozi bacu kandi tumenye ko ibyo watumije bipakiye neza kandi ari bishya iyo uje kubifata, dusaba ingwate idasubizwa binyuze kuri MTN MoMo kugira ngo itumiza ryawe ryemezwe.",
+    "momoTitle": "MTN MoMo",
+    "paymentConfirmation": "Kwemeza kwishyura (Konfirumasiyo)",
+    "orderTotal": "Igiteranyo cy'itumiza",
+    "momoSimulationNote": "Igerageza ryo kwishyura kuri MoMo (Simulasiyo). Mu buzima busanzwe, ibi byohereza ubutumwa bwa USSD kuri telefoni yawe.",
+    "rateBranchExperience": "Ubona ute serivisi ku ishami rya {branch}?",
+    "stockAvailable": "{qty} bihari",
+    "outOfStockStock": "Nta bubiko",
+    "onlyLeft": "Hasigaye {qty} gusa"
   },
   "branchDashboard": {
     "title": "Dashboard y'ibikorwa by'ishami",
@@ -191,16 +335,43 @@
     "assignedTo": "Byahawe",
     "assignToStaffA": "Ha Staff A",
     "markReady": "Shyira kuri Ready",
+    "flagNoShow": "Shyira kuri No-Show",
     "completePickup": "Soza gufata",
     "quickInventory": "Igenzura ryihuse ry'ububiko",
     "stock": "Ububiko",
     "markOutOfStock": "Shyira kuri out of stock",
+    "restock": "Ongeramo ibicuruzwa",
     "outOfStock": "Nta bubiko",
     "pending": "Bitegereje",
     "preparing": "Bitegurwa",
     "ready": "Biteguye",
     "completed": "Byarangiye",
-    "total": "byose"
+    "total": "byose",
+    "loadingOrders": "Gutunganya amasoko...",
+    "refresh": "Vugurura",
+    "bulkActions": "Ibikorwa by'amatsinda",
+    "productsSelected": "Ibicuruzwa {count} byatoranyijwe",
+    "clear": "Siba",
+    "addToStock": "Ongeramo mu bubiko",
+    "setStockValue": "Shyiraho agaciro k'ububiko",
+    "markOutOfStockAction": "Shyira kuri out of stock",
+    "updating": "Biri kuvugururwa...",
+    "apply": "Shyira mu bikorwa",
+    "compareBranches": "Gereranya amashami (Konparizonyi)",
+    "hideComparison": "Hisha ikigereranyo",
+    "compareWithBranch": "Gereranya n'irindi shami",
+    "compareWith": "Gereranya na:",
+    "compare": "Gereranya",
+    "comparisonNote": "Erekana ububiko kuruhande rw'urundi. Gutumiza kw'ishami rimwe ntibigira icyo bihindura ku rindi.",
+    "noInventoryMatches": "Nta bicuruzwa bijyanye n'ibyo mwashatse byabonetse.",
+    "editStock": "Hindura ingano y'ububiko",
+    "save": "Bika",
+    "showLess": "Erekana bike",
+    "showAllProductsCount": "Erekana ibicuruzwa byose {count}",
+    "flags": "{count, plural, one {Icyitonderwa} other {Ibyitonderwa (Eritike)}}",
+    "enterStaffName": "Injiza izina ry'umukozi ugiye guhabwa iri soko:",
+    "flagReasonPrompt": "Shyira icyitonderwa kuri uyu mukiriya kuko atabonetse? Andika igitekerezo (si itegeko):",
+    "defaultNoShowComment": "Umukiriya ntiyabonetse ngo aze gufata ibyo yatumije."
   },
   "branchReviews": {
     "title": "Ibitekerezo ku mashami",
@@ -216,7 +387,20 @@
     "noReviews": "Nta bitekerezo biraboneka",
     "anonymous": "Ntazina",
     "reviewsFor": "Ibitekerezo bya {branch}",
-    "reviewSubmitted": "Igitekerezo cyoherejwe — murakoze!"
+    "reviewSuccess": "✓ Igitekerezo cyoherejwe — murakoze!",
+    "totalReviews": "Ibitekerezo byose",
+    "globalAvg": "Impuzandengo rusange",
+    "writeReview": "Andika igitekerezo",
+    "detailedFeedback": "Andika byimbitse",
+    "reviewGuidelines": "Iyo wohereje, uba wemeye amabwiriza yacu y'ibitekerezo",
+    "noReviewsFound": "Nta bitekerezo bijyanye n'ibyo mwashatse byabonetse.",
+    "verifiedPurchase": "Kugura kwemejwe (Vurifiye)",
+    "filterBy": "Shungura ukurikije",
+    "allReviews": "Ibitekerezo byose",
+    "customerReviews": "ibitekerezo by'abakiriya",
+    "sharingExperience": "Sangira ubunararibonye bwawe kuri ishami rya {branch}",
+    "branchFeedback": "Ibitekerezo ku ishami",
+    "loading": "Gutunganya ibitekerezo..."
   },
   "footer": {
     "tagline": "Supermarket ikunzwe cyane mu Rwanda. Ibiribwa bishya bigera ku rugi rwawe.",
@@ -230,8 +414,9 @@
     "contact": "Twandikire",
     "branchDashboard": "Dashboard y'ishami",
     "branchReviews": "Ibitekerezo by'amashami",
-    "copyright": "© 2024 Simba Supermarket. Uburenganzira bwose burabitswe.",
+    "copyright": "© 2026 Simba Supermarket. Uburenganzira bwose burabitswe.",
     "madeInRwanda": "Byakorewe mu Rwanda",
-    "prices": "Ibiciro muri RWF"
+    "prices": "Ibiciro muri RWF",
+    "followUs": "Dukurikire"
   }
 }

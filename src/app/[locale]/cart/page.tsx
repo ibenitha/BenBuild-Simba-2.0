@@ -17,6 +17,7 @@ const DELIVERY_FEE = 2000;
 
 export default function CartPage({ params: { locale } }: CartPageProps) {
   const t = useTranslations('cart');
+  const tNav = useTranslations('nav');
   const { items, removeItem, updateQuantity, total, savings } = useCartStore();
   const [hydrated, setHydrated] = useState(false);
 
@@ -30,6 +31,7 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
   const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
   const orderTotal = subtotal + deliveryFee;
   const progressPct = Math.min((subtotal / FREE_DELIVERY_THRESHOLD) * 100, 100);
+  const totalItems = stableItems.reduce((s, i) => s + i.quantity, 0);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -37,7 +39,7 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
 
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-sm text-slate-400 mb-6">
-          <Link href={`/${locale}`} className="hover:text-simba-orange transition-colors">Home</Link>
+          <Link href={`/${locale}`} className="hover:text-simba-orange transition-colors">{tNav('home')}</Link>
           <ChevronRight className="w-3.5 h-3.5" />
           <span className="text-slate-700 dark:text-slate-300 font-medium">{t('title')}</span>
         </nav>
@@ -46,7 +48,7 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
           <ShoppingBag className="w-7 h-7 text-simba-orange" />
           {t('title')}
           {stableItems.length > 0 && (
-            <span className="text-base font-normal text-slate-400">({stableItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
+            <span className="text-base font-normal text-slate-400">({tNav('itemsLabel', { count: totalItems })})</span>
           )}
         </h1>
 
@@ -72,11 +74,11 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
                   <Truck className="w-4 h-4 text-simba-orange" />
                   {deliveryFee === 0 ? (
                     <p className="text-sm font-semibold text-green-600 dark:text-green-400">
-                      🎉 You&apos;ve unlocked free delivery!
+                      🎉 {t('freeDeliveryUnlocked')}
                     </p>
                   ) : (
                     <p className="text-sm text-slate-600 dark:text-slate-400">
-                      Add <span className="font-bold text-simba-orange">{formatPrice(FREE_DELIVERY_THRESHOLD - subtotal)}</span> more for free delivery
+                      {t('freeDeliveryProgress', { amount: formatPrice(FREE_DELIVERY_THRESHOLD - subtotal) })}
                     </p>
                   )}
                 </div>
@@ -101,7 +103,7 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
                   <div key={item.product.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 flex gap-4 shadow-sm group">
                     {/* Image */}
                     <Link href={`/${locale}/products/${item.product.id}`} className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden flex-shrink-0 border border-slate-100 dark:border-slate-700">
-                      <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />
+                      <Image src={item.product.image} alt={item.product.name} fill sizes="96px" className="object-cover" />
                     </Link>
 
                     <div className="flex-1 min-w-0">
@@ -115,7 +117,7 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
                         <button
                           onClick={() => removeItem(item.product.id)}
                           className="flex-shrink-0 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-all"
-                          title="Remove"
+                          title={t('remove')}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -146,7 +148,7 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
                             <p className="text-xs text-slate-400 line-through">{formatPrice(item.product.originalPrice * item.quantity)}</p>
                           )}
                           {itemSaving > 0 && (
-                            <p className="text-xs text-green-600 dark:text-green-400 font-medium">Save {formatPrice(itemSaving)}</p>
+                            <p className="text-xs text-green-600 dark:text-green-400 font-medium">{t('save')} {formatPrice(itemSaving)}</p>
                           )}
                         </div>
                       </div>
@@ -165,35 +167,34 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
                     <Tag className="w-5 h-5 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <p className="font-bold text-green-700 dark:text-green-400 text-sm">You&apos;re saving!</p>
-                    <p className="text-green-600 dark:text-green-500 text-xs">{formatPrice(totalSavings)} off on this order</p>
+                    <p className="font-bold text-green-700 dark:text-green-400 text-sm">{t('savingsBanner', { amount: formatPrice(totalSavings) })}</p>
                   </div>
                 </div>
               )}
 
               {/* Summary card */}
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-5 shadow-sm sticky top-24">
-                <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-4">Order Summary</h2>
+                <h2 className="font-bold text-lg text-slate-800 dark:text-slate-100 mb-4">{t('orderSummary')}</h2>
 
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Subtotal ({stableItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
+                    <span className="text-slate-500">{t('subtotal')} ({totalItems} {tNav('itemsLabel', { count: totalItems })})</span>
                     <span className="font-medium text-slate-700 dark:text-slate-300">{formatPrice(subtotal)}</span>
                   </div>
                   {totalSavings > 0 && (
                     <div className="flex justify-between text-green-600 dark:text-green-400">
-                      <span>Savings</span>
+                      <span>{t('savings')}</span>
                       <span className="font-medium">-{formatPrice(totalSavings)}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Delivery</span>
+                    <span className="text-slate-500">{t('delivery')}</span>
                     <span className={`font-medium ${deliveryFee === 0 ? 'text-green-600 dark:text-green-400' : 'text-slate-700 dark:text-slate-300'}`}>
-                      {deliveryFee === 0 ? '🎉 Free' : formatPrice(deliveryFee)}
+                      {deliveryFee === 0 ? `🎉 ${t('deliveryFree')}` : formatPrice(deliveryFee)}
                     </span>
                   </div>
                   <div className="border-t border-slate-100 dark:border-slate-800 pt-3 flex justify-between font-bold text-base">
-                    <span className="text-slate-800 dark:text-slate-100">Total</span>
+                    <span className="text-slate-800 dark:text-slate-100">{t('total')}</span>
                     <span className="text-simba-orange text-lg">{formatPrice(orderTotal)}</span>
                   </div>
                 </div>
@@ -202,10 +203,10 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
                   href={`/${locale}/checkout`}
                   className="mt-5 flex items-center justify-center gap-2 w-full bg-simba-orange hover:bg-simba-orange-dark text-white py-3.5 rounded-xl font-bold transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
                 >
-                  Proceed to Checkout <ArrowRight className="w-4 h-4" />
+                  {t('checkout')} <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link href={`/${locale}`} className="mt-3 block text-center text-sm text-slate-400 hover:text-simba-orange transition-colors">
-                  ← Continue Shopping
+                  ← {t('continueShopping')}
                 </Link>
               </div>
             </div>

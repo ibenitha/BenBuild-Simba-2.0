@@ -24,7 +24,7 @@ interface HeroBannerProps {
   interval?: number;
 }
 
-const TRANSITION_MS = 600;
+const TRANSITION_MS = 450;
 
 export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps) {
   const [active, setActive] = useState(0);
@@ -136,7 +136,7 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
       >
         <div
           className="relative rounded-2xl overflow-hidden shadow-lg"
-          style={{ height: 'clamp(200px, 38vw, 420px)' }}
+          style={{ height: 'clamp(220px, 42vw, 480px)' }}
         >
           {/* Slides */}
           {slides.map((slide, i) => (
@@ -147,7 +147,8 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
                 alt={slide.title}
                 fill
                 priority={i === 0}
-                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1280px"
+                {...(i === 0 ? { fetchPriority: 'high' } : {})}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 95vw, 1280px"
                 className="object-cover"
                 style={{ objectPosition: slide.focus ?? 'center' }}
               />

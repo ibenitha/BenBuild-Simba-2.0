@@ -11,6 +11,7 @@ export interface Product {
   inStock: boolean;
   rating?: number;
   reviews?: number;
+  subcategoryId?: number;
 }
 
 export interface Category {
@@ -19,7 +20,6 @@ export interface Category {
   slug: string;
   image: string;
   productCount: number;
-  color: string;
 }
 
 export interface CartItem {
@@ -28,3 +28,32 @@ export interface CartItem {
 }
 
 export type Locale = 'en' | 'fr' | 'rw';
+
+// ── User Roles ────────────────────────────────────────────────
+export type UserRole = 'customer' | 'staff' | 'manager' | 'admin';
+
+export interface CurrentUser {
+  id: string;
+  email: string;
+  fullName: string;
+  role: UserRole;
+  branchId?: string; // For staff/manager: which branch they belong to
+  avatarUrl?: string;
+}
+
+// ── Auth ──────────────────────────────────────────────────────
+export interface AuthResult {
+  ok: boolean;
+  message?: string;
+}
+
+// ── Staff / Admin ─────────────────────────────────────────────
+export interface StaffProfile {
+  id: string;
+  email: string;
+  fullName: string;
+  role: UserRole;
+  branchId?: string;
+  branchName?: string;
+  createdAt: string;
+}

@@ -1,7 +1,21 @@
 {
+  "categories": {
+    "all": "All Categories",
+    "cosmetics-and-personal-care": "Cosmetics & Personal Care",
+    "sports-and-wellness": "Sports & Wellness",
+    "baby-products": "Baby Products",
+    "kitchenware-and-electronics": "Kitchenware & Electronics",
+    "food-products": "Food Products",
+    "alcoholic-drinks": "Alcoholic Drinks",
+    "general": "General Products",
+    "cleaning-and-sanitary": "Cleaning & Sanitary",
+    "kitchen-storage": "Kitchen Storage",
+    "pet-care": "Pet Care"
+  },
   "nav": {
     "home": "Home",
     "categories": "Categories",
+    "allProducts": "All Products",
     "cart": "Cart",
     "search": "Search products...",
     "darkMode": "Dark Mode",
@@ -12,17 +26,60 @@
     "branchOps": "Branch Ops",
     "myCart": "My Cart",
     "empty": "Empty",
-    "itemsLabel": "{count, plural, one {item} other {items}}"
+    "itemsLabel": "{count, plural, one {item} other {items}}",
+    "freeDelivery": "Free delivery on orders over 20,000 RWF",
+    "location": "Kigali, Rwanda",
+    "seeAllResults": "See all results for \"{query}\"",
+    "more": "More",
+    "toggleDarkMode": "Toggle dark mode",
+    "openCart": "Open cart",
+    "welcomeSimba": "Welcome to Simba",
+    "selectBranch": "Please select your preferred branch",
+    "branchPricingNote": "Prices and availability may vary by location. Choose a branch to see what's fresh near you.",
+    "selectBranchCta": "Select Branch",
+    "fastDeliveryNote": "Fast Delivery: Orders from your selected branch are typically delivered within 45 minutes in Kigali.",
+    "reviews": "Reviews",
+    "locations": "Locations",
+    "storeLocator": "Store Locator"
   },
   "home": {
     "hero": {
-      "title": "Rwanda's Freshest Groceries",
-      "subtitle": "Delivered to your door. Shop from 789+ products across 10 categories.",
-      "cta": "Start Shopping",
-      "badge": "Rwanda's #1 Supermarket"
+      "slides": {
+        "main": {
+          "badge": "Rwanda's #1 Supermarket",
+          "title": "Fresh Groceries, Delivered in 45 min",
+          "subtitle": "Shop 789+ products from 9 Kigali branches. Pick up in-store or get it delivered today.",
+          "cta": "Start Shopping"
+        },
+        "fresh": {
+          "badge": "Farm fresh daily",
+          "title": "Fresh Vegetables & Fruits",
+          "subtitle": "Sourced fresh every morning. Tomatoes, avocados, bananas and more — delivered to your door.",
+          "cta": "Shop Produce"
+        },
+        "momo": {
+          "badge": "Easy checkout",
+          "title": "Pay with MoMo, Pick Up Fast",
+          "subtitle": "Confirm your order with a 500 RWF deposit. Your branch starts preparing immediately.",
+          "cta": "Order Now"
+        },
+        "deals": {
+          "badge": "Limited offer",
+          "title": "15% Off All Groceries",
+          "subtitle": "Use code SIMBA10 at checkout. Fresh picks, unbeatable prices across all categories.",
+          "cta": "Claim Offer"
+        }
+      },
+      "props": {
+        "delivery": { "title": "45-min delivery", "desc": "In Kigali" },
+        "pickup": { "title": "Free pick-up", "desc": "At 9 branches" },
+        "payment": { "title": "MoMo & Card", "desc": "Secure payment" },
+        "fresh": { "title": "Fresh guarantee", "desc": "Or we refund" }
+      }
     },
     "categories": "Shop by Category",
     "categoriesSubtitle": "10 categories · 789+ products",
+    "shopByCategory": "Shop by Category",
     "featured": "Featured Products",
     "featuredSubtitle": "Bestsellers across all categories",
     "deals": "Today's Deals",
@@ -35,7 +92,39 @@
     "kigaliBranches": "Kigali branches",
     "products": "Products",
     "avgDelivery": "Avg. delivery",
-    "happyCustomers": "Happy customers"
+    "happyCustomers": "Happy customers",
+    "whyTrustSimba": "Why Kigali Trusts Simba",
+    "yearsInRwanda": "Years in Rwanda",
+    "branchesInKigali": "Branches in Kigali",
+    "freshnessGuarantee": "Freshness Guarantee",
+    "freshnessDesc": "Sourced daily from local farmers",
+    "securePayment": "Secure Payment",
+    "securePaymentDesc": "MoMo & International Cards",
+    "deliveryTitle": "Lightning Fast",
+    "deliveryDesc": "Under 45 mins in Kigali",
+    "topPicks": "Kigali's Top Picks",
+    "shopByCategory": "Shop by Category",
+    "weeklyDeals": "Weekly Deals & Offers",
+    "browseBranchReviews": "Browse Branch Reviews",
+    "shareExperience": "Share Your Simba Experience",
+    "shareExperienceDesc": "Your feedback helps us serve Kigali better. Read reviews for all 9 branches or share your recent shopping experience.",
+    "avgRating": "Avg Rating",
+    "totalReviews": "Total Reviews",
+    "kigaliBranches": "Kigali Branches",
+    "callSupport": "Call Support",
+    "trackOrder": "Track Order",
+    "selfService": "Self Service",
+    "gpsDelivery": "Real-time GPS delivery",
+    "manageAccount": "Manage account & returns",
+    "promoFreshTitle": "Freshness Delivered",
+    "promoFreshSubtitle": "Up to 20% off weekly essentials",
+    "promoFreshBadge": "Featured",
+    "promoMomoTitle": "MoMo Exclusive",
+    "promoMomoSubtitle": "Secure payments, fast checkout",
+    "promoMomoBadge": "Safe",
+    "promoBabyTitle": "Baby Care Sale",
+    "promoBabySubtitle": "Gentle products for your little ones",
+    "promoBabyBadge": "Sale"
   },
   "product": {
     "addToCart": "Add to Cart",
@@ -50,7 +139,21 @@
     "productsAvailable": "{count} products available",
     "noProductsIn": "No products in {category} yet",
     "home": "Home",
-    "off": "OFF"
+    "off": "OFF",
+    "recentlyViewed": "Recently Viewed",
+    "add": "Add",
+    "added": "Added to Cart!",
+    "noProducts": "No products found",
+    "sortBy": "Sort by",
+    "sortOptions": {
+      "newest": "Newest",
+      "priceLow": "Price: Low to High",
+      "priceHigh": "Price: High to Low",
+      "name": "Name: A to Z"
+    },
+    "noMatchesFound": "No matches found",
+    "noMatchesDesc": "We couldn't find any products matching \"{query}\". Try checking your spelling or exploring other categories.",
+    "browseAll": "Browse All Products"
   },
   "cart": {
     "title": "Your Cart",
@@ -68,7 +171,14 @@
     "items": "items",
     "freeDeliveryUnlocked": "You've unlocked FREE delivery!",
     "freeDeliveryProgress": "Add {amount} more for free delivery",
-    "savingsBanner": "You're saving {amount} on this order!"
+    "savingsBanner": "You're saving {amount} on this order!",
+    "save": "Save",
+    "orderSummary": "Order Summary",
+    "savings": "Savings",
+    "continueShopping": "Continue Shopping",
+    "outOfStockBranch": "Out of stock at this branch",
+    "onlyAvailable": "Only {stock} available",
+    "fixStockIssues": "Please fix stock issues to proceed to checkout"
   },
   "checkout": {
     "title": "Checkout",
@@ -102,7 +212,8 @@
     "category": "Category",
     "inStock": "In Stock Only",
     "apply": "Apply",
-    "clear": "Clear"
+    "clear": "Clear",
+    "allCategories": "All Categories"
   },
   "auth": {
     "login": "Login",
@@ -122,6 +233,7 @@
     "welcomeBack": "Welcome back",
     "signInSubtitle": "Sign in to your Simba account",
     "createAccountSubtitle": "Join thousands of Kigali shoppers",
+    "orContinueWithEmail": "or continue with email",
     "signingIn": "Signing in…",
     "creatingAccount": "Creating account…",
     "sending": "Sending…",
@@ -139,13 +251,33 @@
     "perkPay": "Pay with MoMo or card"
   },
   "conversationSearch": {
+    "eyebrow": "Conversational Search",
     "title": "Ask Simba AI",
     "hint": "Try: \"Do you have fresh milk?\" or \"I need something for breakfast\".",
     "placeholder": "Ask Simba AI what you need...",
     "ask": "Ask",
     "searching": "Searching...",
+    "poweredBy": "Powered by Groq",
+    "poweredByHint": "Natural-language product discovery using your live catalog context.",
+    "assistantLabel": "Simba AI",
+    "viewProduct": "View product",
+    "productFallbackUnit": "In stock",
     "unavailable": "Search is currently unavailable. Please try again.",
-    "noResponse": "No response."
+    "noResponse": "No response.",
+    "suggestedPrompts": {
+      "milk": "Do you have fresh milk?",
+      "breakfast": "I need something for breakfast",
+      "snacks": "Show me healthy snacks"
+    },
+    "thinking": "Simba AI is thinking...",
+    "userLabel": "You",
+    "clearChat": "Clear conversation",
+    "recommendations": "Simba AI's Recommendations",
+    "askSimba": "Ask Simba",
+    "viewAllResults": "View all results",
+    "closeChat": "Close chat",
+    "welcomeBubble": "How can I help you today?",
+    "repliesInSeconds": "Typically replies in seconds"
   },
   "pickupCheckout": {
     "checkout": "Checkout",
@@ -178,7 +310,19 @@
     "openBranchDashboard": "Open Branch Dashboard",
     "continueShopping": "Continue Shopping",
     "rateExperience": "Rate your pick-up experience",
-    "loginRequired": "Please log in to place an order."
+    "loginRequired": "Please log in to place an order.",
+    "changeDefaultBranch": "Change default branch",
+    "phonePlaceholder": "+250 7xx xxx xxx",
+    "momoDepositRequired": "Small {amount} MoMo Deposit Required",
+    "momoDepositDesc": "To protect our branch staff's time and ensure your order is packed and fresh when you arrive, we require a small non-refundable deposit via MTN MoMo to confirm your pick-up.",
+    "momoTitle": "MTN MoMo",
+    "paymentConfirmation": "Payment Confirmation",
+    "orderTotal": "Order Total",
+    "momoSimulationNote": "Simulating a secure MoMo prompt for demo purposes. In production, this would trigger a USSD push to your phone.",
+    "rateBranchExperience": "How was your experience with {branch}?",
+    "stockAvailable": "{qty} available",
+    "outOfStockStock": "Out of stock",
+    "onlyLeft": "Only {qty} left"
   },
   "branchDashboard": {
     "title": "Branch Operations Dashboard",
@@ -191,16 +335,43 @@
     "assignedTo": "Assigned to",
     "assignToStaffA": "Assign to Staff A",
     "markReady": "Mark Ready",
+    "flagNoShow": "Flag No-Show",
     "completePickup": "Complete Pickup",
     "quickInventory": "Quick Inventory Controls",
     "stock": "Stock",
     "markOutOfStock": "Mark out of stock",
+    "restock": "Restock",
     "outOfStock": "Out of stock",
     "pending": "Pending",
     "preparing": "Preparing",
     "ready": "Ready",
     "completed": "Completed",
-    "total": "total"
+    "total": "total",
+    "loadingOrders": "Loading orders...",
+    "refresh": "Refresh",
+    "bulkActions": "Bulk Actions",
+    "productsSelected": "{count} products selected",
+    "clear": "Clear",
+    "addToStock": "Add to Stock",
+    "setStockValue": "Set Stock Value",
+    "markOutOfStockAction": "Mark Out of Stock",
+    "updating": "Updating...",
+    "apply": "Apply",
+    "compareBranches": "Compare branches",
+    "hideComparison": "Hide comparison",
+    "compareWithBranch": "Compare with another branch",
+    "compareWith": "Compare with:",
+    "compare": "Compare",
+    "comparisonNote": "Showing stock side by side. Ordering at one branch does NOT affect the other.",
+    "noInventoryMatches": "No products match your filter.",
+    "editStock": "Edit stock quantity",
+    "save": "Save",
+    "showLess": "Show less",
+    "showAllProductsCount": "Show all {count} products",
+    "flags": "{count, plural, one {Flag} other {Flags}}",
+    "enterStaffName": "Enter staff name to assign:",
+    "flagReasonPrompt": "Flag customer for no-show? Enter optional comment:",
+    "defaultNoShowComment": "Customer did not show up for pick-up."
   },
   "branchReviews": {
     "title": "Branch Reviews",
@@ -216,7 +387,20 @@
     "noReviews": "No reviews yet",
     "anonymous": "Anonymous",
     "reviewsFor": "Reviews for {branch}",
-    "reviewSubmitted": "Review submitted — thank you!"
+    "reviewSuccess": "✓ Review submitted — thank you!",
+    "totalReviews": "Total Reviews",
+    "globalAvg": "Global Avg",
+    "writeReview": "Write a review",
+    "detailedFeedback": "Detailed feedback",
+    "reviewGuidelines": "By submitting, you agree to our review guidelines",
+    "noReviewsFound": "No reviews found matching your filter.",
+    "verifiedPurchase": "Verified Purchase",
+    "filterBy": "Filter by",
+    "allReviews": "All Reviews",
+    "customerReviews": "customer reviews",
+    "sharingExperience": "Sharing your experience at {branch}",
+    "branchFeedback": "Branch Feedback",
+    "loading": "Loading reviews..."
   },
   "footer": {
     "tagline": "Rwanda's most popular online supermarket. Fresh groceries delivered to your door.",
@@ -230,8 +414,9 @@
     "contact": "Contact Us",
     "branchDashboard": "Branch Dashboard",
     "branchReviews": "Branch Reviews",
-    "copyright": "© 2024 Simba Supermarket. All rights reserved.",
+    "copyright": "© 2026 Simba Supermarket. All rights reserved.",
     "madeInRwanda": "Made in Rwanda",
-    "prices": "Prices in RWF"
+    "prices": "Prices in RWF",
+    "followUs": "Follow us"
   }
 }

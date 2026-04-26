@@ -42,7 +42,7 @@ export default function FilterPanel({
             onClick={() => onCategoryChange('')}
             className={`w-full text-left px-3 py-1.5 rounded-lg text-sm transition-colors ${!selectedCategory ? 'bg-simba-orange text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
           >
-            All Categories
+            {t('allCategories')}
           </button>
           {categories.map(cat => (
             <button

@@ -1,104 +1,107 @@
-import { Product, Category } from '@/types';
+import { Product } from '@/types';
+import { simbaData } from './simba-data';
 
-export const categories: Category[] = [
-  { id: '1', name: 'Food Products', slug: 'food-products', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80', productCount: 145, color: 'bg-orange-50 dark:bg-orange-950' },
-  { id: '2', name: 'Cleaning & Sanitary', slug: 'cleaning-sanitary', image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=600&q=80', productCount: 88, color: 'bg-cyan-50 dark:bg-cyan-950' },
-  { id: '3', name: 'Vegetables & Fruits', slug: 'vegetables-fruits', image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=600&q=80', productCount: 67, color: 'bg-green-50 dark:bg-green-950' },
-  { id: '4', name: 'Cosmetics', slug: 'cosmetics', image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80', productCount: 76, color: 'bg-pink-50 dark:bg-pink-950' },
-  { id: '5', name: 'Non-Alcoholic Drinks', slug: 'non-alcoholic-drinks', image: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=600&q=80', productCount: 98, color: 'bg-blue-50 dark:bg-blue-950' },
-  { id: '6', name: 'Alcoholic Drinks', slug: 'alcoholic-drinks', image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80', productCount: 54, color: 'bg-amber-50 dark:bg-amber-950' },
-  { id: '7', name: 'Kitchenware', slug: 'kitchenware', image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80', productCount: 62, color: 'bg-stone-50 dark:bg-stone-950' },
-  { id: '8', name: 'Electronics', slug: 'electronics', image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80', productCount: 43, color: 'bg-indigo-50 dark:bg-indigo-950' },
-  { id: '9', name: 'Toys', slug: 'toys', image: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=600&q=80', productCount: 38, color: 'bg-yellow-50 dark:bg-yellow-950' },
-  { id: '10', name: 'Pet Care', slug: 'pet-care', image: 'https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?w=600&q=80', productCount: 28, color: 'bg-lime-50 dark:bg-lime-950' },
-];
+// Real Simba products from data
+export const products: Product[] = simbaData.products.map((p: any) => ({
+  id: p.id.toString(),
+  name: p.name,
+  price: p.price,
+  category: p.category,
+  categorySlug: getCategorySlug(p.category),
+  description: `${p.name} - High quality product from Simba Supermarket`,
+  image: p.image,
+  inStock: p.inStock,
+  unit: p.unit || 'Pcs',
+  subcategoryId: p.subcategoryId,
+}));
 
-export const products: Product[] = [
-  { id: 'p1', name: 'Indomie Noodles', price: 500, originalPrice: 600, image: 'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Instant noodles, chicken flavour', unit: '70g', inStock: true, rating: 4.5, reviews: 312 },
-  { id: 'p2', name: 'Cooking Oil', price: 3500, image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Pure vegetable cooking oil', unit: '1L', inStock: true, rating: 4.6, reviews: 198 },
-  { id: 'p3', name: 'Peanut Butter', price: 2800, image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Smooth peanut butter', unit: '400g', inStock: true, rating: 4.7, reviews: 145 },
-  { id: 'p4', name: 'White Rice', price: 3500, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Premium long grain white rice', unit: '2kg', inStock: true, rating: 4.8, reviews: 267 },
-  { id: 'p5', name: 'Spaghetti', price: 1200, image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Italian style spaghetti', unit: '500g', inStock: true, rating: 4.5, reviews: 189 },
-  { id: 'p6', name: 'Maize Flour', price: 2000, image: 'https://images.unsplash.com/photo-1628672734097-5c29c0f0e4e6?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Fine maize flour for ugali', unit: '2kg', inStock: true, rating: 4.6, reviews: 234 },
-  { id: 'p7', name: 'Sugar', price: 1800, image: 'https://images.unsplash.com/photo-1587735243615-c03f25aaff15?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Refined white sugar', unit: '1kg', inStock: true, rating: 4.7, reviews: 178 },
-  { id: 'p8', name: 'Salt', price: 400, image: 'https://images.unsplash.com/photo-1518110925495-5fe2fda0442c?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Iodized table salt', unit: '500g', inStock: true, rating: 4.4, reviews: 98 },
-  { id: 'p9', name: 'Canned Tomatoes', price: 1500, image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Peeled canned tomatoes', unit: '400g', inStock: true, rating: 4.5, reviews: 156 },
-  { id: 'p10', name: 'Honey', price: 4500, image: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Pure natural honey', unit: '500g', inStock: true, rating: 4.9, reviews: 203 },
-  { id: 'p11', name: 'Jam Strawberry', price: 2200, image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Strawberry fruit jam', unit: '350g', inStock: true, rating: 4.6, reviews: 134 },
-  { id: 'p12', name: 'Biscuits', price: 800, image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Cream filled biscuits', unit: '200g', inStock: true, rating: 4.4, reviews: 289 },
-  { id: 'p13', name: 'Fresh Milk', price: 1500, image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Fresh pasteurized whole milk', unit: '1L', inStock: true, rating: 4.7, reviews: 312 },
-  { id: 'p14', name: 'Eggs', price: 3500, image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Farm fresh eggs', unit: 'tray of 30', inStock: true, rating: 4.8, reviews: 267 },
-  { id: 'p15', name: 'Butter', price: 2800, image: 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Salted butter', unit: '250g', inStock: true, rating: 4.6, reviews: 145 },
-  { id: 'p16', name: 'Yogurt', price: 1200, image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Natural plain yogurt', unit: '500g', inStock: true, rating: 4.5, reviews: 198 },
-  { id: 'p17', name: 'Cheddar Cheese', price: 4500, image: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Aged cheddar cheese', unit: '250g', inStock: true, rating: 4.7, reviews: 112 },
-  { id: 'p18', name: 'White Bread', price: 1200, image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Soft white sandwich bread', unit: 'loaf', inStock: true, rating: 4.5, reviews: 234 },
-  { id: 'p19', name: 'Chicken Breast', price: 5500, image: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Fresh boneless chicken breast', unit: '1kg', inStock: true, rating: 4.6, reviews: 178 },
-  { id: 'p20', name: 'Beef Mince', price: 7500, image: 'https://images.unsplash.com/photo-1588347818036-8fc5e6b0c0e0?w=400&q=80', category: 'Food Products', categorySlug: 'food-products', description: 'Fresh minced beef', unit: '500g', inStock: true, rating: 4.7, reviews: 145 },
-  { id: 'p21', name: 'Tomatoes', price: 1200, image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Fresh ripe tomatoes', unit: '1kg', inStock: true, rating: 4.5, reviews: 189 },
-  { id: 'p22', name: 'Onions', price: 800, image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Red onions, fresh from farm', unit: '1kg', inStock: true, rating: 4.3, reviews: 134 },
-  { id: 'p23', name: 'Carrots', price: 600, image: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Crunchy fresh carrots', unit: '500g', inStock: true, rating: 4.6, reviews: 98 },
-  { id: 'p24', name: 'Avocado', price: 400, image: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Ripe Hass avocados', unit: 'each', inStock: true, rating: 4.8, reviews: 267 },
-  { id: 'p25', name: 'Bananas', price: 1000, image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Sweet ripe bananas', unit: 'bunch', inStock: true, rating: 4.7, reviews: 312 },
-  { id: 'p26', name: 'Mango', price: 600, image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Juicy ripe mangoes', unit: 'each', inStock: true, rating: 4.9, reviews: 198 },
-  { id: 'p27', name: 'Pineapple', price: 1500, image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Sweet fresh pineapple', unit: 'each', inStock: true, rating: 4.6, reviews: 145 },
-  { id: 'p28', name: 'Cabbage', price: 700, image: 'https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Fresh green cabbage', unit: 'each', inStock: true, rating: 4.4, reviews: 112 },
-  { id: 'p29', name: 'Spinach', price: 500, image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Fresh green spinach', unit: 'bunch', inStock: true, rating: 4.5, reviews: 89 },
-  { id: 'p30', name: 'Sweet Potato', price: 900, image: 'https://images.unsplash.com/photo-1596097635121-14b63b7a0c19?w=400&q=80', category: 'Vegetables & Fruits', categorySlug: 'vegetables-fruits', description: 'Orange sweet potatoes', unit: '1kg', inStock: true, rating: 4.6, reviews: 134 },
-  { id: 'p31', name: 'Coca-Cola', price: 800, image: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&q=80', category: 'Non-Alcoholic Drinks', categorySlug: 'non-alcoholic-drinks', description: 'Coca-Cola classic soft drink', unit: '500ml', inStock: true, rating: 4.6, reviews: 456 },
-  { id: 'p32', name: 'Fanta Orange', price: 800, image: 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?w=400&q=80', category: 'Non-Alcoholic Drinks', categorySlug: 'non-alcoholic-drinks', description: 'Fanta orange soda', unit: '500ml', inStock: true, rating: 4.5, reviews: 312 },
-  { id: 'p33', name: 'Mineral Water', price: 500, image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&q=80', category: 'Non-Alcoholic Drinks', categorySlug: 'non-alcoholic-drinks', description: 'Pure mineral water', unit: '1.5L', inStock: true, rating: 4.7, reviews: 389 },
-  { id: 'p34', name: 'Orange Juice', price: 2500, image: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&q=80', category: 'Non-Alcoholic Drinks', categorySlug: 'non-alcoholic-drinks', description: 'Fresh squeezed orange juice', unit: '1L', inStock: true, rating: 4.8, reviews: 234 },
-  { id: 'p35', name: 'Sprite', price: 800, image: 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=400&q=80', category: 'Non-Alcoholic Drinks', categorySlug: 'non-alcoholic-drinks', description: 'Sprite lemon-lime soda', unit: '500ml', inStock: true, rating: 4.5, reviews: 267 },
-  { id: 'p36', name: 'Energy Drink', price: 1500, image: 'https://images.unsplash.com/photo-1622543925917-763c34d1a86e?w=400&q=80', category: 'Non-Alcoholic Drinks', categorySlug: 'non-alcoholic-drinks', description: 'Red Bull energy drink', unit: '250ml', inStock: true, rating: 4.4, reviews: 198 },
-  { id: 'p37', name: 'Laundry Detergent', price: 4500, image: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?w=400&q=80', category: 'Cleaning & Sanitary', categorySlug: 'cleaning-sanitary', description: 'Powerful laundry detergent powder', unit: '1kg', inStock: true, rating: 4.6, reviews: 312 },
-  { id: 'p38', name: 'Dish Soap', price: 1500, image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400&q=80', category: 'Cleaning & Sanitary', categorySlug: 'cleaning-sanitary', description: 'Liquid dish washing soap', unit: '500ml', inStock: true, rating: 4.5, reviews: 234 },
-  { id: 'p39', name: 'Toilet Paper', price: 3500, image: 'https://images.unsplash.com/photo-1584556326561-c8746083993b?w=400&q=80', category: 'Cleaning & Sanitary', categorySlug: 'cleaning-sanitary', description: 'Soft 3-ply toilet paper', unit: 'pack of 12', inStock: true, rating: 4.7, reviews: 389 },
-  { id: 'p40', name: 'Bleach', price: 1200, image: 'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=400&q=80', category: 'Cleaning & Sanitary', categorySlug: 'cleaning-sanitary', description: 'Multi-purpose bleach cleaner', unit: '1L', inStock: true, rating: 4.5, reviews: 178 },
-  { id: 'p41', name: 'Diapers', price: 8500, image: 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=400&q=80', category: 'Cleaning & Sanitary', categorySlug: 'cleaning-sanitary', description: 'Baby diapers size 3', unit: 'pack of 40', inStock: true, rating: 4.8, reviews: 267 },
-  { id: 'p42', name: 'Air Freshener', price: 2500, image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&q=80', category: 'Cleaning & Sanitary', categorySlug: 'cleaning-sanitary', description: 'Lavender air freshener spray', unit: '300ml', inStock: true, rating: 4.4, reviews: 145 },
-  { id: 'p43', name: 'Shampoo', price: 3500, image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80', category: 'Cosmetics', categorySlug: 'cosmetics', description: 'Moisturizing shampoo for all hair types', unit: '400ml', inStock: true, rating: 4.6, reviews: 234 },
-  { id: 'p44', name: 'Toothpaste', price: 1500, image: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=400&q=80', category: 'Cosmetics', categorySlug: 'cosmetics', description: 'Whitening fluoride toothpaste', unit: '100ml', inStock: true, rating: 4.7, reviews: 312 },
-  { id: 'p45', name: 'Body Lotion', price: 4500, image: 'https://images.unsplash.com/photo-1571875257727-256c39da42af?w=400&q=80', category: 'Cosmetics', categorySlug: 'cosmetics', description: 'Hydrating body lotion', unit: '250ml', inStock: true, rating: 4.8, reviews: 198 },
-  { id: 'p46', name: 'Deodorant', price: 2800, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&q=80', category: 'Cosmetics', categorySlug: 'cosmetics', description: '48h protection deodorant', unit: '150ml', inStock: true, rating: 4.5, reviews: 167 },
-  { id: 'p47', name: 'Soap Bar', price: 800, image: 'https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=400&q=80', category: 'Cosmetics', categorySlug: 'cosmetics', description: 'Antibacterial soap bar', unit: '100g', inStock: true, rating: 4.4, reviews: 289 },
-  { id: 'p48', name: 'Sunscreen', price: 5500, image: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&q=80', category: 'Cosmetics', categorySlug: 'cosmetics', description: 'SPF 50 sunscreen lotion', unit: '100ml', inStock: true, rating: 4.7, reviews: 134 },
-  { id: 'p49', name: 'Primus Beer', price: 1200, image: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80', category: 'Alcoholic Drinks', categorySlug: 'alcoholic-drinks', description: 'Rwandan Primus lager beer', unit: '500ml', inStock: true, rating: 4.7, reviews: 456 },
-  { id: 'p50', name: 'Mutzig Beer', price: 1300, image: 'https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=400&q=80', category: 'Alcoholic Drinks', categorySlug: 'alcoholic-drinks', description: 'Premium Mutzig lager', unit: '500ml', inStock: true, rating: 4.6, reviews: 312 },
-  { id: 'p51', name: 'Red Wine', price: 8500, image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=80', category: 'Alcoholic Drinks', categorySlug: 'alcoholic-drinks', description: 'Cabernet Sauvignon red wine', unit: '750ml', inStock: true, rating: 4.5, reviews: 189 },
-  { id: 'p52', name: 'Whisky', price: 25000, image: 'https://images.unsplash.com/photo-1569529465841-dfecdab7503b?w=400&q=80', category: 'Alcoholic Drinks', categorySlug: 'alcoholic-drinks', description: 'Blended Scotch whisky', unit: '750ml', inStock: true, rating: 4.8, reviews: 145 },
-  { id: 'p53', name: 'Frying Pan', price: 12000, image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80', category: 'Kitchenware', categorySlug: 'kitchenware', description: 'Non-stick frying pan', unit: '28cm', inStock: true, rating: 4.6, reviews: 178 },
-  { id: 'p54', name: 'Cutting Board', price: 5500, image: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=400&q=80', category: 'Kitchenware', categorySlug: 'kitchenware', description: 'Bamboo cutting board', unit: 'each', inStock: true, rating: 4.5, reviews: 134 },
-  { id: 'p55', name: 'Cooking Pot', price: 18000, image: 'https://images.unsplash.com/photo-1584990347449-a2d4c2c044c9?w=400&q=80', category: 'Kitchenware', categorySlug: 'kitchenware', description: 'Stainless steel cooking pot', unit: '5L', inStock: true, rating: 4.7, reviews: 112 },
-  { id: 'p56', name: 'Rice Cooker', price: 35000, image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&q=80', category: 'Kitchenware', categorySlug: 'kitchenware', description: 'Electric rice cooker', unit: '1.8L', inStock: true, rating: 4.8, reviews: 89 },
-  { id: 'p57', name: 'Smart TV', price: 350000, image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&q=80', category: 'Electronics', categorySlug: 'electronics', description: '43 inch 4K Smart TV', unit: '43"', inStock: true, rating: 4.7, reviews: 234 },
-  { id: 'p58', name: 'Bluetooth Speaker', price: 45000, image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80', category: 'Electronics', categorySlug: 'electronics', description: 'Portable Bluetooth speaker', unit: 'each', inStock: true, rating: 4.6, reviews: 189 },
-  { id: 'p59', name: 'Phone Charger', price: 8500, image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=400&q=80', category: 'Electronics', categorySlug: 'electronics', description: 'Fast USB-C phone charger', unit: 'each', inStock: true, rating: 4.5, reviews: 312 },
-  { id: 'p60', name: 'Electric Kettle', price: 28000, image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80', category: 'Electronics', categorySlug: 'electronics', description: '1.7L electric kettle', unit: 'each', inStock: true, rating: 4.7, reviews: 145 },
-  { id: 'p61', name: 'LEGO Set', price: 25000, image: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=400&q=80', category: 'Toys', categorySlug: 'toys', description: 'Creative LEGO building set', unit: 'each', inStock: true, rating: 4.9, reviews: 178 },
-  { id: 'p62', name: 'Baby Car', price: 15000, image: 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400&q=80', category: 'Toys', categorySlug: 'toys', description: 'Remote control toy car', unit: 'each', inStock: true, rating: 4.6, reviews: 134 },
-  { id: 'p63', name: 'Doll', price: 8500, image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', category: 'Toys', categorySlug: 'toys', description: 'Fashion doll with accessories', unit: 'each', inStock: true, rating: 4.5, reviews: 112 },
-  { id: 'p64', name: 'Dog Food', price: 6500, image: 'https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?w=400&q=80', category: 'Pet Care', categorySlug: 'pet-care', description: 'Premium dry dog food', unit: '2kg', inStock: true, rating: 4.7, reviews: 145 },
-  { id: 'p65', name: 'Cat Food', price: 5500, image: 'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=400&q=80', category: 'Pet Care', categorySlug: 'pet-care', description: 'Wet cat food in gravy', unit: '400g', inStock: true, rating: 4.6, reviews: 112 },
-  { id: 'p66', name: 'Pet Shampoo', price: 3500, image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80', category: 'Pet Care', categorySlug: 'pet-care', description: 'Gentle pet shampoo', unit: '250ml', inStock: true, rating: 4.5, reviews: 89 },
-];
+// Helper function to convert category name to slug
+function getCategorySlug(category: string): string {
+  return category
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+}
 
+// Extract unique categories from products
+const categoryMap = new Map<string, { name: string; count: number; image: string }>();
+
+products.forEach(product => {
+  const existing = categoryMap.get(product.categorySlug);
+  if (existing) {
+    existing.count++;
+  } else {
+    categoryMap.set(product.categorySlug, {
+      name: product.category,
+      count: 1,
+      image: product.image, // Use first product image as category image
+    });
+  }
+});
+
+// Real categories from the actual products
+export const categories = Array.from(categoryMap.entries()).map(([slug, data], index) => ({
+  id: (index + 1).toString(),
+  name: data.name,
+  slug: slug,
+  image: data.image,
+  productCount: data.count,
+}));
+
+// Search function
+export function searchProducts(query: string): Product[] {
+  const lowerQuery = query.toLowerCase().trim();
+  if (!lowerQuery) return products;
+
+  const tokens = lowerQuery.split(/\s+/).filter(t => t.length > 0);
+  
+  return products.filter((p) => {
+    const name = p.name.toLowerCase();
+    const cat = p.category.toLowerCase();
+    const desc = (p.description || '').toLowerCase();
+
+    // Exact match for the full query gets priority
+    if (name.includes(lowerQuery) || cat.includes(lowerQuery) || desc.includes(lowerQuery)) {
+      return true;
+    }
+
+    // Check if ALL tokens are present in name/cat/desc
+    return tokens.every(token => 
+      name.includes(token) || cat.includes(token) || desc.includes(token)
+    );
+  });
+}
+
+// Get products by category
+export function getProductsByCategory(categorySlug: string): Product[] {
+  return products.filter(p => p.categorySlug === categorySlug);
+}
+
+// Get category by slug
+export function getCategoryBySlug(slug: string) {
+  return categories.find(c => c.slug === slug);
+}
+
+// Get product by ID
 export function getProductById(id: string): Product | undefined {
   return products.find(p => p.id === id);
 }
 
-export function getProductsByCategory(slug: string): Product[] {
-  return products.filter(p => p.categorySlug === slug);
+// Get featured products (first 12)
+export function getFeaturedProducts(): Product[] {
+  return products.slice(0, 12);
 }
 
-export function searchProducts(query: string): Product[] {
-  const q = query.toLowerCase();
-  return products.filter(p =>
-    p.name.toLowerCase().includes(q) ||
-    p.description.toLowerCase().includes(q) ||
-    p.category.toLowerCase().includes(q)
-  );
+// Get products by price range
+export function getProductsByPriceRange(min: number, max: number): Product[] {
+  return products.filter(p => p.price >= min && p.price <= max);
 }
 
-export function getCategoryBySlug(slug: string): Category | undefined {
-  return categories.find(c => c.slug === slug);
-}
+// Store info
+export const storeInfo = {
+  name: simbaData.store.name,
+  tagline: simbaData.store.tagline,
+  location: simbaData.store.location,
+  currency: simbaData.store.currency,
+};

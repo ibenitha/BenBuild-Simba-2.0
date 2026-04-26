@@ -1,13 +1,15 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight } from 'lucide-react';
+import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, AlertTriangle, LogIn } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCartStore } from '@/store/cart';
+import { useBranchStore } from '@/store/branch';
+import { useOperationsStore } from '@/store/operations';
+import { useAuthStore } from '@/store/auth';
 import { formatPrice } from '@/lib/utils';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 interface CartDrawerProps {
   open: boolean;
@@ -21,28 +23,56 @@ const DELIVERY_FEE = 2000;
 export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
   const t = useTranslations('cart');
   const { items, removeItem, updateQuantity, total, itemCount, savings } = useCartStore();
+  const { selectedBranchId, getSelectedBranch } = useBranchStore();
+  const { fetchStock, getBranchStock, stockByBranch } = useOperationsStore();
+  const currentUser = useAuthStore((s) => s.currentUser);
+  const currentBranch = getSelectedBranch();
+
   const [hydrated, setHydrated] = useState(false);
   const stableItems = hydrated ? items : [];
-  const subtotal = hydrated ? total() : 0;
-  const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
-  const orderTotal = subtotal + deliveryFee;
-  const totalSavings = hydrated ? savings() : 0;
-  const progressPct = Math.min((subtotal / FREE_DELIVERY_THRESHOLD) * 100, 100);
-  const amountToFree = FREE_DELIVERY_THRESHOLD - subtotal;
   const stableItemCount = hydrated ? itemCount() : 0;
+  const subtotal = hydrated ? total() : 0;
+  const totalSavings = hydrated ? savings() : 0;
+
+  const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD || subtotal === 0 ? 0 : DELIVERY_FEE;
+  const amountToFree = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
+  const progressPct = Math.min(100, (subtotal / FREE_DELIVERY_THRESHOLD) * 100);
+  const orderTotal = subtotal + deliveryFee;
+
+  // Validation: Check if items are in stock at the selected branch
+  const stockWarnings = useMemo(() => {
+    if (!hydrated) return {};
+    const warnings: Record<string, string> = {};
+    stableItems.forEach(item => {
+      const stock = getBranchStock(selectedBranchId, item.product.id);
+      if (stock === 0) {
+        warnings[item.product.id] = t('outOfStockBranch');
+      } else if (stock < item.quantity) {
+        warnings[item.product.id] = t('onlyAvailable', { stock });
+      }
+    });
+    return warnings;
+  }, [stableItems, selectedBranchId, getBranchStock, hydrated, t]);
+
+  const hasStockError = Object.keys(stockWarnings).length > 0;
 
   useEffect(() => {
     setHydrated(true);
-    if (open) document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = '';
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      // Refresh stock for the selected branch when opening cart
+      fetchStock(selectedBranchId);
+    } else {
+      document.body.style.overflow = '';
+    }
     return () => { document.body.style.overflow = ''; };
-  }, [open]);
+  }, [open, selectedBranchId, fetchStock]);
 
   return (
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300 touch-none ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
@@ -118,7 +148,7 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
                     {/* Thumbnail */}
                     <Link href={`/${locale}/products/${item.product.id}`} onClick={onClose} className="relative w-18 h-18 flex-shrink-0">
                       <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700">
-                        <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />
+                        <Image src={item.product.image} alt={item.product.name} fill sizes="72px" className="object-cover" />
                       </div>
                     </Link>
 
@@ -156,11 +186,17 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
                           </p>
                           {itemSaving > 0 && (
                             <p className="text-xs text-green-600 dark:text-green-400 font-medium">
-                              Save {formatPrice(itemSaving)}
+                              {t('save')} {formatPrice(itemSaving)}
                             </p>
                           )}
                         </div>
                       </div>
+                      {stockWarnings[item.product.id] && (
+                        <p className="text-[10px] font-bold text-red-500 mt-2 flex items-center gap-1">
+                          <AlertTriangle className="w-3 h-3" />
+                          {stockWarnings[item.product.id]}
+                        </p>
+                      )}
                     </div>
 
                     {/* Remove */}
@@ -208,14 +244,44 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
             </div>
 
             {/* Actions */}
-            <Link
-              href={`/${locale}/checkout`}
-              onClick={onClose}
-              className="flex items-center justify-center gap-2 w-full bg-simba-orange hover:bg-simba-orange-dark text-white py-3.5 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
-            >
-              {t('checkoutBtn', { total: formatPrice(orderTotal) })}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            {hasStockError ? (
+              <div className="space-y-2">
+                <button
+                  disabled
+                  className="flex items-center justify-center gap-2 w-full bg-slate-200 dark:bg-slate-800 text-slate-400 py-3.5 rounded-xl font-bold text-sm cursor-not-allowed"
+                >
+                  {t('checkoutBtn', { total: formatPrice(orderTotal) })}
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <p className="text-[10px] text-center text-red-500 font-bold animate-pulse">
+                  {t('fixStockIssues')}
+                </p>
+              </div>
+            ) : !currentUser ? (
+              // Not logged in — show sign-in prompt
+              <div className="space-y-2">
+                <Link
+                  href={`/${locale}/auth/login?next=/${locale}/checkout`}
+                  onClick={onClose}
+                  className="flex items-center justify-center gap-2 w-full bg-simba-orange hover:bg-orange-600 text-white py-3.5 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
+                >
+                  <LogIn className="w-4 h-4" />
+                  Sign In to Checkout
+                </Link>
+                <p className="text-[10px] text-center text-slate-400">
+                  Your cart will be saved
+                </p>
+              </div>
+            ) : (
+              <Link
+                href={`/${locale}/checkout`}
+                onClick={onClose}
+                className="flex items-center justify-center gap-2 w-full bg-simba-orange hover:bg-orange-600 text-white py-3.5 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
+              >
+                {t('checkoutBtn', { total: formatPrice(orderTotal) })}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
             <Link
               href={`/${locale}/cart`}
               onClick={onClose}

@@ -1,14 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { requireAuth, requireStaff, isAuthError } from '@/lib/supabase/api-auth';
 
-// POST /api/orders — place a new pickup order
+// POST /api/orders — place a new pickup or delivery order (requires auth)
 export async function POST(req: NextRequest) {
+  // Customers must be logged in to place orders
+  const auth = await requireAuth();
+  if (isAuthError(auth)) return auth;
+
   try {
     const body = await req.json();
-    const { customerName, customerEmail, branchId, timeSlot, deposit, items } = body;
+    const {
+      customerName, customerEmail, branchId, timeSlot, deposit, items,
+      orderType, deliveryAddress, deliveryDistrict, deliveryFee, totalAmount
+    } = body;
 
-    if (!customerName || !branchId || !timeSlot || !items?.length) {
+    if (!customerName || !branchId || !items?.length) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
+    }
+
+    // Ensure the order email matches the authenticated user
+    if (customerEmail && customerEmail !== auth.email) {
+      return NextResponse.json({ error: 'Email mismatch.' }, { status: 403 });
     }
 
     const supabase = createClient();
@@ -18,11 +31,17 @@ export async function POST(req: NextRequest) {
     const { error: orderError } = await supabase.from('orders').insert({
       id: orderId,
       customer_name: customerName,
-      customer_email: customerEmail,
+      customer_email: auth.email, // Always use authenticated email
+      user_id: auth.userId,
       branch_id: branchId,
-      time_slot: timeSlot,
-      deposit,
+      time_slot: timeSlot || 'ASAP',
+      deposit: deposit || 0,
       status: 'pending',
+      order_type: orderType || 'pickup',
+      delivery_address: deliveryAddress,
+      delivery_district: deliveryDistrict,
+      delivery_fee: deliveryFee || 0,
+      total_amount: totalAmount || deposit,
     });
 
     if (orderError) throw orderError;
@@ -66,19 +85,35 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// GET /api/orders?branchId=xxx — fetch orders for a branch
+// GET /api/orders — fetch orders
+// - Customers: can only see their own orders
+// - Staff/Manager/Admin: can see orders by branchId
 export async function GET(req: NextRequest) {
+  const auth = await requireAuth();
+  if (isAuthError(auth)) return auth;
+
   try {
     const { searchParams } = new URL(req.url);
     const branchId = searchParams.get('branchId');
+    const email = searchParams.get('email');
 
     const supabase = createClient();
+    const isStaff = ['staff', 'manager', 'admin'].includes(auth.role);
+
     let query = supabase
       .from('orders')
       .select('*, order_items(*)')
       .order('created_at', { ascending: false });
 
-    if (branchId) query = query.eq('branch_id', branchId);
+    if (isStaff) {
+      // Staff can filter by branch
+      if (branchId) query = query.eq('branch_id', branchId);
+      // Staff can also filter by email if needed
+      if (email && !branchId) query = query.eq('customer_email', email);
+    } else {
+      // Customers see their own orders — match by user_id OR email (covers old orders without user_id)
+      query = query.or(`user_id.eq.${auth.userId},customer_email.eq.${auth.email}`);
+    }
 
     const { data, error } = await query;
     if (error) throw error;
