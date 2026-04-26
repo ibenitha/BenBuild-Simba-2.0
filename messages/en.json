@@ -40,7 +40,8 @@
     "fastDeliveryNote": "Fast Delivery: Orders from your selected branch are typically delivered within 45 minutes in Kigali.",
     "reviews": "Reviews",
     "locations": "Locations",
-    "storeLocator": "Store Locator"
+    "storeLocator": "Store Locator",
+    "marketRep": "Market Rep"
   },
   "home": {
     "hero": {
@@ -153,7 +154,8 @@
     },
     "noMatchesFound": "No matches found",
     "noMatchesDesc": "We couldn't find any products matching \"{query}\". Try checking your spelling or exploring other categories.",
-    "browseAll": "Browse All Products"
+    "browseAll": "Browse All Products",
+    "onlyLeft": "Only {qty} left"
   },
   "cart": {
     "title": "Your Cart",
@@ -414,6 +416,7 @@
     "contact": "Contact Us",
     "branchDashboard": "Branch Dashboard",
     "branchReviews": "Branch Reviews",
+    "marketRepDashboard": "Market Rep Dashboard",
     "copyright": "© 2026 Simba Supermarket. All rights reserved.",
     "madeInRwanda": "Made in Rwanda",
     "prices": "Prices in RWF",

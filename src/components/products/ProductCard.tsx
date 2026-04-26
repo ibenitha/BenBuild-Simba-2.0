@@ -121,7 +121,7 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
           {qty === 0 && !isOutOfStock && (
             <button
               onClick={handleAdd}
-              className="absolute bottom-3 right-3 w-9 h-9 bg-simba-orange hover:bg-simba-orange-dark text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 z-10"
+              className="absolute bottom-3 right-3 w-10 h-10 bg-simba-orange hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 z-10 sm:opacity-0 sm:group-hover:opacity-100"
               aria-label="Add to cart"
             >
               <Plus className="w-4 h-4" />
@@ -167,7 +167,7 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
               <button
                 onClick={handleAdd}
                 disabled={isOutOfStock}
-                className="flex items-center gap-1.5 bg-simba-orange hover:bg-simba-orange-dark text-white px-3 py-2 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm flex-shrink-0"
+                className="flex items-center gap-1.5 bg-simba-orange hover:bg-orange-600 text-white px-3 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm flex-shrink-0 min-h-[44px]"
               >
                 <ShoppingCart className="w-3.5 h-3.5" />
                 {t('add')}
@@ -179,14 +179,14 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
               >
                 <button
                   onClick={handleDec}
-                  className="w-8 h-8 flex items-center justify-center text-white hover:bg-simba-orange-dark transition-colors"
+                  className="w-9 h-9 sm:w-8 sm:h-8 flex items-center justify-center text-white hover:bg-orange-600 transition-colors"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
                 <span className="text-white font-bold text-sm w-6 text-center">{qty}</span>
                 <button
                   onClick={handleInc}
-                  className="w-8 h-8 flex items-center justify-center text-white hover:bg-simba-orange-dark transition-colors"
+                  className="w-9 h-9 sm:w-8 sm:h-8 flex items-center justify-center text-white hover:bg-orange-600 transition-colors"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>

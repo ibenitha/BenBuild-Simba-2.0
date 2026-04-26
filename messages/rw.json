@@ -40,7 +40,8 @@
     "fastDeliveryNote": "Gutumiza vuba: Amasoko aturutse ku ishami wahisemo ubusanzwe agera aho uri mu minota 45 i Kigali.",
     "reviews": "Ibitekerezo",
     "locations": "Amashami",
-    "storeLocator": "Gushaka Ishami"
+    "storeLocator": "Gushaka Ishami",
+    "marketRep": "Umuhagarariye"
   },
   "home": {
     "hero": {
@@ -153,7 +154,8 @@
     },
     "noMatchesFound": "Nta bicuruzwa bijyanye n'ibyo mwasabye byabonetse",
     "noMatchesDesc": "Ntabwo twabashije kubona ibicuruzwa bijyanye na \"{query}\". Gerageza urebe ko wanditse neza cyangwa urebe mu bindi byiciro.",
-    "browseAll": "Reba ibicuruzwa byose"
+    "browseAll": "Reba ibicuruzwa byose",
+    "onlyLeft": "Hasigaye {qty} gusa"
   },
   "cart": {
     "title": "Agasanduku Kawe",
@@ -414,6 +416,7 @@
     "contact": "Twandikire",
     "branchDashboard": "Dashboard y'ishami",
     "branchReviews": "Ibitekerezo by'amashami",
+    "marketRepDashboard": "Dashboard y'Umuhagarariye",
     "copyright": "© 2026 Simba Supermarket. Uburenganzira bwose burabitswe.",
     "madeInRwanda": "Byakorewe mu Rwanda",
     "prices": "Ibiciro muri RWF",

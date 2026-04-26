@@ -132,7 +132,7 @@ export default function ConversationalSearch({ locale }: Props) {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, setIsOpen]);
 
   // Handle body scroll lock
   useEffect(() => {
@@ -191,7 +191,7 @@ export default function ConversationalSearch({ locale }: Props) {
     } finally {
       setLoading(false);
     }
-  }, [loading, t]);
+  }, [loading, locale, t]);
 
   const onAsk = (event: React.FormEvent) => {
     event.preventDefault();
@@ -205,7 +205,7 @@ export default function ConversationalSearch({ locale }: Props) {
   return (
     <>
       {/* Floating Toggle Button */}
-      <div className="fixed bottom-6 right-6 z-[60] flex flex-col items-end gap-3">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[60] flex flex-col items-end gap-3">
         <AnimatePresence>
           {!isOpen && (
             <motion.div
@@ -257,7 +257,7 @@ export default function ConversationalSearch({ locale }: Props) {
               initial={{ opacity: 0, y: 100, scale: 0.9, transformOrigin: 'bottom right' }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 100, scale: 0.9 }}
-              className="fixed bottom-6 right-6 z-[70] flex h-[600px] w-[calc(100vw-3rem)] sm:w-[400px] flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_20px_60px_-15px_rgba(15,23,42,0.3)] dark:border-slate-800 dark:bg-slate-900"
+              className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[70] flex h-[85vh] max-h-[600px] w-[calc(100vw-2rem)] sm:w-[400px] flex-col overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200 bg-white shadow-[0_20px_60px_-15px_rgba(15,23,42,0.3)] dark:border-slate-800 dark:bg-slate-900"
             >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-100 bg-white px-5 py-4 dark:border-slate-800 dark:bg-slate-900">

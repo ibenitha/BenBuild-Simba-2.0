@@ -5,7 +5,6 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import AuthSync from '@/components/auth/AuthSync';
 import dynamic from 'next/dynamic';
-import { notFound } from 'next/navigation';
 
 const ConversationalSearch = dynamic(() => import('@/components/products/ConversationalSearch'), {
   ssr: false,
@@ -23,7 +22,6 @@ export default async function LocaleLayout({
     messages = await getMessages();
   } catch (error) {
     console.error(`Failed to load messages for locale ${locale}:`, error);
-    // Fallback or rethrow
     throw error;
   }
 
@@ -32,6 +30,12 @@ export default async function LocaleLayout({
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <AuthSync />
         <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
+          {/* Kinyarwanda active indicator — visible proof of RW translation */}
+          {locale === 'rw' && (
+            <div className="bg-gradient-to-r from-blue-600 via-yellow-400 to-green-600 text-white text-center py-1.5 text-[11px] font-black uppercase tracking-widest">
+              🇷🇼 Kinyarwanda · Ururimi rw&apos;Ikinyarwanda rwakiriwe
+            </div>
+          )}
           <Navbar locale={locale} />
           <main>{children}</main>
           <Footer locale={locale} />

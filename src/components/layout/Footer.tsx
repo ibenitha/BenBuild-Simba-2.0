@@ -43,7 +43,7 @@ export default async function Footer({ locale }: { locale: string }) {
   return (
     <footer className="bg-slate-900 text-slate-300 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
@@ -77,7 +77,7 @@ export default async function Footer({ locale }: { locale: string }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-simba-orange text-slate-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
+                    className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-simba-orange text-slate-400 hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-110"
                   >
                     {social.icon}
                   </a>
@@ -125,6 +125,7 @@ export default async function Footer({ locale }: { locale: string }) {
               <li><a href="#" className="hover:text-simba-orange-light transition-colors">{t('contact')}</a></li>
               <li><Link href={`/${locale}/branch-dashboard`} className="hover:text-simba-orange-light transition-colors">{t('branchDashboard')}</Link></li>
               <li><Link href={`/${locale}/branch-reviews`} className="hover:text-simba-orange-light transition-colors">{t('branchReviews')}</Link></li>
+              <li><Link href={`/${locale}/admin/dashboard`} className="hover:text-simba-orange-light transition-colors">{t('marketRepDashboard')}</Link></li>
             </ul>
           </div>
         </div>

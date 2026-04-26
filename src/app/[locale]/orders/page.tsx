@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -66,22 +66,7 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
   const [reordering, setReordering] = useState<string | null>(null);
   const [reorderSuccess, setReorderSuccess] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!user) {
-      router.push(`/${locale}/auth/login`);
-      return;
-    }
-    fetchOrders();
-  }, [user]);
-
-  // Poll for order status updates every 15 seconds
-  useEffect(() => {
-    if (!user) return;
-    const interval = setInterval(fetchOrders, 15000);
-    return () => clearInterval(interval);
-  }, [user]);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     try {
@@ -93,7 +78,22 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) {
+      router.push(`/${locale}/auth/login`);
+      return;
+    }
+    void fetchOrders();
+  }, [fetchOrders, locale, router, user]);
+
+  // Poll for order status updates every 15 seconds
+  useEffect(() => {
+    if (!user) return;
+    const interval = setInterval(fetchOrders, 15000);
+    return () => clearInterval(interval);
+  }, [fetchOrders, user]);
 
   const handleReorder = async (order: Order) => {
     setReordering(order.id);

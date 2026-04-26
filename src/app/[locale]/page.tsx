@@ -10,7 +10,7 @@ import HeroBanner, { HeroSlide } from '@/components/products/HeroBanner';
 import PromoRail from '@/components/products/PromoRail';
 import { motion } from 'framer-motion';
 import {
-  ArrowRight, MapPin, ChevronRight, LayoutGrid, Star, Trophy
+  ArrowRight, MapPin, ChevronRight, LayoutGrid, Star, Trophy, CreditCard, ShieldCheck, Sparkles, Truck
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -144,6 +144,53 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
       )}
 
       {/* Shop by Category — full grid */}
+      {!isFiltered && (
+        <section className="py-8 sm:py-10 bg-white dark:bg-slate-950">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {[
+                {
+                  title: t('freshnessGuarantee'),
+                  description: t('freshnessDesc'),
+                  icon: <Sparkles className="w-5 h-5" />,
+                  tone: 'from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-slate-900',
+                },
+                {
+                  title: t('securePayment'),
+                  description: t('securePaymentDesc'),
+                  icon: <CreditCard className="w-5 h-5" />,
+                  tone: 'from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-slate-900',
+                },
+                {
+                  title: t('deliveryTitle'),
+                  description: t('deliveryDesc'),
+                  icon: <Truck className="w-5 h-5" />,
+                  tone: 'from-emerald-50 to-lime-50 dark:from-emerald-950/20 dark:to-slate-900',
+                },
+                {
+                  title: t('browseBranchReviews'),
+                  description: t('shareExperienceDesc'),
+                  icon: <ShieldCheck className="w-5 h-5" />,
+                  tone: 'from-slate-50 to-zinc-100 dark:from-slate-900 dark:to-slate-950',
+                },
+              ].map((feature) => (
+                <div
+                  key={feature.title}
+                  className={`rounded-[2rem] border border-slate-100 dark:border-slate-800 bg-gradient-to-br ${feature.tone} p-6 shadow-sm`}
+                >
+                  <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-simba-orange mb-5">
+                    {feature.icon}
+                  </div>
+                  <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{feature.title}</h2>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{feature.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Shop by Category â€” full grid */}
       {!isFiltered && (
         <section className="py-14 bg-slate-50 dark:bg-slate-950">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

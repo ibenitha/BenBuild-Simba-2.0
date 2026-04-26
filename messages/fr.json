@@ -40,7 +40,8 @@
     "fastDeliveryNote": "Livraison rapide : Les commandes de la succursale sélectionnée sont généralement livrées dans les 45 minutes à Kigali.",
     "reviews": "Avis",
     "locations": "Succursales",
-    "storeLocator": "Localisateur de magasins"
+    "storeLocator": "Localisateur de magasins",
+    "marketRep": "Représentant"
   },
   "home": {
     "hero": {
@@ -153,7 +154,8 @@
     },
     "noMatchesFound": "Aucun résultat trouvé",
     "noMatchesDesc": "Nous n'avons trouvé aucun produit correspondant à \"{query}\". Vérifiez l'orthographe ou explorez d'autres catégories.",
-    "browseAll": "Parcourir tous les produits"
+    "browseAll": "Parcourir tous les produits",
+    "onlyLeft": "Plus que {qty} restants"
   },
   "cart": {
     "title": "Votre Panier",
@@ -414,6 +416,7 @@
     "contact": "Contact",
     "branchDashboard": "Tableau de bord succursale",
     "branchReviews": "Avis des succursales",
+    "marketRepDashboard": "Tableau de bord représentant",
     "copyright": "© 2026 Simba Supermarket. Tous droits réservés.",
     "madeInRwanda": "Fabriqué au Rwanda",
     "prices": "Prix en RWF",

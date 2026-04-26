@@ -29,7 +29,7 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
   const currentBranch = getSelectedBranch();
 
   const [hydrated, setHydrated] = useState(false);
-  const stableItems = hydrated ? items : [];
+  const stableItems = useMemo(() => (hydrated ? items : []), [hydrated, items]);
   const stableItemCount = hydrated ? itemCount() : 0;
   const subtotal = hydrated ? total() : 0;
   const totalSavings = hydrated ? savings() : 0;
@@ -167,14 +167,14 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
                         <div className="flex items-center bg-white dark:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-600 overflow-hidden">
                           <button
                             onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                            className="w-7 h-7 flex items-center justify-center text-slate-500 hover:bg-simba-orange hover:text-white transition-colors"
+                            className="w-9 h-9 flex items-center justify-center text-slate-500 hover:bg-simba-orange hover:text-white transition-colors"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
                           <span className="text-sm font-bold w-7 text-center text-slate-800 dark:text-slate-100">{item.quantity}</span>
                           <button
                             onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                            className="w-7 h-7 flex items-center justify-center text-slate-500 hover:bg-simba-orange hover:text-white transition-colors"
+                            className="w-9 h-9 flex items-center justify-center text-slate-500 hover:bg-simba-orange hover:text-white transition-colors"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
@@ -199,10 +199,10 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
                       )}
                     </div>
 
-                    {/* Remove */}
+                    {/* Remove — always visible on mobile, hover on desktop */}
                     <button
                       onClick={() => removeItem(item.product.id)}
-                      className="opacity-0 group-hover/item:opacity-100 self-start mt-0.5 p-1 text-slate-300 hover:text-red-500 transition-all"
+                      className="sm:opacity-0 sm:group-hover/item:opacity-100 self-start mt-0.5 p-2 text-slate-300 hover:text-red-500 transition-all"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -266,10 +266,10 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
                   className="flex items-center justify-center gap-2 w-full bg-simba-orange hover:bg-orange-600 text-white py-3.5 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
                 >
                   <LogIn className="w-4 h-4" />
-                  Sign In to Checkout
+                  {t('signInToCheckout')}
                 </Link>
                 <p className="text-[10px] text-center text-slate-400">
-                  Your cart will be saved
+                  {t('cartSaved')}
                 </p>
               </div>
             ) : (

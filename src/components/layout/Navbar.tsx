@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
-import { ShoppingCart, Search, Sun, Moon, Menu, X, Globe, ChevronDown, LayoutGrid, Heart, Phone, MapPin, Check, Clock, ChevronRight, Star, MessageSquare } from 'lucide-react';
+import { ShoppingCart, Search, Sun, Moon, Menu, X, Globe, ChevronDown, LayoutGrid, Heart, Phone, MapPin, Check, Clock, ChevronRight, Star, MessageSquare, Activity } from 'lucide-react';
 import { useCartStore } from '@/store/cart';
 import { useBranchStore } from '@/store/branch';
 import { useOperationsStore } from '@/store/operations';
@@ -285,21 +285,25 @@ function NavbarInner({ locale }: NavbarProps) {
               <div className="relative hidden sm:block">
                 <button
                   onClick={() => setLangOpen(!langOpen)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700"
                 >
                   <Globe className="w-4 h-4" />
-                  <span className="uppercase font-semibold text-xs">{locale}</span>
+                  <span className="font-bold text-xs">
+                    {locale === 'rw' ? '🇷🇼 RW' : locale === 'fr' ? '🇫🇷 FR' : '🇬🇧 EN'}
+                  </span>
                   <ChevronDown className="w-3 h-3" />
                 </button>
                 {langOpen && (
-                  <div className="absolute right-0 top-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl py-1 min-w-[160px] z-50">
+                  <div className="absolute right-0 top-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl py-1 min-w-[170px] z-50">
                     {languages.map(lang => (
                       <button
                         key={lang.code}
                         onClick={() => switchLocale(lang.code)}
-                        className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-2 hover:bg-orange-50 dark:hover:bg-slate-700 transition-colors ${locale === lang.code ? 'text-simba-orange font-semibold' : 'text-slate-700 dark:text-slate-300'}`}
+                        className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-2 hover:bg-orange-50 dark:hover:bg-slate-700 transition-colors ${locale === lang.code ? 'text-simba-orange font-bold bg-orange-50/50 dark:bg-orange-950/20' : 'text-slate-700 dark:text-slate-300'}`}
                       >
-                        <span>{lang.flag}</span> {lang.label}
+                        <span>{lang.flag}</span>
+                        <span>{lang.label}</span>
+                        {locale === lang.code && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-simba-orange" />}
                       </button>
                     ))}
                   </div>
@@ -357,6 +361,14 @@ function NavbarInner({ locale }: NavbarProps) {
                       >
                         My Orders
                       </Link>
+                      {(currentUser.role === 'admin' || currentUser.role === 'manager') && (
+                        <Link
+                          href={`/${locale}/admin/dashboard`}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-slate-700 transition-colors"
+                        >
+                          Market Rep Dashboard
+                        </Link>
+                      )}
                       {(currentUser.role === 'staff' || currentUser.role === 'manager' || currentUser.role === 'admin') && (
                         <Link
                           href={`/${locale}/branch-dashboard`}
@@ -386,10 +398,10 @@ function NavbarInner({ locale }: NavbarProps) {
               {/* Branch Ops — only show for staff/manager/admin */}
               {currentUser && (currentUser.role === 'staff' || currentUser.role === 'manager' || currentUser.role === 'admin') && (
                 <Link
-                  href={`/${locale}/branch-dashboard`}
+                  href={(currentUser.role === 'admin' || currentUser.role === 'manager') ? `/${locale}/admin/dashboard` : `/${locale}/branch-dashboard`}
                   className="hidden sm:block px-3 py-2 text-xs rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:bg-simba-orange dark:hover:bg-simba-orange dark:hover:text-white transition-colors"
                 >
-                  {t('branchOps')}
+                  {(currentUser.role === 'admin' || currentUser.role === 'manager') ? 'Market Rep' : t('branchOps')}
                 </Link>
               )}
 
@@ -453,6 +465,17 @@ function NavbarInner({ locale }: NavbarProps) {
                   <MapPin className="w-4 h-4" />
                   {t('storeLocator')}
                 </Link>
+
+                {/* Market Rep Dashboard — only for managers/admins */}
+                {currentUser && (currentUser.role === 'manager' || currentUser.role === 'admin') && (
+                  <Link
+                    href={`/${locale}/admin/dashboard`}
+                    className="flex items-center gap-2 px-6 py-3 text-white font-bold text-sm hover:bg-white/10 transition-colors border-l border-white/10"
+                  >
+                    <Activity className="w-4 h-4" />
+                    {t('marketRep')}
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -468,9 +491,9 @@ function NavbarInner({ locale }: NavbarProps) {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   placeholder={t('search')}
-                  className="w-full pl-4 pr-4 py-2.5 rounded-l-xl border-2 border-r-0 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange"
+                  className="w-full pl-4 pr-4 py-3 rounded-l-xl border-2 border-r-0 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange min-h-[44px]"
                 />
-                <button type="submit" className="bg-simba-orange text-white px-4 rounded-r-xl">
+                <button type="submit" className="bg-simba-orange text-white px-4 rounded-r-xl min-h-[44px] min-w-[44px] flex items-center justify-center">
                   <Search className="w-4 h-4" />
                 </button>
               </div>
@@ -479,7 +502,7 @@ function NavbarInner({ locale }: NavbarProps) {
               <Link
                 href={`/${locale}/products`}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 bg-simba-orange text-white text-sm font-bold rounded-lg hover:bg-simba-orange-dark transition-colors"
+                className="flex items-center gap-2 px-4 py-3.5 bg-simba-orange text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-colors min-h-[44px]"
               >
                 <LayoutGrid className="w-4 h-4" />
                 {t('categories')}
@@ -488,7 +511,7 @@ function NavbarInner({ locale }: NavbarProps) {
                 <Link
                   href={`/${locale}/orders`}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-bold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-3.5 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-bold rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors min-h-[44px]"
                 >
                   My Orders
                 </Link>
@@ -496,7 +519,7 @@ function NavbarInner({ locale }: NavbarProps) {
               <Link
                 href={`/${locale}/branch-reviews`}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-bold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-3.5 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-bold rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors min-h-[44px]"
               >
                 <Star className="w-4 h-4" />
                 {t('reviews')}
@@ -504,7 +527,7 @@ function NavbarInner({ locale }: NavbarProps) {
               <Link
                 href={`/${locale}/locations`}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-bold rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-3.5 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-bold rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors min-h-[44px]"
               >
                 <MapPin className="w-4 h-4" />
                 {t('locations')}
@@ -512,10 +535,36 @@ function NavbarInner({ locale }: NavbarProps) {
               <Link
                 href={`/${locale}`}
                 onClick={() => setMobileOpen(false)}
-                className="block px-4 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-3.5 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors min-h-[44px]"
               >
                 {t('home')}
               </Link>
+              {currentUser && (currentUser.role === 'staff' || currentUser.role === 'manager' || currentUser.role === 'admin') && (
+                <Link
+                  href={(currentUser.role === 'admin' || currentUser.role === 'manager') ? `/${locale}/admin/dashboard` : `/${locale}/branch-dashboard`}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 px-4 py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold rounded-xl hover:bg-simba-orange transition-colors min-h-[44px]"
+                >
+                  <Activity className="w-4 h-4" />
+                  {(currentUser.role === 'admin' || currentUser.role === 'manager') ? 'Market Rep Dashboard' : t('branchOps')}
+                </Link>
+              )}
+              {currentUser ? (
+                <button
+                  onClick={() => { logout(); setMobileOpen(false); }}
+                  className="w-full flex items-center gap-2 px-4 py-3.5 bg-red-50 dark:bg-red-950/20 text-red-500 text-sm font-bold rounded-xl hover:bg-red-100 transition-colors min-h-[44px]"
+                >
+                  {t('logout')}
+                </button>
+              ) : (
+                <Link
+                  href={`/${locale}/auth/login`}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 px-4 py-3.5 bg-simba-orange/10 text-simba-orange text-sm font-bold rounded-xl hover:bg-simba-orange/20 transition-colors min-h-[44px]"
+                >
+                  {t('login')}
+                </Link>
+              )}
             </div>
             <div className="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
               {languages.map(lang => (

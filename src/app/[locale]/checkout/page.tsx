@@ -10,8 +10,8 @@ import { useBranchStore } from '@/store/branch';
 import { useOperationsStore } from '@/store/operations';
 import { simbaBranches } from '@/lib/branches';
 import { formatPrice, cn } from '@/lib/utils';
+import { CartItem } from '@/types';
 import { Star, MapPin, Loader2, CreditCard, CheckCircle, Navigation, Phone, Truck, Package, ChevronRight, Store, Clock } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const PICKUP_SLOTS = ['08:00 - 10:00', '10:00 - 12:00', '12:00 - 14:00', '16:00 - 18:00'];
 const KIGALI_DISTRICTS = ['Gasabo', 'Nyarugenge', 'Kicukiro'];
@@ -53,7 +53,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
     }
   }, [branchId, fetchStock, fetchReviews, user, fetchCustomerFlags]);
 
-  const stableItems = hydrated ? items : [];
+  const stableItems = useMemo(() => (hydrated ? items : []), [hydrated, items]);
   const subtotal = hydrated ? total() : 0;
   
   const deliveryFee = orderType === 'delivery' 
@@ -120,7 +120,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
           <CreditCard className="w-10 h-10 text-simba-orange" />
         </div>
         <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
-          Sign in to Checkout
+          {t('signInToCheckout')}
         </h1>
         <p className="text-slate-500 font-medium mb-8 leading-relaxed">
           You need to be signed in to place an order. Your cart will be saved.
@@ -130,13 +130,13 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
             href={`/${locale}/auth/login?next=/${locale}/checkout`}
             className="inline-flex items-center justify-center gap-2 bg-simba-orange text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg shadow-orange-200 dark:shadow-none hover:bg-orange-600 transition-all active:scale-95"
           >
-            Sign In to Continue <ChevronRight className="w-4 h-4" />
+            {t('signInToContinue')} <ChevronRight className="w-4 h-4" />
           </Link>
           <Link
             href={`/${locale}/auth/register?next=/${locale}/checkout`}
             className="inline-flex items-center justify-center gap-2 border-2 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs hover:border-simba-orange hover:text-simba-orange transition-all"
           >
-            Create Account
+            {t('createAccount')}
           </Link>
           <Link href={`/${locale}`} className="text-sm text-slate-400 hover:text-simba-orange transition-colors mt-2">
             ← Continue Shopping
@@ -162,36 +162,57 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-        <div>
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter italic leading-none">{t('title')}</h1>
-          <p className="text-slate-500 font-medium mt-2">{t('subtitle')}</p>
+    <div className="bg-[radial-gradient(circle_at_top,rgba(251,146,60,0.10),transparent_38%),linear-gradient(180deg,#fff7ed_0%,transparent_22%)] dark:bg-none">
+      <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12">
+        <div className="mb-8 rounded-[2rem] sm:rounded-[2.75rem] border border-orange-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/90 backdrop-blur-sm shadow-sm overflow-hidden">
+          <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.5fr_1fr] lg:items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-simba-orange/10 text-simba-orange px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em]">
+                <Package className="w-3.5 h-3.5" />
+                {orderType === 'pickup' ? t('flowPickup') : t('flowDelivery')}
+              </div>
+              <h1 className="mt-4 text-3xl sm:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">
+                {t('title')}
+              </h1>
+              <p className="text-slate-500 font-medium mt-3 max-w-2xl">{t('subtitle')}</p>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <CheckoutStat label="Items" value={stableItems.length.toString()} />
+              <CheckoutStat label="Branch" value={simbaBranches.find(branch => branch.id === branchId)?.district || 'Kigali'} />
+              <CheckoutStat label="Total" value={formatPrice(subtotal + deliveryFee)} />
+            </div>
+          </div>
         </div>
-        
-        <div className="flex p-1.5 bg-slate-100 dark:bg-slate-800 rounded-[1.5rem] border border-slate-200 dark:border-slate-700 w-fit">
-          <button
-            onClick={() => setOrderType('pickup')}
-            className={cn(
-              "flex items-center gap-2 px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-              orderType === 'pickup' ? "bg-white dark:bg-slate-700 text-simba-orange shadow-md shadow-slate-200 dark:shadow-none" : "text-slate-500 hover:text-slate-700"
-            )}
-          >
-            <Package className="w-4 h-4" />
-            Pick-up
-          </button>
-          <button
-            onClick={() => setOrderType('delivery')}
-            className={cn(
-              "flex items-center gap-2 px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-              orderType === 'delivery' ? "bg-white dark:bg-slate-700 text-simba-orange shadow-md shadow-slate-200 dark:shadow-none" : "text-slate-500 hover:text-slate-700"
-            )}
-          >
-            <Truck className="w-4 h-4" />
-            Delivery
-          </button>
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('checkout')}</h2>
+            <p className="text-slate-500 font-medium mt-2">{t('reviewBeforeConfirm')}</p>
+          </div>
+
+          <div className="flex w-full sm:w-fit p-1.5 bg-slate-100 dark:bg-slate-800 rounded-[1.5rem] border border-slate-200 dark:border-slate-700">
+            <button
+              onClick={() => setOrderType('pickup')}
+              className={cn(
+                "flex-1 sm:flex-none items-center justify-center gap-2 px-5 sm:px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all inline-flex",
+                orderType === 'pickup' ? "bg-white dark:bg-slate-700 text-simba-orange shadow-md shadow-slate-200 dark:shadow-none" : "text-slate-500 hover:text-slate-700"
+              )}
+            >
+              <Package className="w-4 h-4" />
+              Pick-up
+            </button>
+            <button
+              onClick={() => setOrderType('delivery')}
+              className={cn(
+                "flex-1 sm:flex-none items-center justify-center gap-2 px-5 sm:px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all inline-flex",
+                orderType === 'delivery' ? "bg-white dark:bg-slate-700 text-simba-orange shadow-md shadow-slate-200 dark:shadow-none" : "text-slate-500 hover:text-slate-700"
+              )}
+            >
+              <Truck className="w-4 h-4" />
+              Delivery
+            </button>
+          </div>
         </div>
-      </div>
 
       {step === 'pickup' && (
         <div className="grid lg:grid-cols-2 gap-10">
@@ -203,7 +224,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
               <div className="flex items-center justify-between mb-8 relative z-10">
                 <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
                   <span className="w-8 h-8 rounded-lg bg-simba-orange/10 text-simba-orange flex items-center justify-center text-xs">1</span>
-                  {orderType === 'pickup' ? t('selectBranch') : 'Fulfillment Branch'}
+                  {orderType === 'pickup' ? t('selectBranch') : t('fulfillmentBranch')}
                 </h2>
                 {orderType === 'pickup' && (
                   <Link href={`/${locale}?changeBranch=true`} className="text-[10px] font-black uppercase tracking-widest text-simba-orange hover:opacity-70 transition-opacity">
@@ -246,10 +267,23 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
           </div>
 
           <div className="space-y-8">
+            <div className="lg:sticky lg:top-24">
+              <OrderSummaryPanel
+                items={stableItems}
+                subtotal={subtotal}
+                deliveryFee={deliveryFee}
+                paymentAmount={paymentAmount}
+                requiredDeposit={requiredDeposit}
+                orderType={orderType}
+                branchName={simbaBranches.find(branch => branch.id === branchId)?.name.replace('Simba Supermarket ', '') || 'Simba'}
+                slot={slot}
+              />
+              <div className="h-8" />
+            </div>
             <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800 shadow-sm">
               <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white mb-8 flex items-center gap-3">
                 <span className="w-8 h-8 rounded-lg bg-simba-orange/10 text-simba-orange flex items-center justify-center text-xs">2</span>
-                {orderType === 'pickup' ? t('pickupTimeContact') : 'Delivery Details'}
+                {orderType === 'pickup' ? t('pickupTimeContact') : t('deliveryDetailsTitle')}
               </h2>
               <div className="space-y-6">
                 <div className="group">
@@ -287,7 +321,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                 ) : (
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Delivery District</label>
+                      <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">{t('deliveryDistrictLabel')}</label>
                       <div className="relative">
                         <Navigation className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <select value={deliveryDistrict} onChange={e => setDeliveryDistrict(e.target.value)} className="w-full appearance-none bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl pl-12 pr-10 py-4 text-sm font-black focus:border-simba-orange transition-all outline-none">
@@ -297,10 +331,10 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Street Address / Landmark</label>
+                      <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">{t('streetAddressLabel')}</label>
                       <div className="relative">
                         <MapPin className="absolute left-4 top-4 w-4 h-4 text-slate-400" />
-                        <textarea value={deliveryAddress} onChange={e => setDeliveryAddress(e.target.value)} placeholder="House number, street name..." rows={3} className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl pl-12 pr-4 py-4 text-sm font-bold focus:border-simba-orange transition-all outline-none resize-none" />
+                        <textarea value={deliveryAddress} onChange={e => setDeliveryAddress(e.target.value)} placeholder={t('streetAddressPlaceholder')} rows={3} className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent rounded-2xl pl-12 pr-4 py-4 text-sm font-bold focus:border-simba-orange transition-all outline-none resize-none" />
                       </div>
                     </div>
                   </div>
@@ -313,16 +347,18 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                     <CreditCard className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="font-black text-sm text-slate-900 dark:text-white uppercase tracking-tight">MoMo {orderType === 'pickup' ? 'Deposit' : 'Full Payment'}</h3>
+                    <h3 className="font-black text-sm text-slate-900 dark:text-white uppercase tracking-tight">{orderType === 'pickup' ? t('momoDepositTitleShort') : t('momoFullPaymentTitleShort')}</h3>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed mt-1">
-                      {orderType === 'pickup' ? `A deposit of ${formatPrice(requiredDeposit)} is required.` : `Full payment of ${formatPrice(subtotal + deliveryFee)} is required upfront.`}
+                      {orderType === 'pickup'
+                        ? t('depositRequiredNow', { amount: formatPrice(requiredDeposit) })
+                        : t('fullPaymentRequiredNow', { amount: formatPrice(subtotal + deliveryFee) })}
                     </p>
                   </div>
                 </div>
               </div>
 
               <button disabled={!phone || !!phoneError || hasOutOfStock || (orderType === 'delivery' && !deliveryAddress)} onClick={() => setStep('deposit')} className="mt-8 w-full bg-simba-orange text-white py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-xs shadow-xl shadow-orange-200 dark:shadow-none hover:bg-orange-600 transition-all active:scale-95 disabled:opacity-50">
-                {orderType === 'delivery' ? 'Pay Full Amount Now' : 'Confirm & Pay Deposit'}
+                {orderType === 'delivery' ? t('payFullAmountNow') : t('confirmPayDeposit')}
               </button>
             </div>
           </div>
@@ -340,15 +376,15 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                 <p className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter italic">{formatPrice(paymentAmount)}</p>
                 <div className="bg-slate-50 dark:bg-slate-800 rounded-[2.5rem] p-6 space-y-4 text-left border border-slate-100">
                   <div className="flex justify-between items-center text-xs font-bold">
-                    <span>Grand Total</span>
+                    <span>{t('grandTotal')}</span>
                     <span>{formatPrice(paymentAmount)}</span>
                   </div>
                 </div>
                 <button onClick={placeOrder} disabled={placing} className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-yellow-100 flex items-center justify-center gap-3">
                   {placing ? <Loader2 className="w-6 h-6 animate-spin" /> : <CreditCard className="w-6 h-6" />}
-                  {placing ? 'Processing...' : 'Simulate Payment'}
+                  {placing ? t('processing') : t('simulatePayment')}
                 </button>
-                <button onClick={() => setStep('pickup')} className="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-simba-orange">Back</button>
+                <button onClick={() => setStep('pickup')} className="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-simba-orange">{t('back')}</button>
             </div>
           </div>
         </div>
@@ -367,8 +403,8 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
               <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-4 text-green-500 shadow-xl relative z-10">
                 <CheckCircle className="w-10 h-10" />
               </div>
-              <h2 className="text-3xl font-black uppercase tracking-tighter relative z-10">ORDER PLACED!</h2>
-              <p className="text-green-100 text-sm mt-1 relative z-10">Your order is confirmed</p>
+              <h2 className="text-3xl font-black uppercase tracking-tighter relative z-10">{t('orderPlaced')}</h2>
+              <p className="text-green-100 text-sm mt-1 relative z-10">{t('orderConfirmedShort')}</p>
             </div>
             <div className="p-8 space-y-4">
               {/* Order ID */}
@@ -379,7 +415,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
 
               {/* What happens next */}
               <div className="space-y-3">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">What happens next</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('whatHappensNext')}</p>
                 {[
                   { icon: '📋', step: '1', text: 'Branch receives your order instantly' },
                   { icon: '👨‍🍳', step: '2', text: 'Staff prepares your items' },
@@ -394,19 +430,102 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
 
               <div className="grid grid-cols-1 gap-3 pt-2">
                 <Link href={`/${locale}/orders`} className="flex items-center justify-center gap-2 w-full bg-simba-orange text-white px-4 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 dark:shadow-none">
-                  <Package className="w-4 h-4" /> Track My Order
+                  <Package className="w-4 h-4" /> {t('trackMyOrder')}
                 </Link>
                 <Link href={`/${locale}/branch-dashboard`} className="block w-full border-2 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 px-4 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest text-center hover:border-simba-orange hover:text-simba-orange transition-all">
-                  Live Branch Status
+                  {t('liveBranchStatus')}
                 </Link>
                 <Link href={`/${locale}`} className="block w-full border-2 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 px-4 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest text-center hover:border-simba-orange hover:text-simba-orange transition-all">
-                  Continue Shopping
+                  {t('continueShopping')}
                 </Link>
               </div>
             </div>
           </div>
         </div>
       )}
+      </div>
+    </div>
+  );
+}
+
+function CheckoutStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-100 dark:border-slate-700 p-4">
+      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{label}</p>
+      <p className="mt-2 text-sm sm:text-base font-black text-slate-900 dark:text-white">{value}</p>
+    </div>
+  );
+}
+
+function OrderSummaryPanel({
+  items,
+  subtotal,
+  deliveryFee,
+  paymentAmount,
+  requiredDeposit,
+  orderType,
+  branchName,
+  slot,
+}: {
+  items: CartItem[];
+  subtotal: number;
+  deliveryFee: number;
+  paymentAmount: number;
+  requiredDeposit: number;
+  orderType: 'pickup' | 'delivery';
+  branchName: string;
+  slot: string;
+}) {
+  const t = useTranslations('pickupCheckout');
+
+  return (
+    <div className="bg-slate-900 text-white rounded-[2.5rem] p-6 sm:p-8 shadow-2xl shadow-slate-900/15">
+      <div className="flex items-center justify-between gap-4 mb-6">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-200">{t('orderSummaryTitle')}</p>
+          <h3 className="text-2xl font-black tracking-tight mt-2">{formatPrice(paymentAmount)}</h3>
+        </div>
+        <div className="rounded-2xl bg-white/10 px-4 py-3 text-right">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">{t('mode')}</p>
+          <p className="text-sm font-black">{orderType === 'pickup' ? t('flowPickup') : t('flowDelivery')}</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        <div className="rounded-2xl bg-white/5 p-4">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t('branchLabel')}</p>
+          <p className="mt-2 text-sm font-bold">{branchName}</p>
+        </div>
+        <div className="rounded-2xl bg-white/5 p-4">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{orderType === 'pickup' ? t('slotLabelShort') : t('dispatchLabel')}</p>
+          <p className="mt-2 text-sm font-bold">{orderType === 'pickup' ? slot : t('dispatchAsap')}</p>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {items.slice(0, 4).map((item) => (
+          <div key={item.product.id} className="flex items-center justify-between gap-3 text-sm">
+            <span className="text-slate-200 truncate">{item.product.name}</span>
+            <span className="text-slate-400 font-black">x{item.quantity}</span>
+          </div>
+        ))}
+        {items.length > 4 && <p className="text-xs text-slate-400">+{items.length - 4} more items</p>}
+      </div>
+
+      <div className="mt-6 pt-6 border-t border-white/10 space-y-3 text-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-slate-400">{t('subtotalLabel')}</span>
+          <span className="font-bold">{formatPrice(subtotal)}</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-slate-400">{orderType === 'pickup' ? t('depositLabel') : t('deliveryFeeLabel')}</span>
+          <span className="font-bold">{formatPrice(orderType === 'pickup' ? requiredDeposit : deliveryFee)}</span>
+        </div>
+        <div className="flex items-center justify-between pt-3 border-t border-white/10">
+          <span className="text-slate-300 font-black uppercase tracking-widest text-xs">{t('payNow')}</span>
+          <span className="text-lg font-black text-simba-orange-light">{formatPrice(paymentAmount)}</span>
+        </div>
+      </div>
     </div>
   );
 }

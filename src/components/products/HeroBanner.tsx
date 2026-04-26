@@ -135,8 +135,8 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
         onTouchEnd={() => setPaused(false)}
       >
         <div
-          className="relative rounded-2xl overflow-hidden shadow-lg"
-          style={{ height: 'clamp(220px, 42vw, 480px)' }}
+          className="relative rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-lg"
+          style={{ height: 'clamp(280px, 45vw, 480px)' }}
         >
           {/* Slides */}
           {slides.map((slide, i) => (
@@ -154,26 +154,26 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
               />
 
               {/* Subtle text-legibility gradient — bottom-left only, not a color wash */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent sm:from-black/55 sm:via-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:from-black/40" />
 
               {/* Text content */}
-              <div className="absolute inset-0 flex flex-col justify-end sm:justify-center px-6 sm:px-10 pb-10 sm:pb-0 z-10">
-                <div className="max-w-xs sm:max-w-sm lg:max-w-lg">
+              <div className="absolute inset-0 flex flex-col justify-end sm:justify-center px-6 sm:px-12 pb-12 sm:pb-0 z-10 text-center sm:text-left">
+                <div className="max-w-xs sm:max-w-sm lg:max-w-lg mx-auto sm:mx-0">
                   {slide.badge && (
-                    <span className={`inline-block text-[10px] sm:text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-2 sm:mb-3 ${slide.badgeClass ?? 'bg-white/20 backdrop-blur-sm text-white border border-white/30'}`}>
+                    <span className={`inline-block text-[10px] sm:text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-3 sm:mb-4 ${slide.badgeClass ?? 'bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-sm'}`}>
                       {slide.badge}
                     </span>
                   )}
-                  <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-white leading-tight drop-shadow">
+                  <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.1] drop-shadow-lg mb-2">
                     {slide.title}
                   </h2>
-                  <p className="text-white/85 text-xs sm:text-sm lg:text-base mt-1.5 sm:mt-2 mb-4 sm:mb-5 leading-relaxed drop-shadow-sm">
+                  <p className="text-white/90 text-xs sm:text-base lg:text-lg mt-2 mb-6 sm:mb-8 leading-relaxed font-medium drop-shadow-md">
                     {slide.subtitle}
                   </p>
                   <Link
                     href={slide.href}
-                    className="inline-flex items-center gap-2 bg-simba-orange hover:bg-simba-orange-dark text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl active:scale-95 transition-all shadow-lg"
+                    className="inline-flex items-center gap-2 bg-simba-orange hover:bg-orange-600 text-white font-black text-xs sm:text-sm px-7 sm:px-8 py-3.5 sm:py-4 rounded-xl active:scale-95 transition-all shadow-xl shadow-orange-950/20 min-h-[48px]"
                   >
                     {slide.cta} <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -188,14 +188,14 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
               <button
                 onClick={goPrev}
                 aria-label="Previous slide"
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white flex items-center justify-center transition-all"
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white flex items-center justify-center transition-all"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={goNext}
                 aria-label="Next slide"
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white flex items-center justify-center transition-all"
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white flex items-center justify-center transition-all"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>

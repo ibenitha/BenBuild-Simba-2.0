@@ -83,7 +83,7 @@ export default function PromoRail({ heading, viewAllHref, viewAllLabel = 'See al
             aria-label="Scroll left"
             className={`
               absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10
-              w-9 h-9 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700
+              w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700
               flex items-center justify-center text-slate-700 dark:text-slate-200
               hover:bg-simba-orange hover:text-white hover:border-simba-orange
               transition-all duration-200
@@ -150,7 +150,7 @@ export default function PromoRail({ heading, viewAllHref, viewAllLabel = 'See al
             aria-label="Scroll right"
             className={`
               absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10
-              w-9 h-9 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700
+              w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700
               flex items-center justify-center text-slate-700 dark:text-slate-200
               hover:bg-simba-orange hover:text-white hover:border-simba-orange
               transition-all duration-200
