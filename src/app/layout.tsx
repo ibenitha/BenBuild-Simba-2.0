@@ -1,5 +1,11 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Simba Supermarket - Rwanda\'s Online Grocery Store',
@@ -7,10 +13,17 @@ export const metadata: Metadata = {
   keywords: 'supermarket, Rwanda, groceries, online shopping, Kigali',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#F97316',
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning>
-      <body className="font-sans">{children}</body>
+      <body className={`${inter.className} font-sans antialiased`}>{children}</body>
     </html>
   );
 }

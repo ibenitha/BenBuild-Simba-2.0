@@ -159,7 +159,7 @@ export default function ProductsPage({ params: { locale } }: ProductsPageProps) 
         {/* Mobile Category Toggle */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="lg:hidden w-full mb-4 flex items-center justify-between gap-2 bg-simba-orange text-white px-4 py-3 rounded-xl font-bold"
+          className="lg:hidden w-full mb-4 flex items-center justify-between gap-2 bg-simba-orange text-white px-4 py-3.5 rounded-xl font-bold min-h-[48px] active:scale-[0.98] transition-transform"
         >
           <span className="flex items-center gap-2">
             <LayoutGrid className="w-5 h-5" />
@@ -337,22 +337,22 @@ export default function ProductsPage({ params: { locale } }: ProductsPageProps) 
             )}
 
             {/* Filters Bar */}
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-4 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-slate-200 dark:border-slate-700 shadow-sm">
-              <div>
-                <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-3 sm:p-4 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 border border-slate-200 dark:border-slate-700 shadow-sm">
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight truncate">
                   {aiPinnedIds.length > 0
                     ? (aiQuery ? `Results for "${aiQuery}"` : 'Simba AI Results')
                     : selectedCategoryName}
-                  <span className="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">({sortedProducts.length} {tNav('itemsLabel', { count: sortedProducts.length })})</span>
+                  <span className="ml-2 text-xs sm:text-sm font-normal text-slate-500 dark:text-slate-400">({sortedProducts.length} {tNav('itemsLabel', { count: sortedProducts.length })})</span>
                 </h1>
               </div>
               
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{t('sortBy')}:</label>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <label className="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider whitespace-nowrap">{t('sortBy')}:</label>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm font-bold bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-simba-orange transition-colors"
+                  className="flex-1 sm:flex-none border border-slate-200 dark:border-slate-700 rounded-lg px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-simba-orange transition-colors min-h-[40px]"
                 >
                   <option value="newest">{t('sortOptions.newest')}</option>
                   <option value="price-low">{t('sortOptions.priceLow')}</option>

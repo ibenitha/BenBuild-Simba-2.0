@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
-import { ShoppingCart, Search, Sun, Moon, Menu, X, Globe, ChevronDown, LayoutGrid, Heart, Phone, MapPin, Check, Clock, ChevronRight, Star, MessageSquare, Activity } from 'lucide-react';
+import { ShoppingCart, Search, Sun, Moon, Menu, X, Globe, ChevronDown, LayoutGrid, Phone, MapPin, Check, Clock, ChevronRight, Star, MessageSquare, Activity } from 'lucide-react';
 import { useCartStore } from '@/store/cart';
 import { useBranchStore } from '@/store/branch';
 import { useOperationsStore } from '@/store/operations';
@@ -197,7 +197,7 @@ function NavbarInner({ locale }: NavbarProps) {
         </div>
       </div>
 
-      <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-800">
+      <header className="sticky top-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm border-b border-slate-100/80 dark:border-slate-800/80">
         {/* Main header */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 h-16 sm:h-20">
@@ -228,11 +228,11 @@ function NavbarInner({ locale }: NavbarProps) {
                   onChange={e => setSearchQuery(e.target.value)}
                   onFocus={() => searchQuery.trim().length > 1 && setShowSuggestions(true)}
                   placeholder={t('search')}
-                  className="w-full pl-5 pr-4 py-3 rounded-l-xl border-2 border-r-0 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange transition-all"
+                  className="w-full pl-5 pr-4 py-3 rounded-l-xl border-2 border-r-0 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-2 focus:ring-simba-orange/20 transition-all"
                 />
                 <button
                   type="submit"
-                  className="bg-simba-orange hover:bg-simba-orange-dark text-white px-6 rounded-r-xl flex items-center gap-2 font-medium text-sm transition-colors flex-shrink-0"
+                  className="bg-simba-orange hover:bg-simba-orange-dark text-white px-6 rounded-r-xl flex items-center gap-2 font-medium text-sm transition-all duration-200 hover:shadow-lg hover:shadow-orange-200/60 dark:hover:shadow-none flex-shrink-0"
                 >
                   <Search className="w-4 h-4" />
                   <span className="hidden lg:inline">{t('searchCta')}</span>
@@ -321,11 +321,6 @@ function NavbarInner({ locale }: NavbarProps) {
                 </button>
               )}
 
-              {/* Wishlist */}
-              <button className="hidden sm:flex p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                <Heart className="w-5 h-5" />
-              </button>
-
               {currentUser ? (
                 <>
                   <div className="relative hidden sm:block group">
@@ -366,7 +361,7 @@ function NavbarInner({ locale }: NavbarProps) {
                           href={`/${locale}/admin/dashboard`}
                           className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-slate-700 transition-colors"
                         >
-                          Market Rep Dashboard
+                          {t('marketRep')}
                         </Link>
                       )}
                       {(currentUser.role === 'staff' || currentUser.role === 'manager' || currentUser.role === 'admin') && (
@@ -395,20 +390,10 @@ function NavbarInner({ locale }: NavbarProps) {
                 </Link>
               )}
 
-              {/* Branch Ops — only show for staff/manager/admin */}
-              {currentUser && (currentUser.role === 'staff' || currentUser.role === 'manager' || currentUser.role === 'admin') && (
-                <Link
-                  href={(currentUser.role === 'admin' || currentUser.role === 'manager') ? `/${locale}/admin/dashboard` : `/${locale}/branch-dashboard`}
-                  className="hidden sm:block px-3 py-2 text-xs rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:bg-simba-orange dark:hover:bg-simba-orange dark:hover:text-white transition-colors"
-                >
-                  {(currentUser.role === 'admin' || currentUser.role === 'manager') ? 'Market Rep' : t('branchOps')}
-                </Link>
-              )}
-
               {/* Cart */}
               <button
                 onClick={() => setCartOpen(true)}
-                className="relative flex items-center gap-2 bg-simba-orange hover:bg-simba-orange-dark text-white px-3 sm:px-4 py-2 rounded-xl transition-colors"
+                className="relative flex items-center gap-2 bg-simba-orange hover:bg-simba-orange-dark text-white px-3 sm:px-4 py-2 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-orange-200/60 dark:hover:shadow-none"
                 aria-label={t('openCart')}
               >
                 <ShoppingCart className="w-5 h-5" />
@@ -546,7 +531,7 @@ function NavbarInner({ locale }: NavbarProps) {
                   className="flex items-center gap-2 px-4 py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold rounded-xl hover:bg-simba-orange transition-colors min-h-[44px]"
                 >
                   <Activity className="w-4 h-4" />
-                  {(currentUser.role === 'admin' || currentUser.role === 'manager') ? 'Market Rep Dashboard' : t('branchOps')}
+                  {(currentUser.role === 'admin' || currentUser.role === 'manager') ? t('marketRep') : t('branchOps')}
                 </Link>
               )}
               {currentUser ? (
@@ -585,25 +570,25 @@ function NavbarInner({ locale }: NavbarProps) {
 
       {/* Branch Selection Modal */}
       {showBranchModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm touch-none">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 touch-auto">
-            <div className="relative h-32 bg-simba-orange flex items-center justify-center">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm touch-none">
+          <div className="bg-white dark:bg-slate-900 rounded-t-3xl sm:rounded-3xl w-full sm:max-w-lg shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom sm:zoom-in duration-300 touch-auto max-h-[90vh] flex flex-col">
+            <div className="relative h-28 sm:h-32 bg-simba-orange flex items-center justify-center flex-shrink-0">
               <div className="absolute top-4 left-4">
                  <Image src="/simba-logo.png" alt="Simba" width={40} height={40} className="brightness-0 invert" />
               </div>
               <MapPin className="w-12 h-12 text-white/20 absolute right-4 bottom-4" />
               <div className="text-center px-6">
-                <h2 className="text-2xl font-black text-white leading-tight">{t('welcomeSimba')}</h2>
+                <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">{t('welcomeSimba')}</h2>
                 <p className="text-orange-100 text-sm font-medium">{t('selectBranch')}</p>
               </div>
             </div>
             
-            <div className="p-6">
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1">
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
                 {t('branchPricingNote')}
               </p>
               
-              <div className="grid grid-cols-1 gap-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="grid grid-cols-1 gap-2 max-h-[40vh] sm:max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                 {simbaBranches.map(branch => (
                   <button
                     key={branch.id}
@@ -639,9 +624,9 @@ function NavbarInner({ locale }: NavbarProps) {
                 ))}
               </div>
               
-              <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-800/50">
-                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center flex-shrink-0">
-                   <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="mt-4 sm:mt-6 flex items-center gap-3 p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-800/50">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-100 dark:bg-blue-800 flex items-center justify-center flex-shrink-0">
+                   <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <p className="text-xs text-blue-800 dark:text-blue-300 leading-snug">
                   {t('fastDeliveryNote')}

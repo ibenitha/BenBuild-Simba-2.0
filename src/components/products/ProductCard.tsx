@@ -75,7 +75,7 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
 
   return (
     <Link href={`/${locale}/products/${product.id}`} className="group block">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-lg hover:border-slate-200 dark:hover:border-slate-600 transition-all duration-300 flex flex-col h-full">
+      <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-lg hover:border-slate-200 dark:hover:border-slate-600 transition-all duration-300 flex flex-col h-full">
 
         {/* Image — tall ratio like the screenshot */}
         <div className="relative overflow-hidden bg-white dark:bg-slate-700 flex-shrink-0" style={{ aspectRatio: '4/3' }}>
@@ -83,7 +83,7 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
             src={product.image}
             alt={product.name}
             fill
-            className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+            className="object-contain p-2 sm:p-3 group-hover:scale-105 transition-transform duration-500"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
 
@@ -98,30 +98,30 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
 
           {/* Low stock badge */}
           {isLowStock && !isOutOfStock && (
-            <div className="absolute top-2 left-2 bg-amber-500 text-white text-[10px] font-black px-2 py-1 rounded-lg shadow uppercase animate-pulse">
+            <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-amber-500 text-white text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shadow uppercase animate-pulse">
               🔥 {t('onlyLeft', { qty: branchStock })}
             </div>
           )}
 
           {/* Discount badge */}
           {discount && (
-            <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
+            <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-red-500 text-white text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shadow">
               -{discount}%
             </div>
           )}
 
           {/* Cart qty bubble */}
           {qty > 0 && !isOutOfStock && (
-            <div className="absolute top-2 right-2 bg-simba-orange text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg z-10">
+            <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-simba-orange text-white text-xs font-bold w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shadow-lg z-10">
               {qty}
             </div>
           )}
 
-          {/* Quick-add "+" button on hover when not in cart */}
+          {/* Quick-add "+" button — always visible on mobile, hover on desktop */}
           {qty === 0 && !isOutOfStock && (
             <button
               onClick={handleAdd}
-              className="absolute bottom-3 right-3 w-10 h-10 bg-simba-orange hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 z-10 sm:opacity-0 sm:group-hover:opacity-100"
+              className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 bg-simba-orange hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:translate-y-2 sm:group-hover:translate-y-0 transition-all duration-200 z-10"
               aria-label="Add to cart"
             >
               <Plus className="w-4 h-4" />
@@ -130,35 +130,35 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
         </div>
 
         {/* Content */}
-        <div className="p-4 flex flex-col flex-1">
+        <div className="p-2.5 sm:p-4 flex flex-col flex-1">
           {/* Category */}
-          <p className="text-xs text-simba-orange font-semibold mb-1 truncate">
+          <p className="text-[10px] sm:text-xs text-simba-orange font-semibold mb-0.5 sm:mb-1 truncate">
             {KNOWN_CATEGORY_SLUGS.has(product.categorySlug)
               ? tCat(product.categorySlug as any)
               : product.category}
           </p>
 
           {/* Name */}
-          <h3 className="font-semibold text-sm text-slate-800 dark:text-slate-100 line-clamp-2 mb-1 leading-snug flex-1">
+          <h3 className="font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-100 line-clamp-2 mb-0.5 sm:mb-1 leading-snug flex-1">
             {product.name}
           </h3>
 
           {/* Unit */}
           {product.unit && (
-            <p className="text-xs text-slate-400 mb-3">{product.unit}</p>
+            <p className="text-[10px] sm:text-xs text-slate-400 mb-2 sm:mb-3">{product.unit}</p>
           )}
 
           {/* Price + stepper row */}
-          <div className="flex items-end justify-between gap-2 mt-auto">
+          <div className="flex items-end justify-between gap-1 sm:gap-2 mt-auto">
             {/* Price block */}
-            <div>
-              <p className="font-black text-simba-orange text-lg leading-tight">
+            <div className="min-w-0">
+              <p className="font-black text-simba-orange text-sm sm:text-lg leading-tight">
                 {formatPrice(product.price)}
               </p>
               {product.originalPrice ? (
-                <p className="text-xs text-slate-400 line-through leading-tight">{formatPrice(product.originalPrice)}</p>
+                <p className="text-[10px] sm:text-xs text-slate-400 line-through leading-tight">{formatPrice(product.originalPrice)}</p>
               ) : (
-                <p className="text-[10px] text-slate-400 leading-tight uppercase tracking-wide">RWF</p>
+                <p className="text-[9px] sm:text-[10px] text-slate-400 leading-tight uppercase tracking-wide">RWF</p>
               )}
             </div>
 
@@ -167,28 +167,28 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
               <button
                 onClick={handleAdd}
                 disabled={isOutOfStock}
-                className="flex items-center gap-1.5 bg-simba-orange hover:bg-orange-600 text-white px-3 py-2.5 rounded-xl text-xs font-bold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm flex-shrink-0 min-h-[44px]"
+                className="flex items-center gap-1 sm:gap-1.5 bg-simba-orange hover:bg-orange-600 text-white px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm flex-shrink-0 min-h-[36px] sm:min-h-[44px]"
               >
-                <ShoppingCart className="w-3.5 h-3.5" />
-                {t('add')}
+                <ShoppingCart className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                <span className="hidden xs:inline sm:inline">{t('add')}</span>
               </button>
             ) : (
               <div
-                className="flex items-center bg-simba-orange rounded-xl overflow-hidden flex-shrink-0 shadow-sm"
+                className="flex items-center bg-simba-orange rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0 shadow-sm"
                 onClick={e => e.preventDefault()}
               >
                 <button
                   onClick={handleDec}
-                  className="w-9 h-9 sm:w-8 sm:h-8 flex items-center justify-center text-white hover:bg-orange-600 transition-colors"
+                  className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-white hover:bg-orange-600 transition-colors"
                 >
-                  <Minus className="w-3.5 h-3.5" />
+                  <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>
-                <span className="text-white font-bold text-sm w-6 text-center">{qty}</span>
+                <span className="text-white font-bold text-xs sm:text-sm w-5 sm:w-6 text-center">{qty}</span>
                 <button
                   onClick={handleInc}
-                  className="w-9 h-9 sm:w-8 sm:h-8 flex items-center justify-center text-white hover:bg-orange-600 transition-colors"
+                  className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-white hover:bg-orange-600 transition-colors"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </button>
               </div>
             )}

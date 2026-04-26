@@ -163,20 +163,20 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
 
   return (
     <div className="bg-[radial-gradient(circle_at_top,rgba(251,146,60,0.10),transparent_38%),linear-gradient(180deg,#fff7ed_0%,transparent_22%)] dark:bg-none">
-      <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12">
-        <div className="mb-8 rounded-[2rem] sm:rounded-[2.75rem] border border-orange-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/90 backdrop-blur-sm shadow-sm overflow-hidden">
-          <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.5fr_1fr] lg:items-center">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 md:py-12">
+        <div className="mb-6 sm:mb-8 rounded-2xl sm:rounded-[2rem] md:rounded-[2.75rem] border border-orange-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/90 backdrop-blur-sm shadow-sm overflow-hidden">
+          <div className="grid gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 lg:grid-cols-[1.5fr_1fr] lg:items-center">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-simba-orange/10 text-simba-orange px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em]">
                 <Package className="w-3.5 h-3.5" />
                 {orderType === 'pickup' ? t('flowPickup') : t('flowDelivery')}
               </div>
-              <h1 className="mt-4 text-3xl sm:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">
+              <h1 className="mt-3 sm:mt-4 text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">
                 {t('title')}
               </h1>
-              <p className="text-slate-500 font-medium mt-3 max-w-2xl">{t('subtitle')}</p>
+              <p className="text-slate-500 font-medium mt-2 sm:mt-3 max-w-2xl text-sm sm:text-base">{t('subtitle')}</p>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               <CheckoutStat label="Items" value={stableItems.length.toString()} />
               <CheckoutStat label="Branch" value={simbaBranches.find(branch => branch.id === branchId)?.district || 'Kigali'} />
               <CheckoutStat label="Total" value={formatPrice(subtotal + deliveryFee)} />
@@ -184,17 +184,17 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('checkout')}</h2>
-            <p className="text-slate-500 font-medium mt-2">{t('reviewBeforeConfirm')}</p>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('checkout')}</h2>
+            <p className="text-slate-500 font-medium mt-1 sm:mt-2 text-sm sm:text-base">{t('reviewBeforeConfirm')}</p>
           </div>
 
           <div className="flex w-full sm:w-fit p-1.5 bg-slate-100 dark:bg-slate-800 rounded-[1.5rem] border border-slate-200 dark:border-slate-700">
             <button
               onClick={() => setOrderType('pickup')}
               className={cn(
-                "flex-1 sm:flex-none items-center justify-center gap-2 px-5 sm:px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all inline-flex",
+                "flex-1 sm:flex-none items-center justify-center gap-2 px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all inline-flex min-h-[44px]",
                 orderType === 'pickup' ? "bg-white dark:bg-slate-700 text-simba-orange shadow-md shadow-slate-200 dark:shadow-none" : "text-slate-500 hover:text-slate-700"
               )}
             >
@@ -204,7 +204,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
             <button
               onClick={() => setOrderType('delivery')}
               className={cn(
-                "flex-1 sm:flex-none items-center justify-center gap-2 px-5 sm:px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all inline-flex",
+                "flex-1 sm:flex-none items-center justify-center gap-2 px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all inline-flex min-h-[44px]",
                 orderType === 'delivery' ? "bg-white dark:bg-slate-700 text-simba-orange shadow-md shadow-slate-200 dark:shadow-none" : "text-slate-500 hover:text-slate-700"
               )}
             >
@@ -215,15 +215,15 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
         </div>
 
       {step === 'pickup' && (
-        <div className="grid lg:grid-cols-2 gap-10">
-          <div className="space-y-8">
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-10">
+          <div className="space-y-6 sm:space-y-8">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-[2.5rem] p-5 sm:p-8 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
               <div className="absolute top-0 right-0 p-8 opacity-5">
                 <Store className="w-32 h-32" />
               </div>
-              <div className="flex items-center justify-between mb-8 relative z-10">
-                <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-lg bg-simba-orange/10 text-simba-orange flex items-center justify-center text-xs">1</span>
+              <div className="flex items-center justify-between mb-5 sm:mb-8 relative z-10">
+                <h2 className="text-base sm:text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white flex items-center gap-2 sm:gap-3">
+                  <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-simba-orange/10 text-simba-orange flex items-center justify-center text-xs">1</span>
                   {orderType === 'pickup' ? t('selectBranch') : t('fulfillmentBranch')}
                 </h2>
                 {orderType === 'pickup' && (
@@ -232,7 +232,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                   </Link>
                 )}
               </div>
-              <div className="space-y-3 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar relative z-10">
+              <div className="space-y-2 sm:space-y-3 max-h-[350px] sm:max-h-[450px] overflow-y-auto pr-1 sm:pr-2 custom-scrollbar relative z-10">
                 {simbaBranches.map(branch => {
                   const rating = branchRatings[branch.id];
                   const active = branch.id === branchId;
@@ -266,7 +266,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
             </div>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             <div className="lg:sticky lg:top-24">
               <OrderSummaryPanel
                 items={stableItems}
@@ -278,11 +278,11 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                 branchName={simbaBranches.find(branch => branch.id === branchId)?.name.replace('Simba Supermarket ', '') || 'Simba'}
                 slot={slot}
               />
-              <div className="h-8" />
+              <div className="h-6 sm:h-8" />
             </div>
-            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 border border-slate-100 dark:border-slate-800 shadow-sm">
-              <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white mb-8 flex items-center gap-3">
-                <span className="w-8 h-8 rounded-lg bg-simba-orange/10 text-simba-orange flex items-center justify-center text-xs">2</span>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-[2.5rem] p-5 sm:p-8 border border-slate-100 dark:border-slate-800 shadow-sm">
+              <h2 className="text-base sm:text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white mb-5 sm:mb-8 flex items-center gap-2 sm:gap-3">
+                <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-simba-orange/10 text-simba-orange flex items-center justify-center text-xs">2</span>
                 {orderType === 'pickup' ? t('pickupTimeContact') : t('deliveryDetailsTitle')}
               </h2>
               <div className="space-y-6">
