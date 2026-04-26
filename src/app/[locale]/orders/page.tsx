@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/auth';
 import { useCartStore } from '@/store/cart';
 import { getProductById } from '@/lib/products';
@@ -40,13 +41,13 @@ interface Order {
   order_items: OrderItem[];
 }
 
-const STATUS_CONFIG: Record<Order['status'], { label: string; color: string; bg: string; icon: React.ReactNode }> = {
-  pending:   { label: 'Pending',   color: 'text-yellow-700', bg: 'bg-yellow-50 border-yellow-200',   icon: <Clock className="w-3.5 h-3.5" /> },
-  accepted:  { label: 'Accepted',  color: 'text-blue-700',   bg: 'bg-blue-50 border-blue-200',       icon: <Package className="w-3.5 h-3.5" /> },
-  ready:     { label: 'Ready',     color: 'text-green-700',  bg: 'bg-green-50 border-green-200',     icon: <CheckCircle className="w-3.5 h-3.5" /> },
-  dispatched:{ label: 'On the way',color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200',   icon: <Truck className="w-3.5 h-3.5" /> },
-  delivered: { label: 'Delivered', color: 'text-green-700',  bg: 'bg-green-50 border-green-200',     icon: <CheckCircle className="w-3.5 h-3.5" /> },
-  completed: { label: 'Completed', color: 'text-slate-600',  bg: 'bg-slate-50 border-slate-200',     icon: <CheckCircle className="w-3.5 h-3.5" /> },
+const STATUS_CONFIG: Record<Order['status'], { color: string; bg: string; icon: React.ReactNode }> = {
+  pending:   { color: 'text-yellow-700', bg: 'bg-yellow-50 border-yellow-200', icon: <Clock className="w-3.5 h-3.5" /> },
+  accepted:  { color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200', icon: <Package className="w-3.5 h-3.5" /> },
+  ready:     { color: 'text-green-700', bg: 'bg-green-50 border-green-200', icon: <CheckCircle className="w-3.5 h-3.5" /> },
+  dispatched:{ color: 'text-purple-700', bg: 'bg-purple-50 border-purple-200', icon: <Truck className="w-3.5 h-3.5" /> },
+  delivered: { color: 'text-green-700', bg: 'bg-green-50 border-green-200', icon: <CheckCircle className="w-3.5 h-3.5" /> },
+  completed: { color: 'text-slate-600', bg: 'bg-slate-50 border-slate-200', icon: <CheckCircle className="w-3.5 h-3.5" /> },
 };
 
 function formatDate(iso: string) {
@@ -57,6 +58,7 @@ function formatDate(iso: string) {
 }
 
 export default function OrdersPage({ params: { locale } }: { params: { locale: string } }) {
+  const t = useTranslations('ordersPage');
   const router = useRouter();
   const user = useAuthStore(s => s.currentUser);
   const { addItem, items: cartItems } = useCartStore();
@@ -115,6 +117,15 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
   const getBranchName = (branchId: string) =>
     simbaBranches.find(b => b.id === branchId)?.name.replace('Simba Supermarket ', '') ?? branchId;
 
+  const statusLabel = (status: Order['status']) => {
+    if (status === 'pending') return t('pending');
+    if (status === 'accepted') return t('accepted');
+    if (status === 'ready') return t('ready');
+    if (status === 'dispatched') return t('onTheWay');
+    if (status === 'delivered') return t('delivered');
+    return t('completed');
+  };
+
   if (!user) return null;
 
   return (
@@ -124,10 +135,10 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-8">
           <Link href={`/${locale}`} className="flex items-center gap-1 hover:text-simba-orange transition-colors">
-            <Home className="w-3.5 h-3.5" /> Home
+            <Home className="w-3.5 h-3.5" /> {t('home')}
           </Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-simba-orange">My Orders</span>
+          <span className="text-simba-orange">{t('myOrders')}</span>
         </nav>
 
         {/* Header */}
@@ -137,7 +148,7 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
               <div className="w-10 h-10 rounded-xl bg-simba-orange/10 flex items-center justify-center">
                 <Receipt className="w-5 h-5 text-simba-orange" />
               </div>
-              My Orders
+              {t('myOrders')}
             </h1>
             <p className="text-slate-500 text-sm mt-1">
               {user.fullName} · {user.email}
@@ -148,7 +159,7 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
             className="hidden sm:flex items-center gap-2 bg-simba-orange text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-simba-orange-dark transition-colors"
           >
             <ShoppingCart className="w-4 h-4" />
-            Shop Now
+            {t('shopNow')}
           </Link>
         </div>
 
@@ -156,7 +167,7 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
         {loading && (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
             <Loader2 className="w-8 h-8 text-simba-orange animate-spin" />
-            <p className="text-sm text-slate-500 font-medium">Loading your orders…</p>
+            <p className="text-sm text-slate-500 font-medium">{t('loadingOrders')}</p>
           </div>
         )}
 
@@ -166,13 +177,13 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
             <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center mx-auto mb-6">
               <ShoppingBag className="w-10 h-10 text-slate-300" />
             </div>
-            <h3 className="text-lg font-black text-slate-900 dark:text-white mb-2">No orders yet</h3>
-            <p className="text-slate-500 text-sm mb-8">Your order history will appear here once you place your first order.</p>
+            <h3 className="text-lg font-black text-slate-900 dark:text-white mb-2">{t('noOrdersYet')}</h3>
+            <p className="text-slate-500 text-sm mb-8">{t('emptyHistory')}</p>
             <Link
               href={`/${locale}/products`}
               className="inline-flex items-center gap-2 bg-simba-orange text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-simba-orange-dark transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
             >
-              Start Shopping <ChevronRight className="w-4 h-4" />
+              {t('startShopping')} <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
         )}
@@ -197,13 +208,13 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
                       <span className="font-black text-sm text-slate-900 dark:text-white">#{order.id}</span>
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${status.bg} ${status.color}`}>
                         {status.icon}
-                        {status.label}
+                        {statusLabel(order.status)}
                       </span>
                       <span className="text-xs text-slate-400 font-medium">
                         {order.order_type === 'delivery' ? (
-                          <span className="flex items-center gap-1"><Truck className="w-3 h-3" /> Delivery</span>
+                          <span className="flex items-center gap-1"><Truck className="w-3 h-3" /> {t('delivery')}</span>
                         ) : (
-                          <span className="flex items-center gap-1"><Package className="w-3 h-3" /> Pick-up</span>
+                          <span className="flex items-center gap-1"><Package className="w-3 h-3" /> {t('pickup')}</span>
                         )}
                       </span>
                     </div>
@@ -256,7 +267,7 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
                     {/* Footer: total + reorder */}
                     <div className="flex items-center justify-between pt-3 border-t border-slate-50 dark:border-slate-800">
                       <div>
-                        <p className="text-xs text-slate-400 font-medium">Order total</p>
+                        <p className="text-xs text-slate-400 font-medium">{t('orderTotal')}</p>
                         <p className="font-black text-simba-orange text-base">{formatPrice(order.total_amount)}</p>
                       </div>
 
@@ -276,7 +287,7 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
                         ) : (
                           <RotateCcw className="w-3.5 h-3.5" />
                         )}
-                        {didReorder ? 'Added to cart!' : isReordering ? 'Adding…' : 'Reorder'}
+                        {didReorder ? t('addedToCart') : isReordering ? t('adding') : t('reorder')}
                       </button>
                     </div>
                   </div>
@@ -290,12 +301,12 @@ export default function OrdersPage({ params: { locale } }: { params: { locale: s
         {reorderSuccess && (
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-6 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 text-sm font-bold animate-in slide-in-from-bottom-4 duration-300">
             <CheckCircle className="w-5 h-5 text-green-400" />
-            Items added to cart!
+            {t('itemsAddedToCart')}
             <Link
               href={`/${locale}/cart`}
               className="ml-2 bg-simba-orange text-white px-3 py-1.5 rounded-lg text-xs font-black hover:bg-simba-orange-dark transition-colors"
             >
-              View Cart
+              {t('viewCart')}
             </Link>
           </div>
         )}

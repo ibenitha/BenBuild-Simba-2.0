@@ -7,6 +7,7 @@ import { products } from '@/lib/products';
 import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/auth';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   ClipboardList, Package, CheckCircle2, Clock, User, 
   ChevronDown, RefreshCw, Search, ArrowUpDown, AlertTriangle, 
@@ -17,19 +18,21 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn, formatPrice } from '@/lib/utils';
 
-const STATUS_CONFIG: Record<OrderStatus, { label: string; color: string; icon: React.ReactNode; step: number }> = {
-  pending:    { label: 'Pending',   color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',  icon: <Clock className="w-3.5 h-3.5" />, step: 1 },
-  accepted:   { label: 'Preparing', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',          icon: <Package className="w-3.5 h-3.5" />, step: 2 },
-  ready:      { label: 'Ready',     color: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400',  icon: <CheckCircle2 className="w-3.5 h-3.5" />, step: 3 },
-  dispatched: { label: 'Dispatched',color: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',icon: <Truck className="w-3.5 h-3.5" />, step: 4 },
-  delivered:  { label: 'Delivered', color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',     icon: <CheckCircle2 className="w-3.5 h-3.5" />, step: 5 },
-  completed:  { label: 'Completed', color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400',          icon: <CheckCircle2 className="w-3.5 h-3.5" />, step: 6 },
+const STATUS_CONFIG: Record<OrderStatus, { color: string; icon: React.ReactNode; step: number }> = {
+  pending:    { color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',  icon: <Clock className="w-3.5 h-3.5" />, step: 1 },
+  accepted:   { color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',          icon: <Package className="w-3.5 h-3.5" />, step: 2 },
+  ready:      { color: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400',  icon: <CheckCircle2 className="w-3.5 h-3.5" />, step: 3 },
+  dispatched: { color: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',  icon: <Truck className="w-3.5 h-3.5" />, step: 4 },
+  delivered:  { color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',      icon: <CheckCircle2 className="w-3.5 h-3.5" />, step: 5 },
+  completed:  { color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400',         icon: <CheckCircle2 className="w-3.5 h-3.5" />, step: 6 },
 };
 
 type StockFilter = 'all' | 'low' | 'out';
 
 export default function BranchDashboardPage() {
   const t = useTranslations('branchDashboard');
+  const pathname = usePathname();
+  const locale = pathname.split('/')[1] || 'en';
   const currentUser = useAuthStore((s) => s.currentUser);
   const initialized = useAuthStore((s) => s.initialized);
   const {
@@ -150,20 +153,20 @@ export default function BranchDashboardPage() {
           <div className="w-20 h-20 bg-orange-100 dark:bg-orange-950/30 rounded-3xl flex items-center justify-center mx-auto mb-6">
             <ShieldCheck className="w-10 h-10 text-simba-orange" />
           </div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Staff Access Required</h1>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-2">{t('staffAccessRequired')}</h1>
           <p className="text-slate-500 mb-8 leading-relaxed">
-            This dashboard is for Simba staff, managers, and administrators only.
+            {t('staffAccessDescription')}
           </p>
           <div className="flex flex-col gap-3">
             <Link
-              href="/en/admin/login"
+              href={`/${locale}/admin/login`}
               className="inline-flex items-center justify-center gap-2 bg-simba-orange text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-orange-600 transition-colors"
             >
               <LogIn className="w-4 h-4" />
-              Sign In as Staff
+              {t('signInAsStaff')}
             </Link>
-            <Link href="/" className="text-sm text-slate-400 hover:text-simba-orange transition-colors">
-              ← Back to Store
+            <Link href={`/${locale}`} className="text-sm text-slate-400 hover:text-simba-orange transition-colors">
+              ← {t('backToStore')}
             </Link>
           </div>
         </div>
@@ -183,7 +186,7 @@ export default function BranchDashboardPage() {
               <h1 className="text-lg font-black uppercase tracking-tight leading-none">{t('title')}</h1>
               <div className="flex items-center gap-2 mt-1">
                 <span className="flex h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Live Operations Mode</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('liveOperationsMode')}</span>
               </div>
             </div>
           </div>
@@ -214,7 +217,7 @@ export default function BranchDashboardPage() {
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-4">
                  <div className="relative min-w-[200px]">
-                    <span className="absolute -top-2 left-3 px-1.5 bg-white dark:bg-slate-900 text-[9px] font-black text-slate-400 uppercase tracking-widest z-10">Active Branch</span>
+                    <span className="absolute -top-2 left-3 px-1.5 bg-white dark:bg-slate-900 text-[9px] font-black text-slate-400 uppercase tracking-widest z-10">{t('activeBranch')}</span>
                     <select
                       value={branchId}
                       onChange={e => setBranchId(e.target.value)}
@@ -244,7 +247,7 @@ export default function BranchDashboardPage() {
               {role === 'staff' && (
                 <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3 bg-orange-50 dark:bg-orange-950/20 px-4 py-2 rounded-xl border border-orange-100 dark:border-orange-900/30">
                   <User className="w-4 h-4 text-simba-orange" />
-                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Active Staff:</span>
+                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{t('activeStaff')}</span>
                   <input value={staffName} onChange={e => setStaffName(e.target.value)} className="bg-transparent text-sm font-bold text-simba-orange focus:outline-none border-b border-simba-orange/30 w-32" />
                 </motion.div>
               )}
@@ -254,7 +257,7 @@ export default function BranchDashboardPage() {
                 { label: t('pending'),   count: counts.pending,   color: 'text-yellow-600', bg: 'bg-yellow-50 dark:bg-yellow-900/20' },
                 { label: t('preparing'), count: counts.accepted,  color: 'text-blue-600',   bg: 'bg-blue-50 dark:bg-blue-900/20' },
                 { label: t('ready'),     count: counts.ready,     color: 'text-indigo-600', bg: 'bg-indigo-50 dark:bg-indigo-900/20' },
-                { label: 'Dispatched',   count: counts.dispatched,color: 'text-orange-600', bg: 'bg-orange-50 dark:bg-orange-900/20' },
+                { label: t('dispatched'),count: counts.dispatched,color: 'text-orange-600', bg: 'bg-orange-50 dark:bg-orange-900/20' },
                 { label: t('completed'), count: counts.completed, color: 'text-slate-400',  bg: 'bg-slate-50 dark:bg-slate-800/50' },
               ].map(s => (
                 <div key={s.label} className={cn("flex flex-col items-center justify-center px-4 py-3 rounded-2xl border border-transparent transition-all", s.bg)}>
@@ -270,8 +273,8 @@ export default function BranchDashboardPage() {
           <div className="lg:col-span-8 space-y-6">
             <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-2">
               <Package className="w-5 h-5 text-simba-orange" />
-              Operations Queue
-              <span className="text-xs font-bold text-slate-400 normal-case ml-2">({displayOrders.length} orders)</span>
+              {t('operationsQueue')}
+              <span className="text-xs font-bold text-slate-400 normal-case ml-2">({displayOrders.length} {t('ordersCount')})</span>
             </h2>
             <div className="space-y-4">
               <AnimatePresence mode="popLayout">
@@ -297,13 +300,13 @@ export default function BranchDashboardPage() {
                   <h2 className="font-black text-slate-900 dark:text-white uppercase tracking-tight">{t('quickInventory')}</h2>
                 </div>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <StockBadge label="All" count={stockSummary.total} active={stockFilter === 'all'} onClick={() => setStockFilter('all')} color="slate" />
-                  <StockBadge label="Low" count={stockSummary.low} active={stockFilter === 'low'} onClick={() => setStockFilter('low')} color="yellow" />
-                  <StockBadge label="Out" count={stockSummary.out} active={stockFilter === 'out'} onClick={() => setStockFilter('out')} color="red" />
+                  <StockBadge label={t('all')} count={stockSummary.total} active={stockFilter === 'all'} onClick={() => setStockFilter('all')} color="slate" />
+                  <StockBadge label={t('low')} count={stockSummary.low} active={stockFilter === 'low'} onClick={() => setStockFilter('low')} color="yellow" />
+                  <StockBadge label={t('out')} count={stockSummary.out} active={stockFilter === 'out'} onClick={() => setStockFilter('out')} color="red" />
                 </div>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input value={stockSearch} onChange={e => setStockSearch(e.target.value)} placeholder="Product search..." className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold focus:ring-2 focus:ring-simba-orange/20" />
+                  <input value={stockSearch} onChange={e => setStockSearch(e.target.value)} placeholder={t('productSearch')} className="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl pl-10 pr-4 py-2.5 text-xs font-bold focus:ring-2 focus:ring-simba-orange/20" />
                 </div>
               </div>
               <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[400px] overflow-y-auto">
@@ -313,7 +316,7 @@ export default function BranchDashboardPage() {
               </div>
               <div className="p-4 bg-slate-50 dark:bg-slate-800/50">
                  <button onClick={() => setShowAllProducts(!showAllProducts)} className="w-full text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-simba-orange transition-colors">
-                  {showAllProducts ? `Show Less` : `View All ${inventoryProducts.length}`}
+                  {showAllProducts ? t('showLess') : t('viewAllCount', { count: inventoryProducts.length })}
                 </button>
               </div>
             </section>
@@ -329,6 +332,14 @@ function OrderCard({ order, role, staffName, t, formatTime, flagCount }: {
 }) {
   const { assignOrder, markReady, dispatchOrder, deliverOrder, completeOrder, addCustomerFlag } = useOperationsStore();
   const cfg = STATUS_CONFIG[order.status];
+  const statusLabel = (status: OrderStatus) => {
+    if (status === 'pending') return t('pending');
+    if (status === 'accepted') return t('preparing');
+    if (status === 'ready') return t('ready');
+    if (status === 'dispatched') return t('dispatched');
+    if (status === 'delivered') return t('delivered');
+    return t('completed');
+  };
   const isManager = role === 'manager';
   const isDelivery = order.orderType === 'delivery';
   
@@ -348,8 +359,8 @@ function OrderCard({ order, role, staffName, t, formatTime, flagCount }: {
              </div>
              <div>
                <div className="flex items-center gap-2">
-                 <h3 className="font-black text-slate-900 dark:text-white uppercase tracking-tight">#{order.id.slice(-6).toUpperCase()} <span className="text-slate-300 font-normal">|</span> <span className={isDelivery ? "text-blue-600" : "text-simba-orange"}>{isDelivery ? 'Delivery' : 'Pick-up'}</span></h3>
-                 {flagCount > 0 && <span className="bg-red-500 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">! {flagCount} Flags</span>}
+                <h3 className="font-black text-slate-900 dark:text-white uppercase tracking-tight">#{order.id.slice(-6).toUpperCase()} <span className="text-slate-300 font-normal">|</span> <span className={isDelivery ? "text-blue-600" : "text-simba-orange"}>{isDelivery ? t('delivery') : t('pickup')}</span></h3>
+                 {flagCount > 0 && <span className="bg-red-500 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">! {flagCount} {t('flagsLabel')}</span>}
                </div>
                <p className="text-xs font-bold text-slate-500 flex items-center gap-1.5 mt-0.5">
                  <User className="w-3.5 h-3.5" /> {order.customerName}
@@ -360,7 +371,7 @@ function OrderCard({ order, role, staffName, t, formatTime, flagCount }: {
           </div>
           <div className="flex flex-col items-end gap-2 text-right">
              <span className={cn("inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest", cfg.color)}>
-                {cfg.icon} {cfg.label}
+                {cfg.icon} {statusLabel(order.status)}
              </span>
              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{formatTime(order.createdAt)} | {formatPrice(order.totalAmount || order.deposit)}</span>
           </div>
@@ -370,7 +381,7 @@ function OrderCard({ order, role, staffName, t, formatTime, flagCount }: {
           <div className="mb-6 p-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-2xl border border-blue-100 dark:border-blue-900/30 flex items-start gap-3">
              <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
              <div>
-               <p className="text-[10px] font-black uppercase tracking-widest text-blue-800 dark:text-blue-400">Destination Address</p>
+               <p className="text-[10px] font-black uppercase tracking-widest text-blue-800 dark:text-blue-400">{t('destinationAddress')}</p>
                <p className="text-xs font-bold text-slate-700 dark:text-slate-300 mt-0.5">{order.deliveryAddress}, {order.deliveryDistrict}</p>
              </div>
           </div>
@@ -404,43 +415,43 @@ function OrderCard({ order, role, staffName, t, formatTime, flagCount }: {
                  <span className="text-[10px] font-black uppercase tracking-tight text-slate-900 dark:text-white">{order.assignedTo}</span>
                </div>
              ) : (
-               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic animate-pulse">Awaiting Assignment...</span>
+               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic animate-pulse">{t('awaitingAssignmentShort')}</span>
              )}
            </div>
 
            <div className="flex items-center gap-2">
               {isManager && order.status === 'pending' && (
-                <button onClick={() => { const name = window.prompt(t('enterStaffName'), 'Staff A'); if (name) assignOrder(order.id, name); }} className="bg-simba-orange text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 shadow-lg shadow-orange-100">
-                  <UserCheck className="w-4 h-4" /> Accept & Assign
+                <button onClick={() => { const name = window.prompt(t('enterStaffName'), t('staffDefaultName')); if (name) assignOrder(order.id, name); }} className="bg-simba-orange text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 shadow-lg shadow-orange-100">
+                  <UserCheck className="w-4 h-4" /> {t('acceptAssign')}
                 </button>
               )}
               {!isManager && order.status === 'accepted' && order.assignedTo === staffName && (
                 <button onClick={() => markReady(order.id)} className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 shadow-lg shadow-blue-100">
-                  <Play className="w-4 h-4" /> Mark Ready
+                  <Play className="w-4 h-4" /> {t('markReady')}
                 </button>
               )}
               {!isManager && order.status === 'ready' && order.assignedTo === staffName && (
                 isDelivery ? (
                   <button onClick={() => dispatchOrder(order.id)} className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 shadow-lg shadow-indigo-100">
-                    <Truck className="w-4 h-4" /> Dispatch Order
+                    <Truck className="w-4 h-4" /> {t('dispatchOrder')}
                   </button>
                 ) : (
                   <button onClick={() => completeOrder(order.id)} className="bg-green-600 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 shadow-lg shadow-green-100">
-                    <CheckCircle className="w-4 h-4" /> Complete Pickup
+                    <CheckCircle className="w-4 h-4" /> {t('completePickup')}
                   </button>
                 )
               )}
               {!isManager && order.status === 'dispatched' && order.assignedTo === staffName && (
                 <button onClick={() => deliverOrder(order.id)} className="bg-green-600 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 shadow-lg shadow-green-100">
-                  <Navigation className="w-4 h-4" /> Mark Delivered
+                  <Navigation className="w-4 h-4" /> {t('markDelivered')}
                 </button>
               )}
               {!isManager && order.status === 'delivered' && order.assignedTo === staffName && (
                 <button onClick={() => completeOrder(order.id)} className="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95">
-                  Complete
+                  {t('complete')}
                 </button>
               )}
-              {order.status === 'completed' && <div className="flex items-center gap-2 text-green-600"><CheckCircle className="w-4 h-4" /><span className="text-[10px] font-black uppercase tracking-widest">Handed Over</span></div>}
+              {order.status === 'completed' && <div className="flex items-center gap-2 text-green-600"><CheckCircle className="w-4 h-4" /><span className="text-[10px] font-black uppercase tracking-widest">{t('handedOver')}</span></div>}
            </div>
         </div>
       </div>
@@ -458,7 +469,7 @@ function InventoryItem({ product, stock, branchId, t }: { product: any, stock: n
         <h4 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate">{product.name}</h4>
         <div className="flex items-center gap-2 mt-0.5">
            <span className={cn("w-1.5 h-1.5 rounded-full", stock === 0 ? "bg-red-500" : stock < 5 ? "bg-yellow-500" : "bg-green-500")} />
-           <span className={cn("text-[10px] font-bold", stock === 0 ? "text-red-500" : stock < 5 ? "text-yellow-600" : "text-slate-500")}>{stock === 0 ? t('outOfStock') : `${stock} Units`}</span>
+           <span className={cn("text-[10px] font-bold", stock === 0 ? "text-red-500" : stock < 5 ? "text-yellow-600" : "text-slate-500")}>{stock === 0 ? t('outOfStock') : t('unitsCount', { count: stock })}</span>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -471,7 +482,7 @@ function InventoryItem({ product, stock, branchId, t }: { product: any, stock: n
         ) : (
           <>
             <button onClick={() => { setEditQty(stock); setIsEditing(true); }} className="p-2 text-slate-400 hover:text-simba-orange opacity-0 group-hover:opacity-100"><ArrowUpDown className="w-4 h-4" /></button>
-            {stock > 0 ? <button onClick={() => setOutOfStock(branchId, product.id)} className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 transition-all">Zero</button> : <button onClick={() => restockProduct(branchId, product.id)} className="text-[9px] font-black uppercase tracking-widest text-green-600 bg-green-50 dark:bg-green-900/20 px-3 py-1.5 rounded-lg border border-green-100 dark:border-green-900/30 transition-all">Restock</button>}
+            {stock > 0 ? <button onClick={() => setOutOfStock(branchId, product.id)} className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-red-500 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 transition-all">{t('setZero')}</button> : <button onClick={() => restockProduct(branchId, product.id)} className="text-[9px] font-black uppercase tracking-widest text-green-600 bg-green-50 dark:bg-green-900/20 px-3 py-1.5 rounded-lg border border-green-100 dark:border-green-900/30 transition-all">{t('restock')}</button>}
           </>
         )}
       </div>

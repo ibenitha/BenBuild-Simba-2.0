@@ -128,15 +128,15 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
       `}</style>
 
       <section
-        className="w-full px-3 sm:px-5 lg:px-8 pt-3 pb-2"
+        className="w-full px-3 sm:px-5 lg:px-8 pt-2.5 sm:pt-3 pb-2 sm:pb-3"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onTouchStart={() => setPaused(true)}
         onTouchEnd={() => setPaused(false)}
       >
         <div
-          className="relative rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-lg"
-          style={{ height: 'clamp(280px, 45vw, 480px)' }}
+          className="relative rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-lg sm:shadow-xl"
+          style={{ height: 'clamp(260px, 62vw, 480px)' }}
         >
           {/* Slides */}
           {slides.map((slide, i) => (
@@ -158,22 +158,22 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:from-black/40" />
 
               {/* Text content */}
-              <div className="absolute inset-0 flex flex-col justify-end sm:justify-center px-6 sm:px-12 pb-12 sm:pb-0 z-10 text-center sm:text-left">
-                <div className="max-w-xs sm:max-w-sm lg:max-w-lg mx-auto sm:mx-0">
+              <div className="absolute inset-0 flex flex-col justify-end sm:justify-center px-4 sm:px-12 pb-8 sm:pb-0 z-10 text-left">
+                <div className="max-w-[92%] sm:max-w-sm lg:max-w-lg">
                   {slide.badge && (
-                    <span className={`inline-block text-[10px] sm:text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-3 sm:mb-4 ${slide.badgeClass ?? 'bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-sm'}`}>
+                    <span className={`inline-block text-[10px] sm:text-xs font-black uppercase tracking-widest px-3 py-1 sm:px-4 sm:py-1.5 rounded-full mb-2.5 sm:mb-4 ${slide.badgeClass ?? 'bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-sm'}`}>
                       {slide.badge}
                     </span>
                   )}
-                  <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.1] drop-shadow-lg mb-2">
+                  <h2 className="text-[1.55rem] sm:text-4xl lg:text-5xl font-black text-white leading-[1.1] drop-shadow-lg mb-1.5 sm:mb-2">
                     {slide.title}
                   </h2>
-                  <p className="text-white/90 text-xs sm:text-base lg:text-lg mt-2 mb-6 sm:mb-8 leading-relaxed font-medium drop-shadow-md">
+                  <p className="text-white/90 text-[13px] sm:text-base lg:text-lg mt-1.5 sm:mt-2 mb-4 sm:mb-8 leading-relaxed font-medium drop-shadow-md line-clamp-2 sm:line-clamp-none">
                     {slide.subtitle}
                   </p>
                   <Link
                     href={slide.href}
-                    className="inline-flex items-center gap-2 bg-simba-orange hover:bg-orange-600 text-white font-black text-xs sm:text-sm px-7 sm:px-8 py-3.5 sm:py-4 rounded-xl active:scale-95 transition-all shadow-xl shadow-orange-950/20 min-h-[48px]"
+                    className="inline-flex items-center justify-center gap-2 bg-simba-orange hover:bg-orange-600 text-white font-black text-xs sm:text-sm px-5 sm:px-8 py-3 sm:py-4 rounded-xl active:scale-95 transition-all shadow-xl shadow-orange-950/20 min-h-[44px] sm:min-h-[48px] w-auto sm:w-auto"
                   >
                     {slide.cta} <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -188,14 +188,14 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
               <button
                 onClick={goPrev}
                 aria-label="Previous slide"
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white flex items-center justify-center transition-all"
+                className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white items-center justify-center transition-all"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={goNext}
                 aria-label="Next slide"
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white flex items-center justify-center transition-all"
+                className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/30 hover:bg-black/55 backdrop-blur-sm text-white items-center justify-center transition-all"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -204,7 +204,7 @@ export default function HeroBanner({ slides, interval = 5000 }: HeroBannerProps)
 
           {/* Dot + progress indicators */}
           {slides.length > 1 && (
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+            <div className="absolute bottom-2.5 sm:bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
               {slides.map((_, i) => (
                 <button
                   key={i}

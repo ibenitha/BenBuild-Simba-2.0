@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/auth';
 import {
   User, Mail, Phone, MapPin, ShieldCheck, ChevronRight,
@@ -14,14 +14,15 @@ import { simbaBranches } from '@/lib/branches';
 import { cn } from '@/lib/utils';
 
 const ROLE_CONFIG = {
-  customer: { label: 'Customer', color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300' },
-  staff:    { label: 'Branch Staff', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
-  manager:  { label: 'Branch Manager', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
-  admin:    { label: 'Administrator', color: 'bg-orange-100 text-simba-orange dark:bg-orange-900/30' },
+  customer: { labelKey: 'roleCustomer', color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300' },
+  staff:    { labelKey: 'roleStaff', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
+  manager:  { labelKey: 'roleManager', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
+  admin:    { labelKey: 'roleAdmin', color: 'bg-orange-100 text-simba-orange dark:bg-orange-900/30' },
 };
 
 export default function ProfilePage({ params: { locale } }: { params: { locale: string } }) {
   const router = useRouter();
+  const t = useTranslations('profilePage');
   const { currentUser, logout, refreshUser, initialized } = useAuthStore();
 
   const [fullName, setFullName] = useState('');
@@ -52,7 +53,7 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
     setSuccess('');
 
     if (!fullName.trim() || fullName.trim().length < 2) {
-      setError('Full name must be at least 2 characters.');
+      setError(t('errorNameMin'));
       return;
     }
 
@@ -66,16 +67,16 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || 'Failed to save changes.');
+        setError(data.error || t('errorSaveFailed'));
         return;
       }
 
       await refreshUser();
-      setSuccess('Profile updated successfully.');
+      setSuccess(t('successProfileUpdated'));
       setEditing(false);
       setTimeout(() => setSuccess(''), 3000);
     } catch {
-      setError('An unexpected error occurred.');
+      setError(t('errorUnexpected'));
     } finally {
       setSaving(false);
     }
@@ -112,10 +113,10 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-8">
           <Link href={`/${locale}`} className="flex items-center gap-1 hover:text-simba-orange transition-colors">
-            <Home className="w-3.5 h-3.5" /> Home
+            <Home className="w-3.5 h-3.5" /> {t('home')}
           </Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-simba-orange">My Profile</span>
+          <span className="text-simba-orange">{t('myProfile')}</span>
         </nav>
 
         {/* Avatar + name header */}
@@ -125,13 +126,13 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl font-black text-slate-900 dark:text-white truncate">
-              {currentUser.fullName || 'Your Account'}
+              {currentUser.fullName || t('yourAccount')}
             </h1>
             <p className="text-sm text-slate-500 truncate">{currentUser.email}</p>
             <div className="flex items-center gap-2 mt-2 flex-wrap">
               <span className={cn('inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold', roleConfig.color)}>
                 <ShieldCheck className="w-3 h-3" />
-                {roleConfig.label}
+                {t(roleConfig.labelKey as any)}
               </span>
               {branchName && (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
@@ -153,12 +154,12 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
         {editing && (
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-6 mb-4">
             <h2 className="font-black text-slate-900 dark:text-white text-sm uppercase tracking-widest mb-5">
-              Edit Profile
+              {t('editProfile')}
             </h2>
             <form onSubmit={handleSave} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                  Full Name
+                  {t('fullName')}
                 </label>
                 <div className="relative">
                   <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -166,7 +167,7 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
                     type="text"
                     value={fullName}
                     onChange={e => { setFullName(e.target.value); setError(''); }}
-                    placeholder="Your full name"
+                    placeholder={t('fullNamePlaceholder')}
                     className="w-full border border-slate-200 dark:border-slate-700 rounded-xl pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all"
                   />
                 </div>
@@ -174,7 +175,7 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
 
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                  Phone Number
+                  {t('phoneNumber')}
                 </label>
                 <div className="relative">
                   <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -190,7 +191,7 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
 
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                  Email Address
+                  {t('emailAddress')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -201,7 +202,7 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
                     className="w-full border border-slate-200 dark:border-slate-700 rounded-xl pl-10 pr-4 py-3 bg-slate-100 dark:bg-slate-800/50 text-sm text-slate-400 cursor-not-allowed"
                   />
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1 ml-1">Email cannot be changed here.</p>
+                <p className="text-[10px] text-slate-400 mt-1 ml-1">{t('emailCannotChange')}</p>
               </div>
 
               {error && (
@@ -225,14 +226,14 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
                   className="flex-1 bg-simba-orange hover:bg-orange-600 text-white py-3 rounded-xl font-bold text-sm transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
                 >
                   {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {saving ? 'Saving...' : 'Save Changes'}
+                  {saving ? t('saving') : t('saveChanges')}
                 </button>
                 <button
                   type="button"
                   onClick={() => { setEditing(false); setError(''); }}
                   className="px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-400 text-sm font-bold transition-colors"
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
               </div>
             </form>
@@ -249,8 +250,8 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
               <Package className="w-4.5 h-4.5 text-simba-orange" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">My Orders</p>
-              <p className="text-xs text-slate-400">View order history and reorder</p>
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{t('myOrders')}</p>
+              <p className="text-xs text-slate-400">{t('myOrdersDesc')}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-slate-300" />
           </Link>
@@ -263,8 +264,8 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
               <Star className="w-4.5 h-4.5 text-yellow-500" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">Branch Reviews</p>
-              <p className="text-xs text-slate-400">Rate your shopping experience</p>
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{t('branchReviews')}</p>
+              <p className="text-xs text-slate-400">{t('branchReviewsDesc')}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-slate-300" />
           </Link>
@@ -278,8 +279,8 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
                 <ShieldCheck className="w-4.5 h-4.5 text-slate-600 dark:text-slate-300" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-bold text-slate-800 dark:text-slate-100">Branch Dashboard</p>
-                <p className="text-xs text-slate-400">Manage orders and stock</p>
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{t('branchDashboard')}</p>
+                <p className="text-xs text-slate-400">{t('branchDashboardDesc')}</p>
               </div>
               <ChevronRight className="w-4 h-4 text-slate-300" />
             </Link>
@@ -293,8 +294,8 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
               <Mail className="w-4.5 h-4.5 text-slate-500" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">Change Password</p>
-              <p className="text-xs text-slate-400">Send a password reset email</p>
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{t('changePassword')}</p>
+              <p className="text-xs text-slate-400">{t('changePasswordDesc')}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-slate-300" />
           </Link>
@@ -306,7 +307,7 @@ export default function ProfilePage({ params: { locale } }: { params: { locale: 
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 border-red-100 dark:border-red-900/30 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 font-bold text-sm transition-colors"
         >
           <LogOut className="w-4 h-4" />
-          Sign Out
+          {t('signOut')}
         </button>
 
       </div>

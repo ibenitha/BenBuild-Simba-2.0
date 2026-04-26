@@ -20,12 +20,12 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
     setError('');
 
     if (!email.trim()) {
-      setError('Email is required.');
+      setError(t('emailRequired'));
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Enter a valid email address.');
+      setError(t('emailInvalid'));
       return;
     }
 
@@ -34,7 +34,7 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
     setLoading(false);
 
     if (!result.ok) {
-      setError(result.message || 'Unable to send reset email.');
+      setError(result.message || t('resetEmailFailed'));
       return;
     }
 
@@ -56,7 +56,7 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
           </div>
           <h1 className="text-2xl font-black text-slate-900 dark:text-white">{t('forgotPassword')}</h1>
           <p className="text-sm text-slate-500 mt-1 text-center max-w-xs">
-            Enter your email and we&apos;ll send you a password reset link.
+            {t('forgotPasswordSubtitle')}
           </p>
         </div>
 
@@ -66,9 +66,9 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
               <div className="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MailCheck className="w-7 h-7 text-green-600" />
               </div>
-              <h2 className="font-bold text-lg text-slate-900 dark:text-white mb-2">Check your inbox</h2>
+              <h2 className="font-bold text-lg text-slate-900 dark:text-white mb-2">{t('checkInbox')}</h2>
               <p className="text-sm text-slate-500 mb-5">
-                We sent a password reset link to {email}.
+                {t('resetSent', { email })}
               </p>
               <Link
                 href={`/${locale}/auth/login`}
@@ -89,7 +89,7 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
                     setEmail(event.target.value);
                     setError('');
                   }}
-                  placeholder="you@example.com"
+                  placeholder={t('emailPlaceholder')}
                   className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all"
                 />
               </div>
@@ -106,7 +106,7 @@ export default function ForgotPasswordPage({ params: { locale } }: { params: { l
                 className="w-full bg-simba-orange hover:bg-simba-orange-dark text-white py-3 rounded-xl font-bold text-sm transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                {loading ? 'Sending...' : t('sendResetLink')}
+                {loading ? t('sending') : t('sendResetLink')}
               </button>
 
               <div className="text-center">

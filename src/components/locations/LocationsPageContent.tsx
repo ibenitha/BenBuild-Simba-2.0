@@ -13,6 +13,7 @@ interface LocationsPageContentProps {
 
 export default function LocationsPageContent({ locale }: LocationsPageContentProps) {
   const tNav = useTranslations('nav');
+  const t = useTranslations('locationsPage');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBranch, setSelectedBranch] = useState<Branch | null>(simbaBranches[0]);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -62,13 +63,13 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
             animate={{ opacity: 1, y: 0 }}
           >
             <span className="inline-block px-3 py-1 bg-simba-orange/20 text-simba-orange text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-4 border border-simba-orange/30">
-              Find Us In Kigali
+              {t('eyebrow')}
             </span>
             <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-6">
-              Our Branch Locations
+              {t('title')}
             </h1>
             <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-              Visit any of our 9 conveniently located branches across Kigali for the best shopping experience in Rwanda.
+              {t('subtitle')}
             </p>
           </motion.div>
 
@@ -83,7 +84,7 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
             </div>
             <input
               type="text"
-              placeholder="Search by branch name, district or address..."
+              placeholder={t('searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-simba-orange focus:border-transparent backdrop-blur-md transition-all"
@@ -110,7 +111,7 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
               />
             ) : (
               <div className="flex items-center justify-center h-full text-slate-400">
-                <p>Select a branch to view on map</p>
+                <p>{t('selectBranchMap')}</p>
               </div>
             )}
             
@@ -126,7 +127,7 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
                   </p>
                   <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
                     <Clock className="h-3.5 w-3.5 text-simba-orange flex-shrink-0" />
-                    Open: {selectedBranch.hours}
+                    {t('openHours', { hours: selectedBranch.hours })}
                   </p>
                 </div>
                 <a
@@ -136,7 +137,7 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
                   className="flex items-center justify-center gap-2 w-full bg-simba-orange text-white py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 dark:shadow-none"
                 >
                   <Navigation className="h-4 w-4" />
-                  Get Directions
+                  {t('getDirections')}
                 </a>
               </div>
             )}
@@ -186,7 +187,7 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
                       </div>
                       <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
                         <Clock className="h-4 w-4 text-slate-400 flex-shrink-0" />
-                        <span>Open: {branch.hours}</span>
+                        <span>{t('openHours', { hours: branch.hours })}</span>
                       </div>
                       <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
                         <Phone className="h-4 w-4 text-slate-400 flex-shrink-0" />
@@ -204,13 +205,13 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
                         }`}
                       >
                         <MapIcon className="h-4 w-4" />
-                        View Map
+                        {t('viewMap')}
                       </button>
                       <Link
                         href={`/${locale}/branch-reviews?branch=${branch.id}`}
                         className="flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
                       >
-                        Reviews
+                        {tNav('reviews')}
                       </Link>
                     </div>
                   </motion.div>
@@ -220,13 +221,13 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
                    <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Search className="h-8 w-8 text-slate-300" />
                    </div>
-                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">No branches found</h3>
-                   <p className="text-slate-500 text-sm mt-1">Try a different search term or check all our locations.</p>
+                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('noBranchesFound')}</h3>
+                   <p className="text-slate-500 text-sm mt-1">{t('noBranchesDesc')}</p>
                    <button 
                      onClick={() => setSearchQuery('')}
                      className="mt-6 text-simba-orange font-bold text-sm uppercase tracking-widest"
                    >
-                     Clear search
+                     {t('clearSearch')}
                    </button>
                 </div>
               )}
@@ -239,23 +240,23 @@ export default function LocationsPageContent({ locale }: LocationsPageContentPro
                 <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4">
                   <Globe className="h-5 w-5 text-blue-600" />
                 </div>
-                <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2">Simba Express Delivery</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('expressTitle')}</h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
-                  Not near a branch? No problem. We deliver from our nearest branch to your door in under 45 minutes.
+                  {t('expressDesc')}
                 </p>
                 <Link 
                   href={`/${locale}/products`}
                   className="flex items-center justify-between w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl group transition-all"
                 >
-                  <span className="text-xs font-bold uppercase tracking-widest group-hover:text-simba-orange">Start Shopping</span>
+                  <span className="text-xs font-bold uppercase tracking-widest group-hover:text-simba-orange">{t('startShopping')}</span>
                   <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-simba-orange" />
                 </Link>
               </div>
 
               <div className="bg-simba-orange rounded-3xl p-6 text-white shadow-xl shadow-orange-200/50 dark:shadow-none">
-                <h4 className="font-black uppercase tracking-tight mb-2">Customer Service</h4>
+                <h4 className="font-black uppercase tracking-tight mb-2">{t('customerServiceTitle')}</h4>
                 <p className="text-xs text-orange-50 leading-relaxed mb-4">
-                  Have questions about our branches or services? Our team is ready to help you 24/7.
+                  {t('customerServiceDesc')}
                 </p>
                 <a 
                   href="tel:+250788000000"

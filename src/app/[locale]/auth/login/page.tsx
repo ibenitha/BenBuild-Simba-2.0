@@ -62,7 +62,7 @@ function LoginForm({ locale }: { locale: string }) {
 
     if (!result.ok) {
       setGoogleLoading(false);
-      setError(result.message || 'Google sign-in failed.');
+      setError(result.message || t('googleSignInFailed'));
     }
     // Google OAuth redirects automatically
   };
@@ -87,7 +87,7 @@ function LoginForm({ locale }: { locale: string }) {
         {/* Show checkout notice if redirected from checkout */}
         {nextUrl.includes('/checkout') && (
           <div className="mb-4 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800/40 rounded-xl px-4 py-3 text-sm text-orange-700 dark:text-orange-400 text-center font-medium">
-            Sign in to complete your order
+            {t('checkoutSignInNotice')}
           </div>
         )}
 
@@ -108,7 +108,7 @@ function LoginForm({ locale }: { locale: string }) {
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
               </svg>
             )}
-            {googleLoading ? 'Redirecting...' : 'Continue with Google'}
+            {googleLoading ? t('redirecting') : t('continueWithGoogle')}
           </button>
 
           <div className="relative my-4">
@@ -128,7 +128,7 @@ function LoginForm({ locale }: { locale: string }) {
                 autoComplete="email"
                 value={email}
                 onChange={(event) => { setEmail(event.target.value); setError(''); }}
-                placeholder="you@example.com"
+                placeholder={t('emailPlaceholder')}
                 className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all"
               />
             </div>
@@ -149,7 +149,7 @@ function LoginForm({ locale }: { locale: string }) {
                   autoComplete="current-password"
                   value={password}
                   onChange={(event) => { setPassword(event.target.value); setError(''); }}
-                  placeholder="••••••••"
+                  placeholder={t('passwordPlaceholder')}
                   className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 pr-11 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all"
                 />
                 <button
@@ -179,7 +179,7 @@ function LoginForm({ locale }: { locale: string }) {
           </form>
 
           <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-800 text-center text-sm">
-            <span className="text-slate-500">Don&apos;t have an account? </span>
+            <span className="text-slate-500">{t('noAccountPrompt')} </span>
             <Link
               href={`/${locale}/auth/register${nextUrl !== `/${locale}` ? `?next=${encodeURIComponent(nextUrl)}` : ''}`}
               className="text-simba-orange font-semibold hover:underline"
@@ -191,9 +191,9 @@ function LoginForm({ locale }: { locale: string }) {
 
         {/* Staff portal link */}
         <p className="text-center text-xs text-slate-400 mt-6">
-          Are you staff?{' '}
+          {t('staffPrompt')}{' '}
           <Link href={`/${locale}/admin/login`} className="text-simba-orange hover:underline font-medium">
-            Sign in to Staff Portal
+            {t('staffPortalSignIn')}
           </Link>
         </p>
       </div>

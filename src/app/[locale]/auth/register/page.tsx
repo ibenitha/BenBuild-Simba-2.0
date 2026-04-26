@@ -25,10 +25,10 @@ function RegisterForm({ locale }: { locale: string }) {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const validate = () => {
-    if (!fullName.trim() || fullName.trim().length < 2) return 'Full name must be at least 2 characters.';
-    if (!email.trim()) return 'Email is required.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Enter a valid email address.';
-    if (password.length < 6) return 'Password must be at least 6 characters.';
+    if (!fullName.trim() || fullName.trim().length < 2) return t('nameMinLength');
+    if (!email.trim()) return t('emailRequired');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return t('emailInvalid');
+    if (password.length < 6) return t('passwordMinLength');
     return null;
   };
 
@@ -66,7 +66,7 @@ function RegisterForm({ locale }: { locale: string }) {
 
     if (!result.ok) {
       setGoogleLoading(false);
-      setError(result.message || 'Google sign-in failed.');
+      setError(result.message || t('googleSignInFailed'));
     }
   };
 
@@ -83,8 +83,8 @@ function RegisterForm({ locale }: { locale: string }) {
               sizes="64px"
             />
           </div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white">Create your account</h1>
-          <p className="text-sm text-slate-500 mt-1">Join thousands of Kigali shoppers</p>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white">{t('createAccount')}</h1>
+          <p className="text-sm text-slate-500 mt-1">{t('createAccountSubtitle')}</p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-sm">
@@ -95,7 +95,7 @@ function RegisterForm({ locale }: { locale: string }) {
             className="w-full mb-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-800 dark:text-slate-100 py-3 rounded-xl font-semibold text-sm transition-colors hover:border-simba-orange disabled:opacity-60 flex items-center justify-center gap-2"
           >
             {googleLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-            {googleLoading ? 'Redirecting...' : 'Continue with Google'}
+            {googleLoading ? t('redirecting') : t('continueWithGoogle')}
           </button>
 
           <div className="relative my-4">
@@ -118,7 +118,7 @@ function RegisterForm({ locale }: { locale: string }) {
                   setFullName(event.target.value);
                   setError('');
                 }}
-                placeholder="Jean-Pierre Habimana"
+                placeholder={t('namePlaceholder')}
                 className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all"
               />
             </div>
@@ -133,7 +133,7 @@ function RegisterForm({ locale }: { locale: string }) {
                   setEmail(event.target.value);
                   setError('');
                 }}
-                placeholder="you@example.com"
+                placeholder={t('emailPlaceholder')}
                 className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all"
               />
             </div>
@@ -149,7 +149,7 @@ function RegisterForm({ locale }: { locale: string }) {
                     setPassword(event.target.value);
                     setError('');
                   }}
-                  placeholder="Minimum 6 characters"
+                  placeholder={t('passwordMinPlaceholder')}
                   className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 pr-11 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all"
                 />
                 <button
@@ -200,7 +200,7 @@ function RegisterForm({ locale }: { locale: string }) {
               className="w-full bg-simba-orange hover:bg-simba-orange-dark text-white py-3 rounded-xl font-bold text-sm transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {loading ? 'Creating account...' : t('createAccount')}
+              {loading ? t('creatingAccount') : t('createAccount')}
             </button>
           </form>
 

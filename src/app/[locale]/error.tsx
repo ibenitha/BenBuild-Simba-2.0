@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 
 export default function Error({
   error,
@@ -9,6 +11,11 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations('errorPage');
+  const pathname = usePathname();
+  const locale = pathname.split('/')[1];
+  const homeHref = locale ? `/${locale}` : '/';
+
   useEffect(() => {
     console.error('Root error:', error);
   }, [error]);
@@ -21,22 +28,22 @@ export default function Error({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
         </div>
-        <h1 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">Something went wrong</h1>
+        <h1 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('title')}</h1>
         <p className="text-slate-500 dark:text-slate-400 mb-8 text-sm leading-relaxed">
-          We encountered an error while loading this page. This might be due to missing environment variables or a temporary connection issue.
+          {t('description')}
         </p>
         <div className="space-y-3">
           <button
             onClick={() => reset()}
             className="w-full bg-simba-orange text-white py-3 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-orange-600 transition-all active:scale-95 shadow-lg shadow-orange-200 dark:shadow-none"
           >
-            Try again
+            {t('tryAgain')}
           </button>
           <a
-            href="/"
+            href={homeHref}
             className="block w-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-3 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-slate-200 transition-all"
           >
-            Go home
+            {t('goHome')}
           </a>
         </div>
       </div>

@@ -7,8 +7,10 @@ import { Loader2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { getAuthErrorMessage } from '@/lib/auth-errors';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function ResetPasswordPage({ params: { locale } }: { params: { locale: string } }) {
+  const t = useTranslations('auth');
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
   const [password, setPassword] = useState('');
@@ -31,7 +33,7 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
       }
 
       if (!session) {
-        setError('This password reset link is invalid or has expired.');
+        setError(t('resetLinkInvalid'));
       } else {
         setReady(true);
       }
@@ -56,7 +58,7 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
       active = false;
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, [supabase, t]);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -64,12 +66,12 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
     setSuccess('');
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      setError(t('passwordMinLength'));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t('passwordsNoMatch'));
       return;
     }
 
@@ -84,7 +86,7 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
       return;
     }
 
-    setSuccess('Your password has been updated. You can sign in now.');
+    setSuccess(t('passwordUpdated'));
 
     window.setTimeout(() => {
       router.push(`/${locale}/auth/login`);
@@ -104,9 +106,9 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
               sizes="64px"
             />
           </div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white">Reset your password</h1>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white">{t('resetPasswordTitle')}</h1>
           <p className="text-sm text-slate-500 mt-1 text-center">
-            Choose a new password for your Simba account.
+            {t('resetPasswordSubtitle')}
           </p>
         </div>
 
@@ -114,7 +116,7 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
           <form onSubmit={onSubmit} noValidate className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                New password
+                {t('newPassword')}
               </label>
               <input
                 type="password"
@@ -124,7 +126,7 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
                   setPassword(event.target.value);
                   setError('');
                 }}
-                placeholder="Minimum 6 characters"
+                placeholder={t('passwordMinPlaceholder')}
                 disabled={!ready || loading}
                 className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all disabled:opacity-60"
               />
@@ -132,7 +134,7 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
 
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Confirm new password
+                {t('confirmNewPassword')}
               </label>
               <input
                 type="password"
@@ -142,7 +144,7 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
                   setConfirmPassword(event.target.value);
                   setError('');
                 }}
-                placeholder="Repeat your new password"
+                placeholder={t('confirmPasswordPlaceholder')}
                 disabled={!ready || loading}
                 className="w-full border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:border-simba-orange focus:ring-1 focus:ring-simba-orange transition-all disabled:opacity-60"
               />
@@ -166,12 +168,12 @@ export default function ResetPasswordPage({ params: { locale } }: { params: { lo
               className="w-full bg-simba-orange hover:bg-simba-orange-dark text-white py-3 rounded-xl font-bold text-sm transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {loading ? 'Updating password...' : 'Update password'}
+              {loading ? t('updatingPassword') : t('updatePassword')}
             </button>
 
             <div className="text-center">
               <Link href={`/${locale}/auth/login`} className="text-sm text-slate-500 hover:text-simba-orange transition-colors">
-                Back to login
+                {t('backToLogin')}
               </Link>
             </div>
           </form>

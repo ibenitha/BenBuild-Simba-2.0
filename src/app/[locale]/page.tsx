@@ -10,7 +10,7 @@ import HeroBanner, { HeroSlide } from '@/components/products/HeroBanner';
 import PromoRail from '@/components/products/PromoRail';
 import { motion } from 'framer-motion';
 import {
-  ArrowRight, MapPin, ChevronRight, LayoutGrid, Star, Trophy, CreditCard, ShieldCheck, Sparkles, Truck
+  ArrowRight, MapPin, ChevronRight, LayoutGrid, Star, Trophy
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -95,46 +95,31 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
   const isFiltered = searchQuery || categoryFilter;
   const featuredProducts = products.slice(0, 10);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
-
   return (
     <div className="bg-white dark:bg-slate-950 min-h-screen">
       {!isFiltered && <HeroBanner slides={heroSlides} interval={3500} />}
 
       {/* Trust Stats Bar - Dark Navy */}
       {!isFiltered && (
-        <section className="bg-slate-900 py-4 overflow-hidden border-y border-slate-800">
+        <section className="bg-slate-900 py-3 sm:py-4 overflow-hidden border-y border-slate-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap items-center justify-around gap-6 text-white/90">
-              <div className="flex items-center gap-2">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center sm:justify-around gap-x-4 gap-y-3 sm:gap-6 text-white/90">
+              <div className="flex items-center gap-2 min-w-0">
                 <Trophy className="w-4 h-4 text-simba-orange" />
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest">15+ {t('yearsInRwanda')}</span>
               </div>
               <div className="hidden md:block w-px h-4 bg-white/10" />
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 <MapPin className="w-4 h-4 text-simba-orange" />
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest">9 {t('branchesInKigali')}</span>
               </div>
               <div className="hidden md:block w-px h-4 bg-white/10" />
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 <LayoutGrid className="w-4 h-4 text-simba-orange" />
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest">789+ {t('products')}</span>
               </div>
               <div className="hidden md:block w-px h-4 bg-white/10" />
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 <Star className="w-4 h-4 text-simba-orange fill-simba-orange" />
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest">4.8 {tNav('reviews')}</span>
               </div>
@@ -143,89 +128,42 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
         </section>
       )}
 
-      {/* Shop by Category — full grid */}
-      {!isFiltered && (
-        <section className="py-8 sm:py-10 bg-white dark:bg-slate-950">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {[
-                {
-                  title: t('freshnessGuarantee'),
-                  description: t('freshnessDesc'),
-                  icon: <Sparkles className="w-5 h-5" />,
-                  tone: 'from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-slate-900',
-                },
-                {
-                  title: t('securePayment'),
-                  description: t('securePaymentDesc'),
-                  icon: <CreditCard className="w-5 h-5" />,
-                  tone: 'from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-slate-900',
-                },
-                {
-                  title: t('deliveryTitle'),
-                  description: t('deliveryDesc'),
-                  icon: <Truck className="w-5 h-5" />,
-                  tone: 'from-emerald-50 to-lime-50 dark:from-emerald-950/20 dark:to-slate-900',
-                },
-                {
-                  title: t('browseBranchReviews'),
-                  description: t('shareExperienceDesc'),
-                  icon: <ShieldCheck className="w-5 h-5" />,
-                  tone: 'from-slate-50 to-zinc-100 dark:from-slate-900 dark:to-slate-950',
-                },
-              ].map((feature) => (
-                <div
-                  key={feature.title}
-                  className={`rounded-[2rem] border border-slate-100 dark:border-slate-800 bg-gradient-to-br ${feature.tone} p-6 shadow-sm`}
-                >
-                  <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-simba-orange mb-5">
-                    {feature.icon}
-                  </div>
-                  <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{feature.title}</h2>
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{feature.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Shop by Category â€” full grid */}
       {!isFiltered && (
-        <section className="py-14 bg-slate-50 dark:bg-slate-950">
+        <section className="py-10 sm:py-14 bg-slate-50 dark:bg-slate-950">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header */}
-            <div className="flex items-end justify-between mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5 sm:mb-8">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-simba-orange mb-1">{t('categories')}</p>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                <h2 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
                   {t('shopByCategory')}
                 </h2>
               </div>
               <Link
                 href={`/${locale}/products`}
-                className="flex items-center gap-1.5 text-sm font-bold text-simba-orange hover:text-simba-orange-dark transition-colors"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-simba-orange hover:text-simba-orange-dark transition-colors bg-white/80 dark:bg-slate-900/70 border border-slate-200/70 dark:border-slate-700 px-3.5 py-2 rounded-xl self-start sm:self-auto"
               >
                 {t('viewAll')} <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Category grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4">
               {/* All Products — featured wide card */}
               <Link
                 href={`/${locale}/products`}
-                className="group col-span-2 sm:col-span-3 lg:col-span-2 relative rounded-2xl overflow-hidden bg-simba-orange shadow-lg shadow-orange-200/50 dark:shadow-none hover:shadow-xl hover:shadow-orange-300/40 transition-all duration-300 hover:-translate-y-0.5 min-h-[140px]"
+                className="group col-span-2 sm:col-span-3 lg:col-span-2 relative rounded-2xl overflow-hidden bg-simba-orange shadow-lg shadow-orange-200/50 dark:shadow-none hover:shadow-xl hover:shadow-orange-300/40 transition-all duration-300 hover:-translate-y-0.5 min-h-[126px] sm:min-h-[140px]"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-simba-orange via-simba-orange to-simba-orange-dark" />
                 <div className="absolute -right-6 -bottom-6 w-36 h-36 bg-white/10 rounded-full" />
                 <div className="absolute -right-2 -bottom-10 w-24 h-24 bg-white/10 rounded-full" />
-                <div className="relative z-10 p-5 h-full flex flex-col justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                <div className="relative z-10 p-4 sm:p-5 h-full flex flex-col justify-between">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/20 flex items-center justify-center">
                     <LayoutGrid className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="text-white font-black text-lg leading-tight">{tNav('allProducts')}</p>
+                    <p className="text-white font-black text-base sm:text-lg leading-tight">{tNav('allProducts')}</p>
                     <p className="text-orange-100 text-xs font-semibold mt-0.5">{products.length} items</p>
                   </div>
                 </div>
@@ -241,7 +179,7 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
                     className="group relative rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-lg hover:border-simba-orange/30 transition-all duration-300 hover:-translate-y-0.5"
                   >
                     {/* Product image background */}
-                    <div className="relative h-28 overflow-hidden bg-slate-50 dark:bg-slate-800">
+                    <div className="relative h-24 sm:h-28 overflow-hidden bg-slate-50 dark:bg-slate-800">
                       <Image
                         src={cat.image}
                         alt={cat.name}
@@ -257,8 +195,8 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
                       </div>
                     </div>
                     {/* Label */}
-                    <div className="px-3 py-2.5">
-                      <p className="text-xs font-bold text-slate-800 dark:text-slate-100 leading-tight line-clamp-1">
+                    <div className="px-2.5 sm:px-3 py-2 sm:py-2.5">
+                      <p className="text-[11px] sm:text-xs font-bold text-slate-800 dark:text-slate-100 leading-tight line-clamp-2 sm:line-clamp-1 min-h-[2rem] sm:min-h-0">
                         {tCat(cat.slug as any)}
                       </p>
                     </div>
@@ -311,7 +249,7 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
       )}
 
       {isFiltered && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
               {searchQuery
@@ -325,7 +263,7 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
       )}
 
       {!isFiltered && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 space-y-14 sm:space-y-32">
           
           {/* Featured Products Section */}
           <motion.section 
@@ -334,29 +272,29 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
           >
-            <div className="flex items-end justify-between mb-10">
+            <div className="flex items-end justify-between mb-6 sm:mb-10">
               <div>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-2 sm:mb-3">
                    <div className="w-8 h-1 bg-simba-orange rounded-full" />
                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-simba-orange">{t('featured')}</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">
+                <h2 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">
                   {t('topPicks')}
                 </h2>
-                <p className="text-slate-500 mt-3 font-medium text-lg">{t('featuredSubtitle')}</p>
+                <p className="text-slate-500 mt-2 sm:mt-3 font-medium text-sm sm:text-lg">{t('featuredSubtitle')}</p>
               </div>
               <Link href={`/${locale}/products`} className="hidden sm:flex items-center gap-2 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-simba-orange dark:hover:bg-simba-orange dark:hover:text-white transition-all active:scale-95">
                 {t('viewAll')} <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
             <ProductGrid products={featuredProducts} locale={locale} />
-            <Link href={`/${locale}/products`} className="sm:hidden flex items-center justify-center gap-2 mt-8 w-full bg-slate-900 text-white px-6 py-4 rounded-2xl font-bold text-sm active:scale-95">
+            <Link href={`/${locale}/products`} className="sm:hidden flex items-center justify-center gap-2 mt-6 w-full bg-slate-900 text-white px-5 py-3.5 rounded-2xl font-bold text-sm active:scale-95 min-h-[44px]">
               {t('viewAll')} <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.section>
 
           {/* Recently Viewed */}
-          <div className="pt-10">
+          <div className="pt-2 sm:pt-10">
             <RecentlyViewed locale={locale} />
           </div>
 
@@ -365,50 +303,50 @@ export default function HomePage({ params: { locale }, searchParams }: HomePageP
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="py-12"
+            className="py-2 sm:py-12"
           >
-            <div className="bg-orange-50 dark:bg-slate-900 rounded-[3rem] p-8 md:p-12 border border-orange-100 dark:border-slate-800 shadow-sm">
-               <div className="flex flex-col md:flex-row items-center gap-10">
+            <div className="bg-orange-50 dark:bg-slate-900 rounded-[1.75rem] sm:rounded-[3rem] p-5 sm:p-8 md:p-12 border border-orange-100 dark:border-slate-800 shadow-sm">
+               <div className="flex flex-col md:flex-row items-center gap-6 sm:gap-10">
                   <div className="flex-1 text-center md:text-left">
-                     <div className="flex items-center gap-2 mb-4 justify-center md:justify-start">
+                     <div className="flex items-center gap-2 mb-3 sm:mb-4 justify-center md:justify-start">
                         <Star className="w-5 h-5 text-simba-orange fill-simba-orange" />
                         <span className="text-xs font-black uppercase tracking-widest text-simba-orange">{tNav('reviews')}</span>
                      </div>
-                     <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4">
+                     <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-3 sm:mb-4">
                         {t('shareExperience')}
                      </h2>
-                     <p className="text-slate-600 dark:text-slate-400 mb-8 text-lg font-medium">
+                     <p className="text-slate-600 dark:text-slate-400 mb-5 sm:mb-8 text-sm sm:text-lg font-medium">
                         {t('shareExperienceDesc')}
                      </p>
-                     <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start">
                         <Link 
                            href={`/${locale}/branch-reviews`}
-                           className="inline-flex items-center gap-3 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-8 py-4 rounded-2xl font-bold hover:bg-simba-orange dark:hover:bg-simba-orange dark:hover:text-white transition-all active:scale-95 shadow-xl"
+                           className="inline-flex items-center justify-center gap-3 bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl font-bold hover:bg-simba-orange dark:hover:bg-simba-orange dark:hover:text-white transition-all active:scale-95 shadow-xl min-h-[44px]"
                         >
                            {t('browseBranchReviews')} <ArrowRight className="w-5 h-5" />
                         </Link>
                         <Link 
                            href={`/${locale}/locations`}
-                           className="inline-flex items-center gap-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-8 py-4 rounded-2xl font-bold hover:border-simba-orange border-2 border-transparent transition-all active:scale-95 shadow-sm"
+                           className="inline-flex items-center justify-center gap-3 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl font-bold hover:border-simba-orange border-2 border-transparent transition-all active:scale-95 shadow-sm min-h-[44px]"
                         >
                            <MapPin className="w-5 h-5 text-simba-orange" /> {tNav('storeLocator')}
                         </Link>
                      </div>
                   </div>
-                  <div className="w-full md:w-1/3 grid grid-cols-2 gap-4">
-                     <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-700">
+                  <div className="w-full md:w-1/3 grid grid-cols-2 gap-3 sm:gap-4">
+                     <div className="bg-white dark:bg-slate-800 p-3.5 sm:p-4 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-700">
                         <div className="text-2xl font-black text-simba-orange mb-1">4.8</div>
                         <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('avgRating')}</div>
                      </div>
-                     <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-700">
+                     <div className="bg-white dark:bg-slate-800 p-3.5 sm:p-4 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-700">
                         <div className="text-2xl font-black text-slate-900 dark:text-white mb-1">10k+</div>
                         <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('totalReviews')}</div>
                      </div>
-                     <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-700">
+                     <div className="bg-white dark:bg-slate-800 p-3.5 sm:p-4 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-700">
                         <div className="text-2xl font-black text-slate-900 dark:text-white mb-1">9</div>
                         <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('kigaliBranches')}</div>
                      </div>
-                     <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-700 flex items-center justify-center">
+                     <div className="bg-white dark:bg-slate-800 p-3.5 sm:p-4 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-700 flex items-center justify-center">
                         <Star className="w-8 h-8 text-simba-orange fill-simba-orange" />
                      </div>
                   </div>

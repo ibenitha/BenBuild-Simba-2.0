@@ -55,19 +55,19 @@ export default function PromoRail({ heading, viewAllHref, viewAllLabel = 'See al
 
   return (
     <section className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
         {/* Header row */}
         {(heading || viewAllHref) && (
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
             {heading && (
-              <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+              <h2 className="text-base sm:text-xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
                 {heading}
               </h2>
             )}
             {viewAllHref && (
               <Link
                 href={viewAllHref}
-                className="flex items-center gap-1 text-sm font-semibold text-simba-orange hover:text-simba-orange-dark transition-colors"
+                className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-simba-orange hover:text-simba-orange-dark transition-colors bg-orange-50/70 dark:bg-orange-950/20 px-2.5 sm:px-0 py-1.5 sm:py-0 rounded-lg sm:rounded-none"
               >
                 {viewAllLabel} <ArrowRight className="w-4 h-4" />
               </Link>
@@ -101,11 +101,11 @@ export default function PromoRail({ heading, viewAllHref, viewAllLabel = 'See al
             {cards.map((card) => (
               <article
                 key={card.id}
-                className="snap-start flex-shrink-0 w-[72vw] sm:w-[44%] md:w-[30%] lg:w-[22%] xl:w-[18%] bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                className="snap-start flex-shrink-0 w-[78vw] sm:w-[44%] md:w-[30%] lg:w-[22%] xl:w-[18%] bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
               >
                 <Link href={card.href} className="block">
                   {/* Image */}
-                  <div className={`relative h-36 sm:h-40 ${card.bgColor ?? 'bg-slate-100 dark:bg-slate-700'}`}>
+                  <div className={`relative h-[8.5rem] sm:h-40 ${card.bgColor ?? 'bg-slate-100 dark:bg-slate-700'}`}>
                     <Image
                       src={card.image}
                       alt={card.title}

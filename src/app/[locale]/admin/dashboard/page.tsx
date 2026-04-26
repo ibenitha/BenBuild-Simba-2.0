@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/auth';
 import { useOperationsStore } from '@/store/operations';
 import { simbaBranches } from '@/lib/branches';
@@ -53,12 +54,13 @@ function StatCard({
 
 // ── Branch Row ────────────────────────────────────────────────
 function BranchRow({
-  branch, orders, reviews, locale,
+  branch, orders, reviews, locale, t,
 }: {
   branch: typeof simbaBranches[0];
   orders: ReturnType<typeof useOperationsStore.getState>['orders'];
   reviews: ReturnType<typeof useOperationsStore.getState>['reviews'];
   locale: string;
+  t: (key: string) => string;
 }) {
   const branchOrders = orders.filter(o => o.branchId === branch.id);
   const pending = branchOrders.filter(o => o.status === 'pending').length;
@@ -90,15 +92,15 @@ function BranchRow({
       <div className="hidden sm:flex items-center gap-6 text-center">
         <div>
           <p className="text-sm font-black text-yellow-600">{pending}</p>
-          <p className="text-[9px] text-slate-400 uppercase tracking-widest">Pending</p>
+          <p className="text-[9px] text-slate-400 uppercase tracking-widest">{t('pending')}</p>
         </div>
         <div>
           <p className="text-sm font-black text-green-600">{completed}</p>
-          <p className="text-[9px] text-slate-400 uppercase tracking-widest">Done</p>
+          <p className="text-[9px] text-slate-400 uppercase tracking-widest">{t('done')}</p>
         </div>
         <div>
           <p className="text-sm font-black text-simba-orange">{formatPrice(revenue)}</p>
-          <p className="text-[9px] text-slate-400 uppercase tracking-widest">Revenue</p>
+          <p className="text-[9px] text-slate-400 uppercase tracking-widest">{t('revenue')}</p>
         </div>
         <div className="flex items-center gap-1">
           <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
@@ -113,7 +115,7 @@ function BranchRow({
         href={`/${locale}/branch-dashboard`}
         className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-simba-orange hover:text-orange-600 transition-colors flex-shrink-0"
       >
-        Manage <ChevronRight className="w-3 h-3" />
+        {t('manage')} <ChevronRight className="w-3 h-3" />
       </Link>
     </div>
   );
@@ -122,6 +124,7 @@ function BranchRow({
 // ── Main Page ─────────────────────────────────────────────────
 export default function MarketRepDashboard({ params: { locale } }: { params: { locale: string } }) {
   const router = useRouter();
+  const t = useTranslations('marketRepDashboard');
   const { currentUser, initialized } = useAuthStore();
   const {
     orders, fetchOrders,
@@ -134,12 +137,11 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
 
   // Fetch data for all branches
   useEffect(() => {
-    if (!isManagerOrAdmin) return;
     fetchOrders();
     fetchReviews();
     fetchCustomerFlags();
     simbaBranches.forEach(b => fetchStock(b.id));
-  }, [isManagerOrAdmin, fetchOrders, fetchReviews, fetchCustomerFlags, fetchStock]);
+  }, [fetchOrders, fetchReviews, fetchCustomerFlags, fetchStock]);
 
   // ── Computed stats ──────────────────────────────────────────
   const stats = useMemo(() => {
@@ -179,34 +181,6 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
     );
   }
 
-  if (!isManagerOrAdmin) {
-    return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
-        <div className="text-center max-w-md">
-          <div className="w-20 h-20 bg-orange-100 dark:bg-orange-950/30 rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <ShieldCheck className="w-10 h-10 text-simba-orange" />
-          </div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Manager Access Required</h1>
-          <p className="text-slate-500 mb-8 leading-relaxed">
-            The Market Rep Dashboard is restricted to managers and administrators.
-          </p>
-          <div className="flex flex-col gap-3">
-            <Link
-              href={`/${locale}/admin/login`}
-              className="inline-flex items-center justify-center gap-2 bg-simba-orange text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-orange-600 transition-colors"
-            >
-              <LogIn className="w-4 h-4" />
-              Sign In as Manager
-            </Link>
-            <Link href={`/${locale}`} className="text-sm text-slate-400 hover:text-simba-orange transition-colors">
-              ← Back to Store
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const STATUS_COLORS: Record<string, string> = {
     pending:    'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
     accepted:   'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
@@ -228,12 +202,12 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
             </div>
             <div>
               <h1 className="text-base sm:text-lg font-black uppercase tracking-tight leading-none">
-                Market Rep Dashboard
+                {t('title')}
               </h1>
               <div className="flex items-center gap-2 mt-1">
                 <span className="flex h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  All Branches · Live View
+                  {t('allBranchesLive')}
                 </span>
               </div>
             </div>
@@ -244,12 +218,12 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
               className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-slate-300 transition-all"
             >
               <Activity className="w-3.5 h-3.5" />
-              Branch Ops
+              {t('branchOps')}
             </Link>
             <button
               onClick={() => { fetchOrders(); fetchReviews(); }}
               className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all active:scale-95"
-              title="Refresh"
+              title={t('refresh')}
             >
               <RefreshCw className="w-4 h-4 text-slate-400" />
             </button>
@@ -258,65 +232,79 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {!isManagerOrAdmin && (
+          <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200/60 dark:border-blue-900/40 rounded-2xl px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
+              {t('readonlyModeNotice')}
+            </p>
+            <Link
+              href={`/${locale}/admin/login`}
+              className="inline-flex items-center justify-center gap-2 bg-simba-orange text-white px-4 py-2 rounded-xl font-bold text-xs hover:bg-orange-600 transition-colors"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              {t('signInAsManager')}
+            </Link>
+          </div>
+        )}
 
         {/* ── KPI Cards ───────────────────────────────────── */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           <StatCard
-            label="Total Orders"
+            label={t('totalOrders')}
             value={stats.totalOrders}
-            sub="All branches combined"
+            sub={t('allBranchesCombined')}
             icon={<ShoppingBag className="w-5 h-5" />}
             color="bg-simba-orange/10 text-simba-orange"
             trend={{ value: 12, positive: true }}
           />
           <StatCard
-            label="Pending"
+            label={t('pending')}
             value={stats.pendingOrders}
-            sub="Awaiting assignment"
+            sub={t('awaitingAssignment')}
             icon={<Clock className="w-5 h-5" />}
             color="bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20"
           />
           <StatCard
-            label="Completed"
+            label={t('completed')}
             value={stats.completedOrders}
-            sub="Delivered or picked up"
+            sub={t('deliveredOrPicked')}
             icon={<CheckCircle2 className="w-5 h-5" />}
             color="bg-green-50 text-green-600 dark:bg-green-900/20"
             trend={{ value: 8, positive: true }}
           />
           <StatCard
-            label="Total Revenue"
+            label={t('totalRevenue')}
             value={formatPrice(stats.totalRevenue)}
-            sub="Completed orders"
+            sub={t('completedOrdersSub')}
             icon={<DollarSign className="w-5 h-5" />}
             color="bg-blue-50 text-blue-600 dark:bg-blue-900/20"
             trend={{ value: 5, positive: true }}
           />
           <StatCard
-            label="Avg Rating"
+            label={t('avgRating')}
             value={stats.avgRating > 0 ? `${stats.avgRating.toFixed(1)} ★` : '—'}
-            sub={`${reviews.length} reviews`}
+            sub={t('reviewsCount', { count: reviews.length })}
             icon={<Star className="w-5 h-5" />}
             color="bg-yellow-50 text-yellow-500 dark:bg-yellow-900/20"
           />
           <StatCard
-            label="Low Stock Items"
+            label={t('lowStockItems')}
             value={stats.lowStockCount}
-            sub="Across all branches"
+            sub={t('acrossAllBranches')}
             icon={<Package className="w-5 h-5" />}
             color={stats.lowStockCount > 10 ? 'bg-red-50 text-red-500 dark:bg-red-900/20' : 'bg-slate-100 text-slate-500 dark:bg-slate-800'}
           />
           <StatCard
-            label="Flagged Customers"
+            label={t('flaggedCustomers')}
             value={stats.flaggedCustomers}
-            sub="No-show or issues"
+            sub={t('noShowOrIssues')}
             icon={<AlertTriangle className="w-5 h-5" />}
             color="bg-red-50 text-red-500 dark:bg-red-900/20"
           />
           <StatCard
-            label="Active Branches"
+            label={t('activeBranches')}
             value={`${simbaBranches.length} / ${simbaBranches.length}`}
-            sub="All Kigali branches"
+            sub={t('allKigaliBranches')}
             icon={<MapPin className="w-5 h-5" />}
             color="bg-simba-orange/10 text-simba-orange"
           />
@@ -331,7 +319,7 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
               <div className="flex items-center gap-2">
                 <Store className="w-4 h-4 text-simba-orange" />
                 <h2 className="font-black text-slate-900 dark:text-white text-sm uppercase tracking-tight">
-                  All Branches
+                  {t('allBranches')}
                 </h2>
                 <span className="text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
                   {simbaBranches.length}
@@ -341,7 +329,7 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
                 href={`/${locale}/locations`}
                 className="text-[10px] font-black uppercase tracking-widest text-simba-orange hover:text-orange-600 transition-colors flex items-center gap-1"
               >
-                View Map <ChevronRight className="w-3 h-3" />
+                {t('viewMap')} <ChevronRight className="w-3 h-3" />
               </Link>
             </div>
             <div className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -352,6 +340,7 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
                   orders={orders}
                   reviews={reviews}
                   locale={locale}
+                  t={t}
                 />
               ))}
             </div>
@@ -363,21 +352,21 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-simba-orange" />
                 <h2 className="font-black text-slate-900 dark:text-white text-sm uppercase tracking-tight">
-                  Recent Orders
+                  {t('recentOrders')}
                 </h2>
               </div>
               <Link
                 href={`/${locale}/branch-dashboard`}
                 className="text-[10px] font-black uppercase tracking-widest text-simba-orange hover:text-orange-600 transition-colors"
               >
-                All →
+                {t('all')} →
               </Link>
             </div>
             <div className="divide-y divide-slate-50 dark:divide-slate-800 max-h-[520px] overflow-y-auto">
               {recentOrders.length === 0 ? (
                 <div className="p-8 text-center">
                   <ShoppingBag className="w-8 h-8 text-slate-200 mx-auto mb-3" />
-                  <p className="text-sm text-slate-400">No orders yet</p>
+                  <p className="text-sm text-slate-400">{t('noOrdersYet')}</p>
                 </div>
               ) : recentOrders.map(order => {
                 const branch = simbaBranches.find(b => b.id === order.branchId);
@@ -419,14 +408,14 @@ export default function MarketRepDashboard({ params: { locale } }: { params: { l
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6">
           <h2 className="font-black text-slate-900 dark:text-white text-sm uppercase tracking-tight mb-4 flex items-center gap-2">
             <Eye className="w-4 h-4 text-simba-orange" />
-            Quick Actions
+            {t('quickActions')}
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: 'Branch Operations', href: `/${locale}/branch-dashboard`, icon: <Activity className="w-5 h-5" />, color: 'bg-simba-orange text-white' },
-              { label: 'Branch Reviews', href: `/${locale}/branch-reviews`, icon: <Star className="w-5 h-5" />, color: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600' },
-              { label: 'Store Locations', href: `/${locale}/locations`, icon: <MapPin className="w-5 h-5" />, color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' },
-              { label: 'All Products', href: `/${locale}/products`, icon: <Package className="w-5 h-5" />, color: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300' },
+              { label: t('branchOperations'), href: `/${locale}/branch-dashboard`, icon: <Activity className="w-5 h-5" />, color: 'bg-simba-orange text-white' },
+              { label: t('branchReviews'), href: `/${locale}/branch-reviews`, icon: <Star className="w-5 h-5" />, color: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600' },
+              { label: t('storeLocations'), href: `/${locale}/locations`, icon: <MapPin className="w-5 h-5" />, color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' },
+              { label: t('allProducts'), href: `/${locale}/products`, icon: <Package className="w-5 h-5" />, color: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300' },
             ].map(action => (
               <Link
                 key={action.label}
