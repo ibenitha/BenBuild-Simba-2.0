@@ -29,7 +29,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages} locale={locale}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <AuthSync />
-        <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
+        <div className="min-h-screen overflow-x-hidden bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
           <Navbar locale={locale} />
           <main>{children}</main>
           <Footer locale={locale} />
