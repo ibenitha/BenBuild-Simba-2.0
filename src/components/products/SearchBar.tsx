@@ -31,11 +31,11 @@ export default function SearchBar({ locale, initialQuery = '' }: SearchBarProps)
           value={query}
           onChange={e => setQuery(e.target.value)}
           placeholder={t('search')}
-          className="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-simba-orange focus:border-transparent shadow-sm"
+          className="w-full pl-12 pr-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-simba-green focus:border-transparent shadow-sm"
         />
         <button
           type="submit"
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-simba-orange text-white px-4 py-1.5 rounded-xl text-sm font-medium hover:bg-simba-orange-dark transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 bg-simba-green text-white px-4 py-1.5 rounded-xl text-sm font-medium hover:bg-simba-green-dark transition-colors"
         >
           Search
         </button>

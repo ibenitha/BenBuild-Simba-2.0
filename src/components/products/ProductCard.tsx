@@ -2,68 +2,26 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, Plus, Minus, Heart } from 'lucide-react';
+import { ShoppingCart, Star, Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Product } from '@/types';
 import { useCartStore } from '@/store/cart';
-import { useBranchStore } from '@/store/branch';
-import { useOperationsStore } from '@/store/operations';
-import { useWishlistStore } from '@/store/wishlist';
 import { formatPrice } from '@/lib/utils';
-import { useEffect, useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
   locale: string;
 }
 
-// Known category slugs that have translations
-const KNOWN_CATEGORY_SLUGS = new Set([
-  'all',
-  'cosmetics-and-personal-care',
-  'sports-and-wellness',
-  'baby-products',
-  'kitchenware-and-electronics',
-  'food-products',
-  'alcoholic-drinks',
-  'general',
-  'cleaning-and-sanitary',
-  'kitchen-storage',
-  'pet-care',
-]);
-
 export default function ProductCard({ product, locale }: ProductCardProps) {
   const t = useTranslations('product');
-  const tCat = useTranslations('categories');
   const { addItem, removeItem, updateQuantity, items } = useCartStore();
-  const { selectedBranchId } = useBranchStore();
-  const { fetchStock, getBranchStock, stockByBranch } = useOperationsStore();
-  const { toggleItem, isWishlisted } = useWishlistStore();
-  const [wishlisted, setWishlisted] = useState(false);
-
-  // Hydrate wishlist state client-side to avoid SSR mismatch
-  useEffect(() => {
-    setWishlisted(isWishlisted(product.id));
-  }, [product.id, isWishlisted]);
-  
   const cartItem = items.find(i => i.product.id === product.id);
   const qty = cartItem?.quantity ?? 0;
 
-  // Use local state or store for stock
-  const branchStock = getBranchStock(selectedBranchId, product.id);
-  const isOutOfStock = branchStock === 0;
-  const isLowStock = branchStock > 0 && branchStock < 5;
-
-  useEffect(() => {
-    // Ensure stock is loaded for this branch
-    if (!stockByBranch[selectedBranchId]) {
-      fetchStock(selectedBranchId);
-    }
-  }, [selectedBranchId, fetchStock, stockByBranch]);
-
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!isOutOfStock) addItem(product);
+    addItem(product);
   };
 
   const handleInc = (e: React.MouseEvent) => {
@@ -77,145 +35,98 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
     else updateQuantity(product.id, qty - 1);
   };
 
-  const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    toggleItem(product);
-    setWishlisted(prev => !prev);
-  };
-
   const discount = product.originalPrice
     ? Math.round((1 - product.price / product.originalPrice) * 100)
     : null;
 
   return (
     <Link href={`/${locale}/products/${product.id}`} className="group block">
-      <div className="bg-white dark:bg-slate-800 rounded-xl sm:rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-lg hover:border-slate-200 dark:hover:border-slate-600 transition-all duration-300 flex flex-col h-full">
-
-        {/* Image — tall ratio like the screenshot */}
-        <div className="relative overflow-hidden bg-white dark:bg-slate-700 flex-shrink-0" style={{ aspectRatio: '4/3' }}>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl hover:border-simba-orange/40 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
+        {/* Image */}
+        <div className="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-700 flex-shrink-0">
           <Image
             src={product.image}
             alt={product.name}
             fill
-            className="object-contain p-2 sm:p-3 group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
-
-          {/* Out of stock overlay */}
-          {isOutOfStock && (
-            <div className="absolute inset-0 bg-white/70 dark:bg-slate-800/70 backdrop-blur-[1px] flex items-center justify-center">
-              <span className="text-red-500 font-black text-xs uppercase tracking-widest border border-red-300 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-full shadow-sm">
+          {!product.inStock && (
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <span className="text-white font-medium text-sm bg-red-500 px-3 py-1 rounded-full">
                 {t('outOfStock')}
               </span>
             </div>
           )}
-
-          {/* Low stock badge */}
-          {isLowStock && !isOutOfStock && (
-            <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-amber-500 text-white text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shadow uppercase animate-pulse">
-              🔥 {t('onlyLeft', { qty: branchStock })}
-            </div>
-          )}
-
-          {/* Discount badge */}
           {discount && (
-            <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-red-500 text-white text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg shadow">
+            <div className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
               -{discount}%
             </div>
           )}
-
-          {/* Cart qty bubble */}
-          {qty > 0 && !isOutOfStock && (
-            <div className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-simba-orange text-white text-xs font-bold w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shadow-lg z-10">
+          {qty > 0 && (
+            <div className="absolute top-2 right-2 bg-simba-orange text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg">
               {qty}
             </div>
-          )}
-          {qty === 0 && !isOutOfStock && (
-            <button
-              onClick={handleAdd}
-              className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 w-9 h-9 sm:w-10 sm:h-10 bg-simba-orange hover:bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:translate-y-2 sm:group-hover:translate-y-0 transition-all duration-200 z-10"
-              aria-label="Add to cart"
-            >
-              <Plus className="w-4 h-4" />
-            </button>
-          )}
-
-          {/* Wishlist button — top-right, hidden when qty bubble is showing */}
-          {qty === 0 && (
-            <button
-              onClick={handleWishlist}
-              className={`absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow transition-all duration-200 z-10 ${
-                wishlisted
-                  ? 'bg-red-500 text-white opacity-100'
-                  : 'bg-white/80 dark:bg-slate-800/80 text-slate-400 hover:text-red-500 opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
-              }`}
-              aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-            >
-              <Heart className={`w-3.5 h-3.5 ${wishlisted ? 'fill-white' : ''}`} />
-            </button>
           )}
         </div>
 
         {/* Content */}
-        <div className="p-2.5 sm:p-4 flex flex-col flex-1">
-          {/* Category */}
-          <p className="text-[10px] sm:text-xs text-simba-orange font-semibold mb-0.5 sm:mb-1 truncate">
-            {KNOWN_CATEGORY_SLUGS.has(product.categorySlug)
-              ? tCat(product.categorySlug as any)
-              : product.category}
-          </p>
-
-          {/* Name */}
-          <h3 className="font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-100 line-clamp-2 mb-0.5 sm:mb-1 leading-snug flex-1">
+        <div className="p-3 flex flex-col flex-1">
+          <p className="text-xs text-simba-orange font-medium mb-0.5 truncate">{product.category}</p>
+          <h3 className="font-semibold text-sm text-slate-800 dark:text-slate-100 line-clamp-2 mb-1 group-hover:text-simba-orange transition-colors leading-snug flex-1">
             {product.name}
           </h3>
-
-          {/* Unit */}
           {product.unit && (
-            <p className="text-[10px] sm:text-xs text-slate-400 mb-2 sm:mb-3">{product.unit}</p>
+            <p className="text-xs text-slate-400 mb-2">{product.unit}</p>
           )}
 
-          {/* Price + stepper row */}
-          <div className="flex items-end justify-between gap-1 sm:gap-2 mt-auto">
-            {/* Price block */}
-            <div className="min-w-0">
-              <p className="font-black text-simba-orange text-sm sm:text-lg leading-tight">
-                {formatPrice(product.price)}
-              </p>
-              {product.originalPrice ? (
-                <p className="text-[10px] sm:text-xs text-slate-400 line-through leading-tight">{formatPrice(product.originalPrice)}</p>
-              ) : (
-                <p className="text-[9px] sm:text-[10px] text-slate-400 leading-tight uppercase tracking-wide">RWF</p>
+          {/* Rating */}
+          {product.rating && (
+            <div className="flex items-center gap-1 mb-2">
+              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+              <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{product.rating}</span>
+              {product.reviews && (
+                <span className="text-xs text-slate-400">({product.reviews})</span>
+              )}
+            </div>
+          )}
+
+          {/* Price row */}
+          <div className="flex items-end justify-between gap-1 mt-auto">
+            <div>
+              <p className="font-bold text-simba-orange text-sm leading-tight">{formatPrice(product.price)}</p>
+              {product.originalPrice && (
+                <p className="text-xs text-slate-400 line-through leading-tight">{formatPrice(product.originalPrice)}</p>
               )}
             </div>
 
-            {/* Add / Stepper */}
+            {/* Quantity stepper or Add button */}
             {qty === 0 ? (
               <button
                 onClick={handleAdd}
-                disabled={isOutOfStock}
-                className="flex items-center gap-1 sm:gap-1.5 bg-simba-orange hover:bg-orange-600 text-white px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm flex-shrink-0 min-h-[36px] sm:min-h-[44px]"
+                disabled={!product.inStock}
+                className="flex items-center gap-1 bg-simba-orange hover:bg-simba-orange-dark text-white px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm flex-shrink-0"
               >
-                <ShoppingCart className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                <span className="hidden xs:inline sm:inline">{t('add')}</span>
+                <ShoppingCart className="w-3.5 h-3.5" />
+                Add
               </button>
             ) : (
               <div
-                className="flex items-center bg-simba-orange rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0 shadow-sm"
+                className="flex items-center gap-1 bg-simba-orange rounded-xl overflow-hidden flex-shrink-0"
                 onClick={e => e.preventDefault()}
               >
                 <button
                   onClick={handleDec}
-                  className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-white hover:bg-orange-600 transition-colors"
+                  className="w-7 h-7 flex items-center justify-center text-white hover:bg-simba-orange-dark transition-colors"
                 >
-                  <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <Minus className="w-3 h-3" />
                 </button>
-                <span className="text-white font-bold text-xs sm:text-sm w-5 sm:w-6 text-center">{qty}</span>
+                <span className="text-white font-bold text-sm w-5 text-center">{qty}</span>
                 <button
                   onClick={handleInc}
-                  className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-white hover:bg-orange-600 transition-colors"
+                  className="w-7 h-7 flex items-center justify-center text-white hover:bg-simba-orange-dark transition-colors"
                 >
-                  <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <Plus className="w-3 h-3" />
                 </button>
               </div>
             )}

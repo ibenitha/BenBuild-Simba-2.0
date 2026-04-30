@@ -1,15 +1,13 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight, AlertTriangle, LogIn } from 'lucide-react';
+import { X, ShoppingBag, Trash2, Plus, Minus, Tag, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCartStore } from '@/store/cart';
-import { useBranchStore } from '@/store/branch';
-import { useOperationsStore } from '@/store/operations';
-import { useAuthStore } from '@/store/auth';
 import { formatPrice } from '@/lib/utils';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 interface CartDrawerProps {
   open: boolean;
@@ -23,61 +21,33 @@ const DELIVERY_FEE = 2000;
 export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
   const t = useTranslations('cart');
   const { items, removeItem, updateQuantity, total, itemCount, savings } = useCartStore();
-  const { selectedBranchId, getSelectedBranch } = useBranchStore();
-  const { fetchStock, getBranchStock, stockByBranch } = useOperationsStore();
-  const currentUser = useAuthStore((s) => s.currentUser);
-  const currentBranch = getSelectedBranch();
-
   const [hydrated, setHydrated] = useState(false);
-  const stableItems = useMemo(() => (hydrated ? items : []), [hydrated, items]);
-  const stableItemCount = hydrated ? itemCount() : 0;
+  const stableItems = hydrated ? items : [];
   const subtotal = hydrated ? total() : 0;
-  const totalSavings = hydrated ? savings() : 0;
-
-  const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD || subtotal === 0 ? 0 : DELIVERY_FEE;
-  const amountToFree = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
-  const progressPct = Math.min(100, (subtotal / FREE_DELIVERY_THRESHOLD) * 100);
+  const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
   const orderTotal = subtotal + deliveryFee;
-
-  // Validation: Check if items are in stock at the selected branch
-  const stockWarnings = useMemo(() => {
-    if (!hydrated) return {};
-    const warnings: Record<string, string> = {};
-    stableItems.forEach(item => {
-      const stock = getBranchStock(selectedBranchId, item.product.id);
-      if (stock === 0) {
-        warnings[item.product.id] = t('outOfStockBranch');
-      } else if (stock < item.quantity) {
-        warnings[item.product.id] = t('onlyAvailable', { stock });
-      }
-    });
-    return warnings;
-  }, [stableItems, selectedBranchId, getBranchStock, hydrated, t]);
-
-  const hasStockError = Object.keys(stockWarnings).length > 0;
+  const totalSavings = hydrated ? savings() : 0;
+  const progressPct = Math.min((subtotal / FREE_DELIVERY_THRESHOLD) * 100, 100);
+  const amountToFree = FREE_DELIVERY_THRESHOLD - subtotal;
+  const stableItemCount = hydrated ? itemCount() : 0;
 
   useEffect(() => {
     setHydrated(true);
-    if (open) {
-      document.body.style.overflow = 'hidden';
-      // Refresh stock for the selected branch when opening cart
-      fetchStock(selectedBranchId);
-    } else {
-      document.body.style.overflow = '';
-    }
+    if (open) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
     return () => { document.body.style.overflow = ''; };
-  }, [open, selectedBranchId, fetchStock]);
+  }, [open]);
 
   return (
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300 touch-none ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       {/* Drawer */}
-      <div className={`fixed right-0 top-0 h-full w-full sm:max-w-[420px] bg-white dark:bg-slate-900 z-50 shadow-2xl transition-transform duration-300 ease-out flex flex-col ${open ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed right-0 top-0 h-full w-full max-w-[420px] bg-white dark:bg-slate-900 z-50 shadow-2xl transition-transform duration-300 ease-out flex flex-col ${open ? 'translate-x-0' : 'translate-x-full'}`}>
 
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
@@ -148,7 +118,7 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
                     {/* Thumbnail */}
                     <Link href={`/${locale}/products/${item.product.id}`} onClick={onClose} className="relative w-18 h-18 flex-shrink-0">
                       <div className="relative w-[72px] h-[72px] rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700">
-                        <Image src={item.product.image} alt={item.product.name} fill sizes="72px" className="object-cover" />
+                        <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />
                       </div>
                     </Link>
 
@@ -167,14 +137,14 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
                         <div className="flex items-center bg-white dark:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-600 overflow-hidden">
                           <button
                             onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                            className="w-9 h-9 flex items-center justify-center text-slate-500 hover:bg-simba-orange hover:text-white transition-colors"
+                            className="w-7 h-7 flex items-center justify-center text-slate-500 hover:bg-simba-orange hover:text-white transition-colors"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
                           <span className="text-sm font-bold w-7 text-center text-slate-800 dark:text-slate-100">{item.quantity}</span>
                           <button
                             onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                            className="w-9 h-9 flex items-center justify-center text-slate-500 hover:bg-simba-orange hover:text-white transition-colors"
+                            className="w-7 h-7 flex items-center justify-center text-slate-500 hover:bg-simba-orange hover:text-white transition-colors"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
@@ -186,23 +156,17 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
                           </p>
                           {itemSaving > 0 && (
                             <p className="text-xs text-green-600 dark:text-green-400 font-medium">
-                              {t('save')} {formatPrice(itemSaving)}
+                              Save {formatPrice(itemSaving)}
                             </p>
                           )}
                         </div>
                       </div>
-                      {stockWarnings[item.product.id] && (
-                        <p className="text-[10px] font-bold text-red-500 mt-2 flex items-center gap-1">
-                          <AlertTriangle className="w-3 h-3" />
-                          {stockWarnings[item.product.id]}
-                        </p>
-                      )}
                     </div>
 
-                    {/* Remove — always visible on mobile, hover on desktop */}
+                    {/* Remove */}
                     <button
                       onClick={() => removeItem(item.product.id)}
-                      className="sm:opacity-0 sm:group-hover/item:opacity-100 self-start mt-0.5 p-2 text-slate-300 hover:text-red-500 transition-all"
+                      className="opacity-0 group-hover/item:opacity-100 self-start mt-0.5 p-1 text-slate-300 hover:text-red-500 transition-all"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -244,44 +208,14 @@ export default function CartDrawer({ open, onClose, locale }: CartDrawerProps) {
             </div>
 
             {/* Actions */}
-            {hasStockError ? (
-              <div className="space-y-2">
-                <button
-                  disabled
-                  className="flex items-center justify-center gap-2 w-full bg-slate-200 dark:bg-slate-800 text-slate-400 py-3.5 rounded-xl font-bold text-sm cursor-not-allowed"
-                >
-                  {t('checkoutBtn', { total: formatPrice(orderTotal) })}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <p className="text-[10px] text-center text-red-500 font-bold animate-pulse">
-                  {t('fixStockIssues')}
-                </p>
-              </div>
-            ) : !currentUser ? (
-              // Not logged in — show sign-in prompt
-              <div className="space-y-2">
-                <Link
-                  href={`/${locale}/auth/login?next=/${locale}/checkout`}
-                  onClick={onClose}
-                  className="flex items-center justify-center gap-2 w-full bg-simba-orange hover:bg-orange-600 text-white py-3.5 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
-                >
-                  <LogIn className="w-4 h-4" />
-                  {t('signInToCheckout')}
-                </Link>
-                <p className="text-[10px] text-center text-slate-400">
-                  {t('cartSaved')}
-                </p>
-              </div>
-            ) : (
-              <Link
-                href={`/${locale}/checkout`}
-                onClick={onClose}
-                className="flex items-center justify-center gap-2 w-full bg-simba-orange hover:bg-orange-600 text-white py-3.5 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
-              >
-                {t('checkoutBtn', { total: formatPrice(orderTotal) })}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            )}
+            <Link
+              href={`/${locale}/checkout`}
+              onClick={onClose}
+              className="flex items-center justify-center gap-2 w-full bg-simba-orange hover:bg-simba-orange-dark text-white py-3.5 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-orange-200 dark:shadow-none"
+            >
+              {t('checkoutBtn', { total: formatPrice(orderTotal) })}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
             <Link
               href={`/${locale}/cart`}
               onClick={onClose}
