@@ -37,7 +37,7 @@ export default async function ProductPage({ params: { locale, id } }: ProductPag
         <nav className="flex items-center gap-1.5 text-sm text-slate-400 mb-6 flex-wrap">
           <Link href={`/${locale}`} className="hover:text-simba-orange transition-colors">{t('home')}</Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <Link href={`/${locale}/products`} className="hover:text-simba-orange transition-colors">{t('home')}</Link>
+          <Link href={`/${locale}/products`} className="hover:text-simba-orange transition-colors">{t('allProducts')}</Link>
           <ChevronRight className="w-3.5 h-3.5" />
           <Link href={`/${locale}/products?category=${product.categorySlug}`} className="hover:text-simba-orange transition-colors">{product.category}</Link>
           <ChevronRight className="w-3.5 h-3.5" />

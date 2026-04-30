@@ -297,8 +297,9 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
                         setPhoneError('');
                       }}
                       onBlur={() => {
-                        if (phone && !/^(\+?250|0)?7[2389]\d{7}$/.test(phone.replace(/\s/g, ''))) {
-                          setPhoneError('Enter a valid Rwanda phone number (e.g. +250 78x xxx xxx)');
+                        const cleaned = phone.replace(/[\s\-]/g, '');
+                        if (phone && !/^(\+?250|0)?7[2389]\d{7}$/.test(cleaned)) {
+                          setPhoneError('Enter a valid Rwanda phone number (e.g. +250 788 123 456)');
                         }
                       }}
                       placeholder="+250 78x xxx xxx"

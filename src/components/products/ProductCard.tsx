@@ -2,12 +2,13 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, Plus, Minus } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Product } from '@/types';
 import { useCartStore } from '@/store/cart';
 import { useBranchStore } from '@/store/branch';
 import { useOperationsStore } from '@/store/operations';
+import { useWishlistStore } from '@/store/wishlist';
 import { formatPrice } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
@@ -37,6 +38,13 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
   const { addItem, removeItem, updateQuantity, items } = useCartStore();
   const { selectedBranchId } = useBranchStore();
   const { fetchStock, getBranchStock, stockByBranch } = useOperationsStore();
+  const { toggleItem, isWishlisted } = useWishlistStore();
+  const [wishlisted, setWishlisted] = useState(false);
+
+  // Hydrate wishlist state client-side to avoid SSR mismatch
+  useEffect(() => {
+    setWishlisted(isWishlisted(product.id));
+  }, [product.id, isWishlisted]);
   
   const cartItem = items.find(i => i.product.id === product.id);
   const qty = cartItem?.quantity ?? 0;
@@ -67,6 +75,12 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
     e.preventDefault();
     if (qty === 1) removeItem(product.id);
     else updateQuantity(product.id, qty - 1);
+  };
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    toggleItem(product);
+    setWishlisted(prev => !prev);
   };
 
   const discount = product.originalPrice
@@ -116,8 +130,6 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
               {qty}
             </div>
           )}
-
-          {/* Quick-add "+" button — always visible on mobile, hover on desktop */}
           {qty === 0 && !isOutOfStock && (
             <button
               onClick={handleAdd}
@@ -125,6 +137,21 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
               aria-label="Add to cart"
             >
               <Plus className="w-4 h-4" />
+            </button>
+          )}
+
+          {/* Wishlist button — top-right, hidden when qty bubble is showing */}
+          {qty === 0 && (
+            <button
+              onClick={handleWishlist}
+              className={`absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shadow transition-all duration-200 z-10 ${
+                wishlisted
+                  ? 'bg-red-500 text-white opacity-100'
+                  : 'bg-white/80 dark:bg-slate-800/80 text-slate-400 hover:text-red-500 opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
+              }`}
+              aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            >
+              <Heart className={`w-3.5 h-3.5 ${wishlisted ? 'fill-white' : ''}`} />
             </button>
           )}
         </div>

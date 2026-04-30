@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { categories, products, searchProducts } from '@/lib/products';
 import ProductGrid from '@/components/products/ProductGrid';
-import { LayoutGrid, ChevronDown, Search, X, Home, ChevronRight, SlidersHorizontal } from 'lucide-react';
+import { LayoutGrid, ChevronDown, Search, X, Home, ChevronRight, SlidersHorizontal, ArrowUp } from 'lucide-react';
 
 interface ProductsPageProps {
   params: { locale: string };
@@ -54,6 +54,15 @@ export default function ProductsPage({ params: { locale } }: ProductsPageProps) 
 
   // Pagination state
   const [visibleCount, setVisibleCount] = useState(20);
+
+  // Back to top
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > 600);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  const scrollToTop = useCallback(() => window.scrollTo({ top: 0, behavior: 'smooth' }), []);
 
   // Update selected category when URL changes
   useEffect(() => {
@@ -402,6 +411,17 @@ export default function ProductsPage({ params: { locale } }: ProductsPageProps) 
           </main>
         </div>
       </div>
+
+      {/* Back to Top button */}
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 bg-simba-orange hover:bg-orange-600 text-white rounded-full shadow-lg flex items-center justify-center transition-all active:scale-95 animate-fade-in"
+          aria-label="Back to top"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
+      )}
     </div>
   );
 }
