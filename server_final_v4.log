@@ -1,0 +1,21 @@
+
+> simba-supermarket@0.1.0 start
+> next start -p 3001
+
+  ▲ Next.js 14.2.3
+  - Local:        http://localhost:3001
+
+ ✓ Starting...
+ ✓ Ready in 375ms
+
+The `locale` parameter in `getRequestConfig` is deprecated, please switch to `await requestLocale`. See https://next-intl.dev/blog/next-intl-3-22#await-request-locale
+
+
+A `locale` is expected to be returned from `getRequestConfig`, but none was returned. This will be an error in the next major version of next-intl.
+
+See: https://next-intl.dev/blog/next-intl-3-22#await-request-locale
+
+ ⚠ For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'npm i sharp', and Next.js will use it automatically for Image Optimization.
+Read more: https://nextjs.org/docs/messages/sharp-missing-in-production
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1628672734097-5c29c0f0e4e6?w=400&q=80 404
+ ⨯ upstream image response failed for https://images.unsplash.com/photo-1596097635121-14b63b7a0c19?w=400&q=80 404

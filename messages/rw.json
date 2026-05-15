@@ -233,5 +233,14 @@
     "copyright": "© 2024 Simba Supermarket. Uburenganzira bwose burabitswe.",
     "madeInRwanda": "Byakorewe mu Rwanda",
     "prices": "Ibiciro muri RWF"
+  },
+  "error": {
+    "notFoundTitle": "Ipaji ntiyabonetse",
+    "notFoundDesc": "Ipaji urimo ushaka ishobora kuba yakuweho, yahinduriwe izina, cyangwa ntibishoboke kuyibona ubu.",
+    "backHome": "Subira Ahabanza",
+    "goBack": "Subira Inyuma",
+    "errorTitle": "Hagize ikibazo kiba!",
+    "errorDesc": "Ikibazo kitari cyitezwe cyabaye. Twatangiye kugikemura.",
+    "tryAgain": "Ongera ugerageze"
   }
 }

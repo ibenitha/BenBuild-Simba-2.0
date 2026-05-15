@@ -5,8 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Tag, ChevronRight, Truck } from 'lucide-react';
 import { useCartStore } from '@/store/cart';
+import { useCouponStore } from '@/store/coupons';
 import { formatPrice } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import CouponInput from '@/components/cart/CouponInput';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 
 interface CartPageProps {
   params: { locale: string };
@@ -17,8 +20,10 @@ const DELIVERY_FEE = 2000;
 
 export default function CartPage({ params: { locale } }: CartPageProps) {
   const t = useTranslations('cart');
-  const { items, removeItem, updateQuantity, total, savings } = useCartStore();
+  const { items, removeItem, updateQuantity, clearCart, total, savings } = useCartStore();
+  const { getDiscount, activeCoupon } = useCouponStore();
   const [hydrated, setHydrated] = useState(false);
+  const [showClearModal, setShowClearModal] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
@@ -27,8 +32,9 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
   const stableItems = hydrated ? items : [];
   const subtotal = hydrated ? total() : 0;
   const totalSavings = hydrated ? savings() : 0;
+  const discount = hydrated ? getDiscount(subtotal) : 0;
   const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
-  const orderTotal = subtotal + deliveryFee;
+  const orderTotal = Math.max(0, subtotal - discount + deliveryFee);
   const progressPct = Math.min((subtotal / FREE_DELIVERY_THRESHOLD) * 100, 100);
 
   return (
@@ -46,7 +52,16 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
           <ShoppingBag className="w-7 h-7 text-simba-orange" />
           {t('title')}
           {stableItems.length > 0 && (
-            <span className="text-base font-normal text-slate-400">({stableItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
+            <>
+              <span className="text-base font-normal text-slate-400">({stableItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
+              <button
+                onClick={() => setShowClearModal(true)}
+                className="ml-auto text-sm font-medium text-red-500 hover:text-red-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+                Clear Cart
+              </button>
+            </>
           )}
         </h1>
 
@@ -158,6 +173,7 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
 
             {/* Order summary */}
             <div className="lg:col-span-1 space-y-4">
+              <CouponInput />
               {/* Savings banner */}
               {totalSavings > 0 && (
                 <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/30 rounded-2xl p-4 flex items-center gap-3">
@@ -186,6 +202,12 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
                       <span className="font-medium">-{formatPrice(totalSavings)}</span>
                     </div>
                   )}
+                  {discount > 0 && (
+                    <div className="flex justify-between text-green-600 dark:text-green-400">
+                      <span>Coupon ({activeCoupon?.code})</span>
+                      <span className="font-medium">-{formatPrice(discount)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span className="text-slate-500">Delivery</span>
                     <span className={`font-medium ${deliveryFee === 0 ? 'text-green-600 dark:text-green-400' : 'text-slate-700 dark:text-slate-300'}`}>
@@ -212,6 +234,15 @@ export default function CartPage({ params: { locale } }: CartPageProps) {
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={showClearModal}
+        onClose={() => setShowClearModal(false)}
+        onConfirm={clearCart}
+        title="Clear Cart?"
+        message="Are you sure you want to remove all items from your shopping cart? This action cannot be undone."
+        confirmText="Yes, Clear Cart"
+      />
     </div>
   );
 }
