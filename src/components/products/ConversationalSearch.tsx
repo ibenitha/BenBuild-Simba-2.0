@@ -15,6 +15,7 @@ export default function ConversationalSearch({ locale }: Props) {
   const [loading, setLoading] = useState(false);
   const [reply, setReply] = useState('');
   const [ids, setIds] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const matched = ids
     .map((id) => products.find((product) => product.id === id))
@@ -24,6 +25,7 @@ export default function ConversationalSearch({ locale }: Props) {
     event.preventDefault();
     if (!message.trim()) return;
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch('/api/conversation-search', {
         method: 'POST',
@@ -31,10 +33,12 @@ export default function ConversationalSearch({ locale }: Props) {
         body: JSON.stringify({ message }),
       });
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed');
       setReply(data.reply ?? t('noResponse'));
       setIds(data.productIds ?? []);
-    } catch {
-      setReply(t('unavailable'));
+    } catch (err: any) {
+      setError(err.message === 'Failed' ? t('unavailable') : err.message);
+      setReply('');
       setIds([]);
     } finally {
       setLoading(false);
@@ -56,6 +60,7 @@ export default function ConversationalSearch({ locale }: Props) {
           {loading ? t('searching') : t('ask')}
         </button>
       </form>
+      {error && <p className="mt-4 text-sm text-red-500 font-medium">{error}</p>}
       {reply && <p className="mt-4 text-sm text-slate-700 dark:text-slate-200">{reply}</p>}
       {matched.length > 0 && (
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

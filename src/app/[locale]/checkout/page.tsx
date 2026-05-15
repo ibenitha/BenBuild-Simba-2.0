@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCartStore } from '@/store/cart';
+import { useOrderStore } from '@/store/orders';
 import { useAuthStore } from '@/store/auth';
 import { useOperationsStore } from '@/store/operations';
 import { simbaBranches } from '@/lib/branches';
@@ -18,6 +19,7 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
   const t = useTranslations('pickupCheckout');
   const router = useRouter();
   const { items, total, clearCart } = useCartStore();
+  const addGlobalOrder = useOrderStore(s => s.addOrder);
   const user = useAuthStore((s) => s.currentUser);
   const seedBranchStock = useOperationsStore((s) => s.seedBranchStock);
   const getBranchStock = useOperationsStore((s) => s.getBranchStock);
@@ -44,6 +46,8 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
   const [orderId, setOrderId] = useState('');
   const [hydrated, setHydrated] = useState(false);
 
+  const stableItems = useMemo(() => (hydrated ? items : []), [hydrated, items]);
+
   useEffect(() => {
     seedBranchStock(simbaBranches.map((branch) => branch.id));
   }, [seedBranchStock]);
@@ -52,7 +56,6 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
     setHydrated(true);
   }, []);
 
-  const stableItems = hydrated ? items : [];
   const subtotal = hydrated ? total() : 0;
   const hasOutOfStock = useMemo(
     () => stableItems.some((item) => getBranchStock(branchId, item.product.id) < item.quantity),
@@ -76,6 +79,26 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
         name: item.product.name,
       })),
     });
+
+    // Also add to global order store for tracking/profile
+    addGlobalOrder({
+      id: created.id,
+      userId: user.email,
+      items: stableItems,
+      total: subtotal,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      deliveryDetails: {
+        name: user.fullName,
+        phone: phone,
+        address: simbaBranches.find(b => b.id === branchId)?.name || 'Branch',
+        district: simbaBranches.find(b => b.id === branchId)?.district || 'Kigali',
+      },
+      paymentMethod: 'MoMo',
+      type: 'pickup',
+      branchId: branchId
+    });
+
     clearCart();
     setOrderId(created.id);
     setStep('done');
@@ -228,7 +251,10 @@ export default function CheckoutPage({ params: { locale } }: { params: { locale:
           <div className="p-6">
             <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">{t('orderConfirmedDescription')}</p>
             <div className="flex flex-col gap-3">
-              <Link href={`/${locale}/branch-dashboard`} className="w-full bg-simba-orange text-white px-4 py-3 rounded-xl font-bold text-sm text-center hover:bg-simba-orange-dark transition-colors">
+              <Link href={`/${locale}/order-tracking/${orderId}`} className="w-full bg-simba-orange text-white px-4 py-3 rounded-xl font-bold text-sm text-center hover:bg-simba-orange-dark transition-colors">
+                Track Your Order
+              </Link>
+              <Link href={`/${locale}/branch-dashboard`} className="w-full border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 px-4 py-3 rounded-xl font-bold text-sm text-center hover:bg-slate-50 transition-colors">
                 {t('openBranchDashboard')}
               </Link>
               <Link href={`/${locale}/branch-reviews`} className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-4 py-3 rounded-xl font-bold text-sm text-center transition-colors">

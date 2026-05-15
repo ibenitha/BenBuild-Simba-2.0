@@ -233,5 +233,14 @@
     "copyright": "© 2024 Simba Supermarket. Tous droits réservés.",
     "madeInRwanda": "Fabriqué au Rwanda",
     "prices": "Prix en RWF"
+  },
+  "error": {
+    "notFoundTitle": "Page non trouvée",
+    "notFoundDesc": "La page que vous recherchez a peut-être été supprimée, a changé de nom ou est temporairement indisponible.",
+    "backHome": "Retour à l'accueil",
+    "goBack": "Retourner",
+    "errorTitle": "Une erreur est survenue !",
+    "errorDesc": "Une erreur inattendue s'est produite. Nous avons été informés et travaillons pour la corriger.",
+    "tryAgain": "Réessayer"
   }
 }

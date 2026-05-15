@@ -1,0 +1,305 @@
+
+> simba-supermarket@0.1.0 start
+> next start -p 3001
+
+  ▲ Next.js 14.2.3
+  - Local:        http://localhost:3001
+
+ ✓ Starting...
+ ✓ Ready in 439ms
+
+The `locale` parameter in `getRequestConfig` is deprecated, please switch to `await requestLocale`. See https://next-intl.dev/blog/next-intl-3-22#await-request-locale
+
+
+A `locale` is expected to be returned from `getRequestConfig`, but none was returned. This will be an error in the next major version of next-intl.
+
+See: https://next-intl.dev/blog/next-intl-3-22#await-request-locale
+
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}
+Error: Could not find the module "/app/node_modules/framer-motion/dist/es/index.mjs#motion#div" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at eb (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:136703)
+    at ek (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:140326)
+    at Array.toJSON (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135755)
+    at stringify (<anonymous>)
+    at eR (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142219)
+    at eE (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:142698)
+    at Timeout._onTimeout (/app/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:12:135475)
+    at listOnTimeout (node:internal/timers:585:17)
+    at process.processTimers (node:internal/timers:521:7) {
+  digest: '216535938'
+}

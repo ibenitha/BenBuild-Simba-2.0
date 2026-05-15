@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, Star, Plus, Minus } from 'lucide-react';
+import { ShoppingCart, Star, Plus, Minus, Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import WishlistButton from './WishlistButton';
 import { Product } from '@/types';
 import { useCartStore } from '@/store/cart';
 import { formatPrice } from '@/lib/utils';
@@ -48,9 +49,12 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
             src={product.image}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-110 transition-transform duration-700"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
+          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+            <WishlistButton product={product} />
+          </div>
           {!product.inStock && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
               <span className="text-white font-medium text-sm bg-red-500 px-3 py-1 rounded-full">
